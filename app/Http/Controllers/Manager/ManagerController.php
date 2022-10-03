@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Project;
-use Auth;
-use App\User;
-use App\Designation;
-use App\Skill;
 use App\Task;
-use App\ProjectAssign;
+use App\User;
+use App\Skill;
+use App\Project;
+use App\Designation;
 use App\ThemeSetting;
-use Image;
-use Illuminate\Support\Facades\Hash;
+use App\ProjectAssign;
+use App\OtherTeamMember;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 class ManagerController extends Controller
 {
     public function index(){
@@ -36,8 +37,6 @@ class ManagerController extends Controller
             $pandding_tasks += $pandding_task;
             $pandding_tasks_complete += $pandding_task_com;
         }
-
-        
         return view('manager.dashboard',compact('projects','users','project','user','pandding_tasks','pandding_tasks_complete'));
     }
     public function ProjectHeads(){
@@ -49,11 +48,26 @@ class ManagerController extends Controller
     }
     public function Team(){
         $id = Auth::user()->id;
-        $users = User::where('user_type',$id)->orwhere('team_member',Auth::user()->id)->with('getusers')->get();
+        // dd(Auth::user()->user_type);
+        $merged = User::where('user_type',$id)->orwhere('team_member',Auth::user()->id)->with('getusers')->get();
+        $others = OtherTeamMember::where('manager_id', $id)->get();
+        $user_array = [];
+        $lists =[];
+        $teams = User::where('user_type',Auth::user()->user_type)->where('role',3)->get();
+        for($i=0; $i<sizeof($others); $i++){
+            $user = User::where('id',$others[$i]->team_member_id)->first();
+            array_push($user_array, $user);
+
+            foreach ($teams as $key=>$product) {
+                if($product->id == $others[$i]->team_member_id) {
+                    unset($teams[$key]);
+                }
+            }
+        }
+        $users =  $merged->merge($user_array);
         $designations = Designation::where('added_by',$id)->orwhere('added_by',Auth::user()->user_type)->get();
         $skills = Skill::where('user_id',$id)->orwhere('user_id',Auth::user()->user_type)->get();
-
-        return view('manager.team',compact('users','designations','skills'));
+        return view('manager.team',compact('users','designations','skills','teams','others'));
     }
     public function AddTeam(Request $request){
         $user = new User();
@@ -62,14 +76,13 @@ class ManagerController extends Controller
         $user->phone = $request->phone;
         $user->address = $request->address;
         $user->password = Hash::make($request->password);
-        $user->user_type = Auth::user()->id;
+        $user->user_type = Auth::user()->user_type;
         $user->role = $request->role;
         $user->dob = $request->dob;
         $user->gender = $request->gender;
         $user->department = $request->department;
         $user->skill = $request->skill;
         $user->team_member = Auth::user()->id;
-
         if($request->hasFile('image')){
             $avatar = $request->file('image');
             $random = Str::random(40);
@@ -119,12 +132,10 @@ class ManagerController extends Controller
         $user->skill = $request->skill;
         $user->dob = $request->dob;
         $user->gender = $request->gender;
-        
         if($request->hasFile('image')){
             $avatar = $request->file('image');
             $filename = time().'.'.$avatar->getClientOriginalExtension();
             Image::make($avatar)->resize(300,300)->save(public_path('/uploads/staf_images/'.$filename));
-            
             $user->image = $filename;
             $user->save();
            }
@@ -133,13 +144,27 @@ class ManagerController extends Controller
     }
     public function DeleteTeam(Request $req){
         $user = user::find($req->id);
-        $project2 = ProjectAssign::where('user_id',$req->id)->get();
-        if ($project2 != null) {
-            foreach ($project2 as $post) {
-                $post->delete();
+        if($user->team_member === Auth::user()->id){
+            $project2 = ProjectAssign::where('user_id',$req->id)->get();
+            if ($project2 != null) {
+                foreach ($project2 as $post) {
+                    $post->delete();
+                }
             }
+            $user->delete();
+            return back()->with('success','User Deleted Successfully!');
+        }else{
+            $others = OtherTeamMember::where('team_member_id', $req->id)->where('manager_id',Auth::user()->id)->first();
+            $others->delete();
+            return back()->with('success','User Deleted Successfully!');
         }
-        $user->delete();
-        return back()->with('success','User Deleted Successfully!');
+        
+    }
+    public function OtherTeamMember(Request $req){
+        $user = new OtherTeamMember();
+        $user->manager_id = Auth::user()->id;
+        $user->team_member_id = $req->member_id;
+        $user->save();
+        return redirect()->back();
     }
 }

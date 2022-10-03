@@ -81,6 +81,7 @@
                                                     <input type="datetime-local" name="due_date" value="{{date('Y-m-d H:i:s', strtotime($task->due_date))}}" data-date-autoclose="true" class="form-control" placeholder="Due Date">
                                                 </div>
                                             </div>
+                                          
                                             <div class="col-md-6 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Assigned To</label>
@@ -89,12 +90,82 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-12">
-                                                <div class="form-group mt-3">
-                                                    <label>Description</label>
-                                                    <textarea rows="10" id="editor" name="summary" class="form-control no-resize" placeholder="Please type what you want...">{{$task->description}}</textarea>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Task Status</label>
+                                                    <select class="form-control" name="status">
+                                                        @if($task->status == 1)
+                                                        <option value="1" selected>Not Started</option>
+                                                        <option value="2">In Progress</option>
+                                                        <option value="3">On Hold</option>
+                                                        <option value="4">Cancelled</option>
+                                                        <option value="5">Finished</option>
+                                                        @elseif($task->status == 2)
+                                                        <option value="1">Not Started</option>
+                                                        <option value="2" selected>In Progress</option>
+                                                        <option value="3">On Hold</option>
+                                                        <option value="4">Cancelled</option>
+                                                        <option value="5">Finished</option>
+                                                        @elseif($task->status == 3)
+                                                        <option value="1">Not Started</option>
+                                                        <option value="2">In Progress</option>
+                                                        <option value="3" selected>On Hold</option>
+                                                        <option value="4">Cancelled</option>
+                                                        <option value="5">Finished</option>
+                                                        @elseif($task->status == 4)
+                                                        <option value="1">Not Started</option>
+                                                        <option value="2">In Progress</option>
+                                                        <option value="3">On Hold</option>
+                                                        <option value="4" selected>Cancelled</option>
+                                                        <option value="5">Finished</option>
+                                                        @elseif($task->status == 5)
+                                                        <option value="1">Not Started</option>
+                                                        <option value="2">In Progress</option>
+                                                        <option value="3">On Hold</option>
+                                                        <option value="4">Cancelled</option>
+                                                        <option value="5" selected>Finished</option>
+                                                        @endif
+                                                    </select>
                                                 </div>
                                             </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <label for="screenshot">Task Completed</label><br>
+                                                <label for="five" class="label">5%</label>
+                                                <input type="radio" class="radio" name="progress" value="five" id="five" <?php echo ($task->progress=='five')?'checked':''; ?>>
+                                                <input type="radio" class="radio" name="progress" value="twentyfive" id="twentyfive" <?php echo ($task->progress=='twentyfive')?'checked':''; ?>>
+                                                <label for="twentyfive" class="label">25%</label>
+                                            
+                                                <input type="radio" class="radio" name="progress" value="fifty" id="fifty" <?php echo ($task->progress=='fifty')?'checked':''; ?>>
+                                                <label for="fifty" class="label">50%</label>
+                                            
+                                                <input type="radio" class="radio" name="progress" value="seventyfive" id="seventyfive" <?php echo ($task->progress=='seventyfive')?'checked':''; ?>>
+                                                <label for="seventyfive" class="label">75%</label>
+                                            
+                                                <input type="radio" class="radio" name="progress" value="onehundred" id="onehundred" <?php echo ($task->progress=='onehundred')?'checked':''; ?>>
+                                                <label for="onehundred" class="label">100%</label>
+                                            
+                                                <div class="progress" style="margin: 0px;width:290px;">
+                                                <div class="progress-bar"></div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+                                                    <label  class="d-block">Add ScreenShot</label>
+                                                    <input type="file" name="images[]" class="form-control col-md-4 d-inline">
+                                                    <input type="file" name="images[]" class="form-control col-md-4 d-inline">
+                                                    <input type="file" name="images[]" class="form-control col-md-4 d-inline">
+                                                    <input type="file" name="images[]" class="form-control col-md-4 d-inline">
+                                                    <input type="file" name="images[]" class="form-control col-md-4 d-inline">
+                                                </div>
+                                            </div>
+                                        <div class="col-sm-12">
+                                            <div class="form-group mt-3">
+                                                <label>Description</label>
+                                                <textarea rows="10" id="editor" name="summary" class="form-control no-resize" placeholder="Please type what you want...">{{$task->description}}</textarea>
+                                            </div>
+                                        </div>
+                                           
+                                        </div>
                                             <div class="col-md-12 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Priority</label>

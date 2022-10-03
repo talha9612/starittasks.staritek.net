@@ -2,20 +2,36 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Project;
-use App\User;
-use App\Task;
-use App\TaskCatagory;
 use Auth;
+use App\Task;
+use App\User;
+use App\Project;
+use App\TaskCatagory;
+use Illuminate\Http\Request;
+use App\Mail\SendMarkDownMail;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
+use Intervention\Image\Facades\Image;
+use Spatie\Activitylog\Models\Activity;
+
 class TasksController extends Controller
 {
     public function index(){
-        $projects = Project::with('head','createproject','projectcatagory')->where('create_project',Auth::user()->id)->get();
         $id = Auth::user()->id;
-        $users = User::where('user_type',$id)->get();
-        $tasks = Task::where('created_by',$id)->with('project','AssignTo','AssignBy')->get();
+        $project_lists = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
+        $users = User::where('user_type',$id)->where('role',2)->get();
+        $user =[Auth::user()->id];
+        $projects =[];
+        $tasks =[];
+        for($i=0; $i<count($users); $i++){
+            array_push($user, $users[$i]->id);
+        }
+        for($i=0; $i<sizeof($user); $i++){
+            $project = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$user[$i])->get();
+            $task = Task::where('created_by',$user[$i])->with('project','AssignTo','AssignBy')->get();
+            array_push($projects, $project);
+            array_push($tasks, $task);
+        }
         return view('admin.addtasks',compact('projects','users','tasks'));
     }
     public function AddTask(Request $req){
@@ -32,6 +48,11 @@ class TasksController extends Controller
         $task->status = 1;
         $task->created_by = $id;
         $task->save();
+        // For Email
+        $tasks = Task::where('id',$task->id)->with('project','AssignBy')->first();
+        $user = User::where('id',$task->user_id)->first();
+        Mail::to($user->email)->send( new SendMarkDownMail($tasks, $user));
+        // End For Email
         return redirect()->back();
     }
     public function SelectHead(Request $req){
@@ -54,6 +75,7 @@ class TasksController extends Controller
         return view('admin.edittask',compact('task','task_catagories'));
     }
     public function UpdateTask(Request $req){
+        $images_array =[];
         $task = Task::find($req->id);
         $task->heading = $req->title;
         $task->description = $req->summary;
@@ -63,9 +85,31 @@ class TasksController extends Controller
         $task->project_id = $req->project_id;
         $task->task_category_id = $req->catagory;
         $task->priority = $req->priority;
-        $task->status = 1;
+        $task->progress = $req->progress;
+        if($req->progress == 'onehundred'){
+            $task->status = 5;
+        }else{
+            $task->status = $req->status;
+        }
+        if($req->hasFile('images')){
+            $images = $req->file('images');
+            for($i=0; $i<sizeof($images); $i++){
+                $image = $images[$i];
+                $filename = time().rand().'.'.$image->getClientOriginalExtension();
+                Image::make($image)->save(public_path('/uploads/screenshots/'.$filename));
+                array_push($images_array, $filename);
+            }
+        }
+        if($images_array !=[]){
+            $task->screen_shot = $images_array;
+        }
         $task->save();
-        return redirect('admin/tasks');
+        // For Email
+        $tasks = Task::where('id',$task->id)->with('project','AssignBy')->first();
+        $user = User::where('id',$task->user_id)->first();
+        Mail::to($user->email)->send( new SendMarkDownMail($tasks, $user));
+        // End For Email
+        return redirect('admin/tasks')->with('success','Task Updated Successfully!');
     }
     public function DeleteTask(Request $req){
         $id =$req->id;
@@ -73,5 +117,15 @@ class TasksController extends Controller
         $attr->delete();
         return redirect('admin/tasks');
     }
-    
+    public function SingleTaskModel(Request $req){
+        $task = Task::where('id',$req->task_id)->with('project','AssignTo','AssignBy','GetTaskCatagory')->first();
+        $backups = Activity::where('subject_id',$req->task_id)->orderBy('id', 'desc')->get();
+        $users = User::get();
+        
+        return response()->json([
+            'data'=>$task,
+            'activities'=>$backups,
+            'users'=>$users
+        ]);
+    }
 }

@@ -15,7 +15,7 @@
                                 <div class="d-md-flex justify-content-between mb-2">
                                     <ul class="nav nav-tabs b-none">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Project List</a></li>                                        
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addnew"><i class="fa fa-plus"></i> Add Project New</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addnew"><i class="fa fa-plus"></i> Add New Project</a></li>
                                         <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addmembers"><i class="fa fa-plus"></i> Add Member into Project</a></li> -->
                                     </ul>
                                 </div>
@@ -57,7 +57,13 @@
                                             @foreach($checks as $key=>$project)
                                                 <tr>
                                                     <td>{{$project->id}}</td>
-                                                    <td>{{$project->project_name}}</td>
+                                                    <td>
+                                                        <form method="post" action="/admin/projectdetails" id="my_form_{{ $project->id }}">
+                                                            @csrf
+                                                            <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                                            <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
+                                                        </form>
+                                                    </td>
                                                     <td>{{$project->head['name']}}</td>
                                                     <td>
                                                         
@@ -129,7 +135,7 @@
                                                 <div class="form-group">
                                                     <label>Project Catagory <button type="button" class="btn btn-success btn-sm" onclick="GetCatagory()" data-toggle="modal" data-target="#addtask">Add Catagory</button></label>
                                                     <select class="form-control show_pro_cata" name="catagory">
-                                                        
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -254,7 +260,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SaveCatagory()">Add</button>
+                <form id="target_category"><button type="submit" class="btn btn-primary" onclick="SaveCatagory()">Add</button></form>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -262,6 +268,10 @@
 </div>
 <script>
             $(document).ready(function(){
+                $( "#target_category" ).submit(function( event ) {
+                    event.preventDefault();
+                    $('#catagory_name').focus();
+                });
                 ClassicEditor
             .create( document.querySelector( '#editor' ) )
             .catch( error => {
@@ -294,7 +304,7 @@
             function SaveCatagory(){
                 var catagoryname = $('#catagory_name').val();
                 $.ajax({
-                       type:"POST",
+                       type:"GET",
                        dataType:"json",
                        url:'/admin/save-catagory/',
                        data:{
@@ -324,7 +334,7 @@
                }
             function DeleteCatagory(id){
                 $.ajax({
-                       type:"POST",
+                       type:"GET",
                        dataType:"json",
                        url:'/admin/delete-project-catagory/',
                        data:{

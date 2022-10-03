@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-<link rel="icon" href="favicon.ico" type="image/x-icon"/>
+<link rel="icon" href="{{ asset('/uploads/company_logos/'. \App\Helpers\AppHelper::instance()->CompanySettingAdmin()->logo) }}" type="image/x-icon"/>
 
 <title>TaskManager::@yield('mytitle')</title>
 
@@ -19,11 +19,14 @@
 <!-- Plugins css -->
 <link rel="stylesheet" href="{{asset('assets/plugins/charts-c3/c3.min.css')}}"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
 <!-- Core css -->
 <link rel="stylesheet" href="{{asset('assets/css/main.css')}}"/>
 <link rel="stylesheet" href="{{asset('assets/css/theme1.css')}}"/>
 <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 </head>
 
 <body class="font-montserrat">
@@ -38,9 +41,9 @@
     <div id="header_top" class="header_top">
         <div class="container">
             <div class="hleft">
-                <a class="header-brand" href="/admin"><i class="fa fa-soccer-ball-o brand-logo"></i></a>
+                <a class="header-brand" href="/admin"><img src="{{ asset('/uploads/company_logos/'. \App\Helpers\AppHelper::instance()->CompanySettingAdmin()->logo) }}" width="50" style="border-radius:50px;"></a>
                 <div class="dropdown">
-                    <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="{{asset('assets/images/user.png')}}" alt="" data-toggle="tooltip" data-placement="right" title="User Menu"/></a>
+                    <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="{{asset('uploads/staf_images/'.Auth::user()->image)}}" alt="" data-toggle="tooltip" data-placement="right" title="User Menu"/></a>
                 </div>
             </div>
             <div class="hright">
@@ -123,7 +126,7 @@
     <div class="user_div">
         <h5 class="brand-name mb-4">Task Manager App<a href="javascript:void(0)" class="user_btn"><i class="fa fa-times" aria-hidden="true"></i></a></h5>
         <div class="card-body">
-            <a href="page-profile.html"><img class="card-profile-img" src="{{asset('assets/images/sm/avatar1.jpg')}}" alt=""></a>
+            <a href="page-profile.html"><img class="card-profile-img" src="{{asset('uploads/staf_images/'.Auth::user()->image)}}" alt=""></a>
             <h6 class="mb-0 text-capitalize">{{Auth::user()->name}}</h6>
             <span><span class="text-capitalize">{{Auth::user()->name}}</span>.{{Auth::user()->email}}</span>
             <hr>
@@ -131,7 +134,7 @@
     </div>
 
     <div id="left-sidebar" class="sidebar ">
-        <h5 class="brand-name">Admin Dashboard <a href="javascript:void(0)" class="menu_option float-right"><i class="fa fa-th-large font-16" data-toggle="tooltip" data-placement="left" title="Grid & List Toggle"></i></a></h5>
+        <h5 class="brand-name">Menu <a href="javascript:void(0)" class="menu_option float-right"><i class="fa fa-th-large font-16" data-toggle="tooltip" data-placement="left" title="Grid & List Toggle"></i></a></h5>
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul class="metismenu">
                 <li class="g_heading">Project</li>
@@ -145,7 +148,7 @@
                        
                     </ul>
                 </li>
-                <!-- <li><a href="app-setting.html"><i class="fa fa-gear"></i><span>Setting</span></a></li> -->
+                <li><a href="/admin/setting"><i class="fa fa-gear"></i><span>Setting</span></a></li>
             </ul>
         </nav>        
     </div>
@@ -156,7 +159,7 @@
                 <div class="page-header">
                     <div class="left">
                         <a href="javascript:void(0)" class="icon menu_toggle mr-3"><i class="fa  fa-align-left"></i></a>
-                        <h1 class="page-title">Dashboard</h1>                        
+                        <h1 class="page-title"><a href="/admin">Dashboard</a></h1>
                     </div>
                     <div class="right">
                         <div class="input-icon xs-hide ">
@@ -167,8 +170,8 @@
                             <div class="dropdown d-flex">
                                 <a class="nav-link icon d-none d-md-flex btn btn-default btn-icon ml-2" data-toggle="dropdown"><i class="fa fa-user"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                    <a class="dropdown-item" href="page-profile.html"><i class="dropdown-icon fa fa-user"></i> Profile</a>
-                                    <a class="dropdown-item" href="app-setting.html"><i class="dropdown-icon fa fa-gear"></i> Settings</a>
+                                    <a class="dropdown-item" href="/admin/profile"><i class="dropdown-icon fa fa-user"></i> Profile</a>
+                                    <a class="dropdown-item" href="/admin/setting"><i class="dropdown-icon fa fa-gear"></i> Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="dropdown-icon fa fa-sign-out"></i> {{ __('Logout') }}
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -192,14 +195,13 @@
             </div>
         </div>
         @yield('content')     
-        <div class="section-body">
+        <div class="section-body" style=" ">
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <a href="templateshub.net">Star Automation</a>
+                        <div class="col-md-12 col-sm-12 fixed-bottom text-center mb-3">
+                            Powered By <a href="https://www.starautomation.net/"><b>StarAutomation</b></a>
                         </div>
-                       
                     </div>
                 </div>
             </footer>
@@ -211,12 +213,12 @@
    
 </script>
 <script src="{{asset('assets/bundles/lib.vendor.bundle.js')}}"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
 <script src="{{asset('assets/bundles/apexcharts.bundle.js')}}"></script>
 <script src="{{asset('assets/bundles/counterup.bundle.js')}}"></script>
 <script src="{{asset('assets/bundles/knobjs.bundle.js')}}"></script>
 <script src="{{asset('assets/bundles/c3.bundle.js')}}"></script>
-
+<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
 <script src="{{asset('assets/js/core.js')}}"></script>
 <script src="{{asset('js/custom-admin.js')}}"></script>
 <script src="{{asset('assets/js/page/project-index.js')}}"></script>

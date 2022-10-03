@@ -32,6 +32,13 @@ class ProjectController extends Controller
         $project->create_project = $id;
         $project->status = $req->status;
         $project->save();
+        // For Assign Project Himself
+        $assign = new ProjectAssign();
+        $assign->project_id = $project->id;
+        $assign->user_id = $id;
+        $assign->manager_id = $id;
+        $assign->save();
+
         return back()->with('success','Add Project successfully!');
     }
     public function AssignProject(Request $req){

@@ -112,10 +112,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">Add Staff</h3>
-                                        <div class="card-options ">
-                                            <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
-                                            <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
-                                        </div>
+                                        
                                     </div>
                                     <form class="card-body" method="post" action="{{url('/admin/add-manager')}}" enctype="multipart/form-data">
                                         @csrf()
@@ -129,24 +126,29 @@
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Email</label>
-                                                    <input type="text" name="email" class="form-control" required>
+                                                    <input type="text" id="check-email" name="email" class="form-control" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Password</label>
-                                                    <input type="password" name="password" class="form-control" required>
+                                                    <div class="input-group mb-3">
+                                                        <input type="password" name="password" id="myInput" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                                        <div class="input-group-append">
+                                                          <span class="input-group-text" onclick="myFunction()"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Date of Birth</label>
-                                                    <input type="datetime-local" name="dob" data-date-autoclose="true" class="form-control" placeholder="Date of Birth" required>
+                                                    <input type="date" value="2000-01-22" name="dob" data-date-autoclose="true" class="form-control" placeholder="Date of Birth" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <label>Gender</label>
-                                                <select class="form-control" name="gender" required>
+                                                <select class="form-control" name="gender">
                                                     <option value="">-- Gender --</option>
                                                     <option value="1">Male</option>
                                                     <option value="2">Female</option>
@@ -154,8 +156,8 @@
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
-                                                    <label>Department</label>
-                                                    <select class="form-control show-tick" name="department">
+                                                    <label>Department <button type="button" class="btn btn-success btn-sm" onclick="GetDepartment()" data-toggle="modal" data-target="#addtask">Add Department</button></label>
+                                                    <select class="form-control show_department" name="department">
                                                         @foreach($designations as $designation)
                                                             <option value="{{$designation->id}}">{{$designation->name}}</option>
                                                         @endforeach
@@ -164,8 +166,8 @@
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
-                                                    <label>Skills</label>
-                                                    <select class="form-control show-tick" name="skill">
+                                                    <label>Skills <button type="button" class="btn btn-success btn-sm" onclick="GetSkill()" data-toggle="modal" data-target="#addskill">Add Skill</button></label>
+                                                    <select class="form-control show_skill" name="skill">
                                                         @foreach($skills as $skill)
                                                             <option value="{{$skill->id}}">{{$skill->name}}</option>
                                                         @endforeach
@@ -187,8 +189,7 @@
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>User Type</label>
-                                                    <select class="form-control show-members" name="role" required>
-                                                    <option value="">-- Role --</option>
+                                                    <select class="form-control show-members" name="role" >
                                                     <option value="2">Manager</option>
                                                     <option value="3">Worker</option>
                                                 </select>
@@ -197,7 +198,7 @@
                                             <div class="col-md-4 col-sm-12 manager_value d-none">
                                                 <div class="form-group">
                                                     <label>Select Manager</label>
-                                                    <select class="form-control select-members text-capitalize" name="team_memeber" required>
+                                                    <select class="form-control select-members text-capitalize" name="team_memeber">
                                                    
                                                 </select>
                                                 </div>
@@ -223,8 +224,95 @@
                 </div>
             </div>
         </div>
+         <!-- Add New Department -->
+<div class="modal fade" id="addtask" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="title" id="defaultModalLabel">Add New Department</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                <div class="col-12">
+                        <div class="form-group show_department_p">                                    
+                            <p></p>
+                        </div>
+                    </div>    
+                <div class="col-12">
+                        <div class="form-group">                                    
+                            <input type="text" id="department_name" class="form-control" placeholder="Department Name">
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="target_department"><button type="submit" class="btn btn-primary" onclick="SaveDepartment()">Add</button></form>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+        <!-- Add New Skill -->
+ <div class="modal fade" id="addskill" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="title" id="defaultModalLabel">Add New Skill</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row clearfix">
+                <div class="col-12">
+                        <div class="form-group show_skill_p">                                    
+                            <p></p>
+                        </div>
+                    </div>    
+                <div class="col-12">
+                        <div class="form-group">                                    
+                            <input type="text" id="skill_name" class="form-control" placeholder="Skill Name">
+                        </div>
+                    </div>                   
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form id="target_category"><button type="submit" class="btn btn-primary" onclick="SaveSkill()">Add</button></form>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> 
         <script>
+             function myFunction(){
+                var x = document.getElementById("myInput");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+            }
             $(document).ready(function(){
+                $( "#target_department" ).submit(function( event ) {
+                    event.preventDefault();
+                    $('#department_name').focus();
+                });
+                $( "#target_category" ).submit(function( event ) {
+                    event.preventDefault();
+                    $('#skill_name').focus();
+                });
+                // For Initalization
+                ClassicEditor
+                .create( document.querySelector( '#editor' ) )
+                .catch( error => {
+                    console.error( error );
+                } );
+                    GetDepartment();
+                    GetSkill();
+                    GetProjectHeads();
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                        }
+                    });
+                // 
                 $.ajax({
                        type:"GET",
                        dataType:"json",
@@ -236,7 +324,7 @@
                             $(".select-members").append("<option value="+response.users[i].id+">"+response.users[i].name+"</option>");
                         }
                        }
-                   })
+                   });
             });
             $('.show-members').on('click',function(){
                 var value = $('.show-members').val();
@@ -246,5 +334,118 @@
                     $('.manager_value').addClass('d-none');
                 }
             });
+            // Here copy form other
+              // For Department
+              function GetDepartment(){
+                $(".show_department").empty();
+                $(".show_department_p").empty();
+                   $.ajax({
+                       type:"GET",
+                       dataType:"json",
+                       url:'/admin/department/',
+                       success:function(response){
+                        var count =1;
+                        for(let i=0; i<response.departments.length; i++){
+                           $(".show_department_p").append("<p id='"+response.departments[i].id+"'>"+(count+i)+") "+response.departments[i].name+" <span style='float: right;'><button class='btn btn-danger btn-sm' onclick='DeleteDepartment("+response.departments[i].id+")'>X</button></span></p>");
+                           $(".show_department").append("<option value="+response.departments[i].id+">"+(count+i)+") "+response.departments[i].name+"</option>");
+                       }
+                       }
+                   });
+               }
+            function SaveDepartment(){
+                var departmentname = $('#department_name').val();
+                $.ajax({
+                       type:"GET",
+                       dataType:"json",
+                       url:'/admin/save-department/',
+                       data:{
+                        "_token": "{{ csrf_token() }}",
+                        'departmentname':departmentname},
+                        
+                       success:function(response){
+                        GetDepartment();
+                        $('#department_name').val('');
+                       }
+                   });
+            }
+            function DeleteDepartment(id){
+                $.ajax({
+                       type:"GET",
+                       dataType:"json",
+                       url:'/admin/delete-project-department/',
+                       data:{
+                        "_token": "{{ csrf_token() }}",
+                        'id':id},
+                       success:function(response){
+                        $("p[id="+id+"]").remove();
+                        GetDepartment();
+                       }
+                   });
+            }
+            // End //
+            // For Skill
+            function GetSkill(){
+                $(".show_skill").empty();
+                $(".show_skill_p").empty();
+                   $.ajax({
+                       type:"GET",
+                       dataType:"json",
+                       url:'/admin/skill/',
+                       success:function(response){
+                        var count =1;
+                        for(let i=0; i<response.skills.length; i++){
+                           $(".show_skill_p").append("<p id='"+response.skills[i].id+"'>"+(count+i)+") "+response.skills[i].name+" <span style='float: right;'><button class='btn btn-danger btn-sm' onclick='DeleteSkill("+response.skills[i].id+")'>X</button></span></p>");
+                           $(".show_skill").append("<option value="+response.skills[i].id+">"+(count+i)+") "+response.skills[i].name+"</option>");
+                       }
+                       }
+                   });
+               }
+            function SaveSkill(){
+                var skillname = $('#skill_name').val();
+                $.ajax({
+                       type:"GET",
+                       dataType:"json",
+                       url:'/admin/save-skill/',
+                       data:{
+                        "_token": "{{ csrf_token() }}",
+                        'skillname':skillname},
+                        
+                       success:function(response){
+                        GetSkill();
+                        $('#skill_name').val('');
+                       }
+                   });
+            }
+            function DeleteSkill(id){
+                $.ajax({
+                       type:"GET",
+                       dataType:"json",
+                       url:'/admin/delete-project-skill/',
+                       data:{
+                        "_token": "{{ csrf_token() }}",
+                        'id':id},
+                       success:function(response){
+                        $("p[id="+id+"]").remove();
+                        GetSkill();
+                       }
+                   });
+            }
+            // End //
+
+            function GetProjectHeads(){
+                $(".show_catagory").empty();
+                   $.ajax({
+                       type:"GET",
+                       dataType:"json",
+                       url:'/admin/prjectheads/',
+                       success:function(response){
+                        console.log(response.users[0].name)
+                        var count =1;
+                        for(let i=0; i<response.users.length; i++){
+                           $(".show_pro_head").append("<option value="+response.users[i].id+">"+(count+i)+") "+response.users[i].name+"</option>");
+                       }
+                       }
+                   })
+               }
         </script>
 @endsection

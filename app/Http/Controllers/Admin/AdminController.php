@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CompanySetting;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Auth;
@@ -13,7 +14,21 @@ use App\Task;
 class AdminController extends Controller
 {
     public function index(){
-        $projects = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
+        $id = Auth::user()->id;
+        $setting = CompanySetting::where('user_id', $id)->first();
+        // $projects = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
+        $project_lists = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
+        $users = User::where('user_type',$id)->where('role',2)->get();
+        $user =[Auth::user()->id];
+        $projects =[];
+        for($i=0; $i<count($users); $i++){
+            array_push($user, $users[$i]->id);
+        }
+        for($i=0; $i<sizeof($user); $i++){
+            $project = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$user[$i])->get();
+            array_push($projects, $project);
+        }
+
         $managers = User::where('user_type',Auth::user()->id)->get();
         $managerscount = User::where('user_type',Auth::user()->id)->where('role',2)->count();
     
@@ -35,9 +50,9 @@ class AdminController extends Controller
         $CompleteprojectCount = $CompleteprojectCount + $projectComplete;
         $memCount +=$memberscount;
         $taskCount +=$taskscount;
-
+            
         }
-        return view('admin.dashboard',compact('projects','projectCount','CompleteprojectCount','managerscount','memCount','taskCount'));
+        return view('admin.dashboard',compact('projects','projectCount','CompleteprojectCount','managerscount','memCount','taskCount','setting'));
     }
     public function ProjectHeads(){
         $id = Auth::user()->id;

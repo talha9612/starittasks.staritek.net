@@ -40,4 +40,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\User','team_member', 'id');
     }
+    public function getdepartment()
+    {
+        return $this->belongsTo('App\Designation','department', 'id');
+    }
+    public function getskill()
+    {
+        return $this->belongsTo('App\Skill','skill', 'id');
+    }
 }

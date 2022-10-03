@@ -56,7 +56,13 @@
                                             @foreach($projects as $key=>$project)
                                                 <tr>
                                                     <td>{{$project->id}}</td>
-                                                    <td>{{$project->project_name}}</td>
+                                                    <td>
+                                                        <form method="post" action="/manager/projectdetails" id="my_form_{{ $project->id }}">
+                                                            @csrf
+                                                            <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                                            <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
+                                                        </form>
+                                                    </td>
                                                     <td>{{$project->head['name']}}</td>
                                                     <td>
                                                     <ul class="list-unstyled team-info sm margin-0 w150">
@@ -64,7 +70,7 @@
                                                             @if($project->id == $assign->project_id)
                                                                 <li><img src="{{asset('uploads/staf_images/'.$assign->GetUsers->image)}}" alt="Avatar"></li>
                                                             @else
-                                                                <li><img src="" alt="Avatar"></li>
+                                                               
                                                             @endif
                                                         @endforeach
                                                         </ul>
@@ -245,14 +251,14 @@
                         </div>
                     </div>    
                 <div class="col-12">
-                        <div class="form-group">                                    
+                        <div class="form-group">
                             <input type="text" id="catagory_name" class="form-control" placeholder="Catagory Name">
                         </div>
-                    </div>                   
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SaveCatagory()">Add</button>
+                <form id="target_category"><button type="submit" class="btn btn-primary" onclick="SaveCatagory()">Add</button></form>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -260,6 +266,10 @@
 </div>
         <script>
             $(document).ready(function(){
+                $( "#target_category" ).submit(function( event ) {
+                    event.preventDefault();
+                    $('#catagory_name').focus();
+                });
                 ClassicEditor
             .create( document.querySelector( '#editor' ) )
             .catch( error => {
@@ -292,7 +302,7 @@
             function SaveCatagory(){
                 var catagoryname = $('#catagory_name').val();
                 $.ajax({
-                       type:"POST",
+                       type:"GET",
                        dataType:"json",
                        url:'/manager/save-catagory/',
                        data:{
@@ -322,7 +332,7 @@
                }
             function DeleteCatagory(id){
                 $.ajax({
-                       type:"POST",
+                       type:"GET",
                        dataType:"json",
                        url:'/manager/delete-project-catagory/',
                        data:{

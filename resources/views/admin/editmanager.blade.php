@@ -85,7 +85,7 @@
                                         <div class="form-group">
                                             <label>Skills</label>
                                             <select class="form-control show-tick" name="skill">
-                                            @foreach($skills as $skill)
+                                                @foreach($skills as $skill)
                                                     @foreach($skill as $define)
                                                         <option value="{{$define->id}}" <?php echo($define->id == $user->skill?'selected':'')?>>{{$define->name}}</option>
                                                     @endforeach

@@ -6,7 +6,7 @@
                 <div class="row clearfix">
                     <div class="col-lg-12">
                         <div class="mb-4">
-                            <h4><i class="fa fa-address-book" aria-hidden="true"></i>Welcome {{Auth::user()->name}}</h4>
+                            <h4><i class="fa fa-address-book" aria-hidden="true"></i> Welcome {{Auth::user()->name}}</h4>
                             <small>Measure How Fast You’re Growing Monthly Recurring Revenue. <a href="#">Learn More</a></small>
                         </div>                        
                     </div>
@@ -15,7 +15,7 @@
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Active Projects</h3>
+                                <h3 class="card-title">Projects</h3>
                             </div>
                             <div class="card-body">
                             <span class="float-left"><i class="fa fa-tasks " style="font-size: 40px;color:#EB6F62" aria-hidden="true"></i></span>
@@ -49,7 +49,7 @@
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Team Mambers</h3>
+                                <h3 class="card-title">Team Members</h3>
                             </div>
                             <div class="card-body">
                             <span class="float-left"><i class="fa fa-user" style="font-size: 40px;color:#00bcd4" aria-hidden="true"></i></span>
@@ -61,7 +61,7 @@
                     <div class="col-xl-2 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">Task Pandding</h3>
+                                <h3 class="card-title">Task Pending</h3>
                             </div>
                             <div class="card-body">
                             <span class="float-left"><i class="fa fa-file" style="font-size: 40px;color:#ff9800bf" aria-hidden="true"></i></span>
@@ -94,13 +94,21 @@
                                                 <th>Last Date</th>
                                                 <th>Project Category</th>
                                                 <th>Status</th>
+                                                <th>Action</th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($projects as $project)
+                                            @foreach($projects as $datas)
+                                            @foreach($datas as $key=>$project)
                                             <tr>
                                                 <td>{{$project->id}}</td>
-                                                <td>{{$project->project_name}}</td>
+                                                <td>
+                                                    <form method="post" action="/admin/projectdetails" id="my_form_{{ $project->id }}">
+                                                        @csrf
+                                                        <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                                        <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
+                                                    </form>
+                                                </td>
                                                 <td>
                                                     <ul class="list-unstyled team-info sm margin-0 w150 d-inline">
                                                         <li><img src="{{asset('uploads/staf_images/'.$project->head->image)}}" alt="Avatar"></li>
@@ -123,7 +131,21 @@
                                                     <label class="tag tag-red">Finished</label>
                                                     @endif
                                                 </td>
+                                                <td>
+                                                    <form action="/admin/project-edit" method="post" class="d-inline">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{$project->id}}">    
+                                                        <button class="btn btn-primary">Edit</button>
+                                                    </form>
+                                                     | 
+                                                     <form action="/admin/project-delete" method="post" class="d-inline">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{$project->id}}">    
+                                                        <button class="btn btn-danger">Del</button>
+                                                    </form>
+                                                </td>
                                             </tr>
+                                            @endforeach
                                             @endforeach
                                         </tbody>
                                     </table>

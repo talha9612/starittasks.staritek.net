@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-<link rel="icon" href="favicon.ico" type="image/x-icon"/>
+<link rel="icon" href="{{ asset('/uploads/company_logos/'. \App\Helpers\AppHelper::instance()->CompanySettingManager()->logo) }}" type="image/x-icon"/>
 
 <title>TaskManager::@yield('mytitle') </title>
 
@@ -39,7 +39,7 @@
     <div id="header_top" class="header_top">
         <div class="container">
             <div class="hleft">
-                <a class="header-brand" href="index-2.html"><i class="fa fa-soccer-ball-o brand-logo"></i></a>
+                <a class="header-brand" href="{{ url('/manager/') }}"><img src="{{ asset('/uploads/company_logos/'. \App\Helpers\AppHelper::instance()->CompanySettingManager()->logo) }}" width="50" style="border-radius:50px;"></a>
                 <div class="dropdown">
                     <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="{{asset('uploads/staf_images/'.Auth::user()->image)}}" alt="" data-toggle="tooltip" data-placement="right" title="User Menu"/></a>
                   
@@ -123,7 +123,7 @@
     <div class="user_div">
         <h5 class="brand-name mb-4">Manager {{Auth::user()->name}}<a href="javascript:void(0)" class="user_btn"><i class="fa fa-times" aria-hidden="true"></i></a></h5>
         <div class="card-body">
-            <a href="page-profile.html"><img class="card-profile-img" src="{{asset('assets/images/sm/avatar1.jpg')}}" alt=""></a>
+            <a href="page-profile.html"><img class="card-profile-img" src="{{asset('uploads/staf_images/'.Auth::user()->image)}}" alt=""></a>
             <h6 class="mb-0">{{Auth::user()->name}}</h6>
             <span>{{Auth::user()->name}}.{{Auth::user()->email}}</span>
           
@@ -133,7 +133,7 @@
     </div>
 
     <div id="left-sidebar" class="sidebar ">
-        <h5 class="brand-name">Manager {{Auth::user()->name}} <a href="javascript:void(0)" class="menu_option float-right"><i class="fa fa-th-large font-16" data-toggle="tooltip" data-placement="left" title="Grid & List Toggle"></i></a></h5>
+        <h5 class="brand-name">Menu <a href="javascript:void(0)" class="menu_option float-right"><i class="fa fa-th-large font-16" data-toggle="tooltip" data-placement="left" title="Grid & List Toggle"></i></a></h5>
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul class="metismenu">
                 <li class="g_heading">Project</li>
@@ -147,7 +147,7 @@
                         <!-- <li><a href="forgot-password.html">Tasks Board</a></li> -->
                     </ul>
                 </li>
-                <!-- <li><a href="app-setting.html"><i class="fa fa-gear"></i><span>Setting</span></a></li> -->
+                <li><a href="/manager/setting"><i class="fa fa-gear"></i><span>Setting</span></a></li>
             </ul>
         </nav>        
     </div>
@@ -158,7 +158,7 @@
                 <div class="page-header">
                     <div class="left">
                         <a href="javascript:void(0)" class="icon menu_toggle mr-3"><i class="fa  fa-align-left"></i></a>
-                        <h1 class="page-title">Dashboard</h1>                        
+                        <h1 class="page-title"><a href="/manager">Dashboard</a></h1>
                     </div>
                     <div class="right">
                         <div class="input-icon xs-hide">
@@ -171,8 +171,8 @@
                             <div class="dropdown d-flex">
                                 <a class="nav-link icon d-none d-md-flex btn btn-default btn-icon ml-2" data-toggle="dropdown"><i class="fa fa-user"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                    <a class="dropdown-item" href="page-profile.html"><i class="dropdown-icon fa fa-user"></i> Profile</a>
-                                    <a class="dropdown-item" href="app-setting.html"><i class="dropdown-icon fa fa-gear"></i> Settings</a>
+                                    <a class="dropdown-item" href="/manager/profile"><i class="dropdown-icon fa fa-user"></i> Profile</a>
+                                    <a class="dropdown-item" href="/manager/setting"><i class="dropdown-icon fa fa-gear"></i> Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="dropdown-icon fa fa-sign-out"></i> {{ __('Logout') }}
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -200,10 +200,9 @@
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <a href="templateshub.net">Star Automation</a>
+                        <div class="col-md-12 col-sm-12 fixed-bottom text-center mb-3">
+                            Powered By <a href="https://www.starautomation.net/"><b>StarAutomation</b></a>
                         </div>
-                       
                     </div>
                 </div>
             </footer>
@@ -219,7 +218,7 @@
 <script src="{{asset('assets/bundles/c3.bundle.js')}}"></script>
 <script src="{{asset('js/customjs-manager.js')}}"></script>
 <script src="{{asset('assets/js/core.js')}}"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>
 <script src="{{asset('assets/js/page/project-index.js')}}"></script>
 </body>
 

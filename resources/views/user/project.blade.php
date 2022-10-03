@@ -71,19 +71,19 @@
             <div class="container-fluid">
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="list" role="tabpanel">
-                    <div class="row clearfix">
-                    <div class="col-12 col-sm-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Project #{{$project->id}} - {{$project->project_name}}</h3>
-                            </div>
-                            <div class="card-body">
-                                <h6 class="mb-3">Description</h6>
-                            {{\Illuminate\Support\Str::limit(trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($project->project_summary)))))), 40)}}
+                        <div class="row clearfix">
+                            <div class="col-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Project #{{$project->id}} - {{$project->project_name}}</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <h6 class="mb-3">Description</h6>
+                                    {{\Illuminate\Support\Str::limit(trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($project->project_summary)))))), 40)}}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
                     </div>
                     <div class="tab-pane fade" id="addnew" role="tabpanel">
                         <div class="row">
@@ -107,13 +107,11 @@
                                                     <td>{{$key+1}}</td>
                                                     <td><img src="{{asset('uploads/staf_images/'.$assign_table->GetUsers->image)}}" alt="Avatar" style="width:100px;padding:5px;border:1px solid black; border-radius:50px;"></td>
                                                     <td><h6>{{$assign_table->GetUsers->name}}</h6>
-                                                        
                                                             @foreach($skills as $skill)
                                                                 @if($assign_table->GetUsers->skill == $skill->id)
                                                                 <span>{{$skill->name}}</span>
                                                                 @endif
                                                             @endforeach
-                                                        
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -130,7 +128,7 @@
                             <div class="col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h3 class="card-title">Add Members</h3>
+                                        <h3 class="card-title">Project Tasks</h3>
                                        
                                     </div>
                                     <div class="card-body" >
@@ -149,15 +147,14 @@
                                         </thead>
                                         <tbody>
                                            @foreach($tasks as $task)
+                                          
                                             <tr>
                                                 <td>{{$task->id}}</td>
-                                                <td class="text-capitalize"><a href="javascript:void(0)" class="getmodel" data-id="{{$task->id}}" data-toggle="modal" data-target="#exampleModal"><h6 class="mb-0 text-dark">{{$task->heading}}</h6></a>
-                                                    <span>{{\Illuminate\Support\Str::limit(trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($task->description)))))), 40)}}</span>
+                                                <td class="text-capitalize"><h6 class="mb-0 text-dark">{{$task->heading}}</h6>
+                                                    {{-- <span>{{\Illuminate\Support\Str::limit(trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($task->description)))))), 40)}}</span> --}}
                                                 </td>
                                                 <td class="text-capitalize">
-                                                  
                                                        {{$task->project->project_name}}
-                                                   
                                                 </td>
                                                 <td>
                                                     <ul class="list-unstyled d-inline team-info sm margin-0 w150">   
@@ -186,6 +183,7 @@
                                                     @endif
                                                 </td>
                                             </tr>
+                                          
                                            @endforeach
                                         </tbody>
                                     </table>
@@ -202,10 +200,10 @@
         </div>
           <!-- Modal -->
        
-<div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         
-        <di class="modal-content">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Task Details</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

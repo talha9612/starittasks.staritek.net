@@ -9,6 +9,7 @@ use App\Task;
 use App\Project;
 use App\ProjectAssign;
 use App\Skill;
+use App\User;
 use DateTime;
 class ProjectController extends Controller
 {
@@ -26,7 +27,9 @@ class ProjectController extends Controller
         if(count($skills) == 0){
             $skills = Skill::where('user_id',$project->project_head)->get();
         }
-        $tasks = Task::where('user_id',Auth::user()->id)->orwhere('user_id',Auth::user()->user_type)->where('project_id',$req->project_id)->with('project','AssignTo','AssignBy')->get();
+        $users = User::where('id',Auth::user()->team_member)->first();
+        $tasks = Task::where('created_by',$users->id)->where('project_id',$req->project_id)->with('project','AssignTo','AssignBy')->get();
+        // $tasks = Task::where('user_id',Auth::user()->id)->orWhere('created_by',Auth::user()->user_type)->where('project_id',$req->project_id)->with('project','AssignTo','AssignBy')->get();
         return view('user.project',compact('project','left_days','assign_task','complete_task','assign_tables','skills','tasks'));
     }
    

@@ -90,7 +90,13 @@
                                             @foreach($projects as $project)
                                             <tr>
                                                 <td>{{$project->id}}</td>
-                                                <td>{{$project->project_name}}</td>
+                                                <td>
+                                                    <form method="post" action="/manager/projectdetails" id="my_form_{{ $project->id }}">
+                                                        @csrf
+                                                        <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                                        <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
+                                                    </form>    
+                                                </td>
                                                 <td>
                                                 {{$project->head->name}}
                                                 </td>

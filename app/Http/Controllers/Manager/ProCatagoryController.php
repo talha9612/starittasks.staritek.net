@@ -14,7 +14,7 @@ class ProCatagoryController extends Controller
             'catagories' => $catagories,
         ]);
     }
-    public function SaveCatagory(Request $req){
+    public function SaveCategory(Request $req){
         $catagory = new ProjectCatagory();
         $catagory->name = $req->catagoryname;
         $catagory->user_id = Auth::user()->id;

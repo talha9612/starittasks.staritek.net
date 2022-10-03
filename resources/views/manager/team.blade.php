@@ -11,6 +11,7 @@
                                     <ul class="nav nav-tabs b-none">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i>Company Staff List</a></li>                                        
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addnew"><i class="fa fa-plus"></i> Add New</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#otherteammembers"><i class="fa fa-plus"></i>Add Other Team Users</a></li>
                                     </ul>
                                 </div>
                                
@@ -24,87 +25,89 @@
             <div class="container-fluid">
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="list" role="tabpanel">
-                    <div class="row clearfix">
-                    <div class="col-12 col-sm-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">View All Users</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Name</th>
-                                                <th>Image</th>
-                                                <th>Email</th>
-                                                <th>Phone No</th>
-                                                <th>Address</th>
-                                                <th>Role</th>
-                                                <th>Team Member</th>
-                                                <th>Account Status</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($users as $user)
-                                            <tr>
-                                                <td>{{$user->id}}</td>
-                                                <td class="text-capitalize">{{$user->name}}</td>
-                                                <td>
-                                                    <img src="{{asset('uploads/staf_images/'.$user->image)}}" width="80" style="border: 1px solid lightgray; padding:5px;" alt="Avatar">
-                                                </td>
-                                                <td class="text-capitalize">{{$user->email}}</td>
-                                                <td>{{$user->phone}}</td>
-                                                <td class="text-capitalize">{{$user->address}}</td>
-                                                <td class="text-capitalize"> 
-                                                    @if($user->role == 1)
-                                                        Super Admin
-                                                    @elseif($user->role == 2)
-                                                        Manager
-                                                    @else
-                                                        User
-                                                    @endif</td>
-                                                <td class="text-capitalize">{{ $user->getusers->name}}</td>
-                                                <td>
-                                                @if($user->status == 1)
-                                                
-                                                <label class="custom-switch m-0">
-                                                <input type="checkbox" value="0" class="custom-switch-input admin-change-status-user" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{$user->status == 1? 'checked':''}}>
-                                                <span class="custom-switch-indicator"></span>
-                                                </label>
-                                              
-                                                @else
-                                                <label class="custom-switch m-0">
-                                                <input type="checkbox" value="0" class="custom-switch-input admin-change-status-user" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{$user->status == 1? 'checked':''}}>
-                                                <span class="custom-switch-indicator"></span>
-                                                </label>
-                                                @endif
-                                               
+                        <div class="row clearfix">
+                            <div class="col-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">View All Users</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Name</th>
+                                                        <th>Image</th>
+                                                        <th>Email</th>
+                                                        <th>Phone No</th>
+                                                        <th>Address</th>
+                                                        <th>Role</th>
+                                                        <th>Team Member</th>
+                                                        <th>Account Status</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($users as $user)
+                                                    <tr>
+                                                        <td>{{$user->id}}</td>
+                                                        <td class="text-capitalize">{{$user->name}}</td>
+                                                        <td>
+                                                            <img src="{{asset('uploads/staf_images/'.$user->image)}}" width="80" style="border: 1px solid lightgray; padding:5px;" alt="Avatar">
+                                                        </td>
+                                                        <td class="text-capitalize">{{$user->email}}</td>
+                                                        <td>{{$user->phone}}</td>
+                                                        <td class="text-capitalize">{{$user->address}}</td>
+                                                        <td class="text-capitalize"> 
+                                                            @if($user->role == 1)
+                                                                Super Admin
+                                                            @elseif($user->role == 2)
+                                                                Manager
+                                                            @else
+                                                                User
+                                                            @endif</td>
+                                                        <td class="text-capitalize">{{ $user->getusers->name}}</td>
+                                                        <td>
+                                                        @if($user->status == 1)
+                                                        
+                                                        <label class="custom-switch m-0">
+                                                        <input type="checkbox" value="0" class="custom-switch-input admin-change-status-user" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{$user->status == 1? 'checked':''}}>
+                                                        <span class="custom-switch-indicator"></span>
+                                                        </label>
+                                                    
+                                                        @else
+                                                        <label class="custom-switch m-0">
+                                                        <input type="checkbox" value="0" class="custom-switch-input admin-change-status-user" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{$user->status == 1? 'checked':''}}>
+                                                        <span class="custom-switch-indicator"></span>
+                                                        </label>
+                                                        @endif
+                                                    
 
-                                                </td>
-                                                <td>
-                                                    <form action="/manager/edit-manager" method="post" class="d-inline">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{$user->id}}">    
-                                                        <button class="btn btn-primary btn-sm">Edit</button>
-                                                    </form>    
-                                                    |  <form action="/manager/delete-manager" method="post" class="d-inline">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{$user->id}}">    
-                                                        <button class="btn btn-info btn-sm">Del</button>
-                                                    </form> 
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                                        </td>
+                                                        <td>
+                                                            @if($user->team_member == Auth::user()->id)
+                                                            <form action="/manager/edit-manager" method="post" class="d-inline">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{$user->id}}">    
+                                                                <button class="btn btn-primary btn-sm">Edit</button> |
+                                                            </form>    
+                                                            @endif
+                                                              <form action="/manager/delete-manager" method="post" class="d-inline">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{$user->id}}">    
+                                                                <button class="btn btn-info btn-sm">Del</button>
+                                                            </form> 
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
                     </div>
                     <div class="tab-pane fade" id="addnew" role="tabpanel">
                         <div class="row">
@@ -112,10 +115,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">Add Staff</h3>
-                                        <div class="card-options ">
-                                            <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
-                                            <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
-                                        </div>
+                                       
                                     </div>
                                     <form class="card-body" method="post" action="{{url('/manager/add-user')}}" enctype="multipart/form-data">
                                         @csrf()
@@ -135,13 +135,18 @@
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Password</label>
-                                                    <input type="password" name="password" class="form-control" required>
+                                                    <div class="input-group mb-3">
+                                                        <input type="password" name="password" id="myInput" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                                        <div class="input-group-append">
+                                                          <span class="input-group-text" onclick="myFunction()"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Date of Birth</label>
-                                                    <input type="datetime-local" name="dob" data-date-autoclose="true" class="form-control" placeholder="Date of Birth" required>
+                                                    <input type="date" name="dob" value="2000-01-22" data-date-autoclose="true" class="form-control" placeholder="Date of Birth" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-sm-12">
@@ -182,20 +187,50 @@
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Role</label>
-                                                    <select class="form-control show-tick" name="role">  
+                                                    <select class="form-control show-tick" name="role">
                                                     <option value="3">My Team Member</option>
                                                 </select>
                                                 </div>
                                             </div>
-                                          
-                                            <div class="col-sm-12">
+                                            <div class=" col-md-4 col-sm-12">
+                                                <label>Select Image</label>
                                                 <div class="form-group mt-2 mb-3">
-                                                    <input type="file" name="image" class="dropify" required>
-                                                    <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
+                                                    <input type="file" name="image" placeholder="check abid" class="dropify" required>
                                                 </div>
                                             </div>
-                                           
                                             <div class="col-sm-12">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="submit" class="btn btn-outline-secondary">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="otherteammembers" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Add Team Member From Other Teams</h3>
+                                    </div>
+                                    <form class="card-body" method="post" action="{{url('/manager/privous-add-user')}}" enctype="multipart/form-data">
+                                        @csrf()
+                                        <div class="row clearfix">
+                                            <div class="col-md-4 col-sm-12">
+                                                <label>Other Team Member List</label>
+                                                <select class="form-control show-tick" name="member_id" required>
+                                                    @foreach($teams as $team)
+                                                        @if($team->team_member == Auth::user()->id)
+                                                        @else
+                                                            <option value="{{ $team->id }}">{{ $team->name }}</option>
+                                                        @endif
+                                                    @endforeach
+                                                    
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-12 mt-3">
                                                 <button type="submit" class="btn btn-primary">Submit</button>
                                                 <button type="submit" class="btn btn-outline-secondary">Cancel</button>
                                             </div>
@@ -230,7 +265,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SaveDepartment()">Add</button>
+                <form id="target_department"><button type="submit" class="btn btn-primary" onclick="SaveDepartment()">Add</button></form>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
@@ -258,14 +293,30 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="SaveSkill()">Add</button>
+                <form id="target_category"><button type="submit" class="btn btn-primary" onclick="SaveSkill()">Add</button></form>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
         <script>
+            function myFunction(){
+                var x = document.getElementById("myInput");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+            }
             $(document).ready(function(){
+                $( "#target_department" ).submit(function( event ) {
+                    event.preventDefault();
+                    $('#department_name').focus();
+                });
+                $( "#target_category" ).submit(function( event ) {
+                    event.preventDefault();
+                    $('#skill_name').focus();
+                });
                 ClassicEditor
             .create( document.querySelector( '#editor' ) )
             .catch( error => {
@@ -300,7 +351,7 @@
             function SaveDepartment(){
                 var departmentname = $('#department_name').val();
                 $.ajax({
-                       type:"POST",
+                       type:"GET",
                        dataType:"json",
                        url:'/manager/save-department/',
                        data:{
@@ -315,7 +366,7 @@
             }
             function DeleteDepartment(id){
                 $.ajax({
-                       type:"POST",
+                       type:"GET",
                        dataType:"json",
                        url:'/manager/delete-project-department/',
                        data:{
@@ -348,7 +399,7 @@
             function SaveSkill(){
                 var skillname = $('#skill_name').val();
                 $.ajax({
-                       type:"POST",
+                       type:"GET",
                        dataType:"json",
                        url:'/manager/save-skill/',
                        data:{
@@ -363,7 +414,7 @@
             }
             function DeleteSkill(id){
                 $.ajax({
-                       type:"POST",
+                       type:"GET",
                        dataType:"json",
                        url:'/manager/delete-project-skill/',
                        data:{

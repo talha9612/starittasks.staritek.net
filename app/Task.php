@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
+use Spatie\Activitylog\Traits\LogsActivity;
 class Task extends Model
 {
+    use LogsActivity;
+    protected static $logAttributes = ['heading','description','due_date','start_date','priority','status','progress','approved','created_by','screen_shot'];
+
     public function project()
     {
         return $this->belongsTo('App\Project','project_id', 'id');

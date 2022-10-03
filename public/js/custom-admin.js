@@ -183,3 +183,29 @@ $('.admin-change-status-user').on('change',function(){
       }
     });
   });
+//  Check Email Validation
+
+    $('#check-email').on('keyup', function() {
+        //ajax request
+        $.ajax({
+            method:'get',
+            url: "/admin/checkEmail",
+            data: {
+                'email' : $('#check-email').val()
+            },
+            dataType: 'json',
+            success: function(data) {
+                if(data == true) {
+                    $('#check-email').addClass('is-invalid');
+                    $('#check-email').removeClass('is-valid');
+                }
+                else {
+                    $('#check-email').removeClass('is-invalid');
+                    $('#check-email').addClass('is-valid');
+                }
+            },
+            error: function(data){
+                //error
+            }
+        });
+    });
