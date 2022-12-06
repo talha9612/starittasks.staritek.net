@@ -34,6 +34,7 @@ class TaskController extends Controller
         $task = Task::find($request->task_id);
         $task->description = $request->desc;
         $task->progress = $request->progress;
+        $privous_progress = $task->progress_int;
         if($request->progress =='five'){
             $task->progress_int = 5;
         }else if($request->progress =='twentyfive'){
@@ -44,15 +45,15 @@ class TaskController extends Controller
             $task->progress_int = 75;
         }else if($request->progress =='onehundred'){
             $task->progress_int = 100;
-        }else if($request->progress ==null){
+        }else if($request->progress == null){
             $task->progress_int = 0;
         }
         if($request->progress == 'onehundred'){
             $task->status = 5;
         }
         // Project Complition Calculation
-            $privous_progress = $task->progress_int;
-            $project = Project::where('id',$task->project_id)->first();
+           
+            $project = Project::find($task->project_id);
             $tasks = Task::where('project_id',$task->project_id)->get();
             $NumberOfTasks = sizeof($tasks);
             $TasksInProjectNum = (100/$NumberOfTasks);
@@ -70,9 +71,11 @@ class TaskController extends Controller
             $task_progress = intval($task->progress_int);
             $project_progress = ($task_progress*$TasksInProjectNum)/100;
             $project_com += $project_progress;
-            $project->project_complete= $project_com;
-        // dd($project_com);
+            // dd($project_com);
+            $project->project_complete = $project_com;
+        
             $project->save();
+       
         // Calculation end //
         if($request->hasFile('images')){
             $images = $request->file('images');
@@ -109,13 +112,13 @@ class TaskController extends Controller
                }
            }
            // End Get Users For Email ///////
-        //    for($i=0; $i<sizeof($users); $i++){
-        //        // Mail::to($users[$i]->email)->send( new SendMarkDownMail($tasks, $users[$i]));
-        //        $subject = 'truly awesome subject line';
-        //        SendEmail::dispatch($tasks,$users[$i],$subject);
-        //    }
+           for($i=0; $i<sizeof($users); $i++){
+               // Mail::to($users[$i]->email)->send( new SendMarkDownMail($tasks, $users[$i]));
+               $subject = 'truly awesome subject line';
+               SendEmail::dispatch($tasks,$users[$i],$subject);
+           }
            // End For Email
         $task->save();
-        // return redirect()->back();
+        return redirect()->back();
     }
 }
