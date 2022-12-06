@@ -64,7 +64,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Password<a href="forgot-password.html" class="float-right small">I forgot password</a></label>
+                    {{-- <label class="form-label">Password<a href="forgot-password.html" class="float-right small">I forgot password</a></label> --}}
                     <!-- <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"> -->
                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" name="password" required autocomplete="current-password">
                     @error('password')

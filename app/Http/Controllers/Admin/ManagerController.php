@@ -24,26 +24,19 @@ class ManagerController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
-        $user->address = $request->address;
+        // $user->address = $request->address;
         $user->password = Hash::make($request->password);
         $user->user_type = Auth::user()->id;
-        $user->role = $request->role;
+        $user->role = 3;
         $user->department = $request->department;
-        $user->skill = $request->skill;
-        $user->dob = $request->dob;
+        $user->skill = 0;
+        // $user->dob = $request->dob;
         $user->gender = $request->gender;
-        if($request->role == 2){
-            $user->team_member = Auth::user()->id;
-        }else{
-            $user->team_member = $request->team_memeber;
-        }
-        
-
+        $user->team_member = Auth::user()->id;
         if($request->hasFile('image')){
             $avatar = $request->file('image');
             $filename = time().'.'.$avatar->getClientOriginalExtension();
             Image::make($avatar)->resize(300,300)->save(public_path('/uploads/staf_images/'.$filename));
-            
             $user->image = $filename;
             $user->save();
            }
@@ -118,5 +111,35 @@ class ManagerController extends Controller
            }
         $user->save();
         return redirect('admin/manager');
+    }
+    public function AddCEO(Request $request){
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        // $user->address = $request->address;
+        $user->password = Hash::make($request->password);
+        $user->user_type = Auth::user()->id;
+        $user->role = 4;
+        $user->department = $request->department;
+        $user->skill = 0;
+        // $user->dob = $request->dob;
+        $user->gender = $request->gender;
+        $user->team_member = Auth::user()->id;
+        if($request->hasFile('image')){
+            $avatar = $request->file('image');
+            $filename = time().'.'.$avatar->getClientOriginalExtension();
+            Image::make($avatar)->resize(300,300)->save(public_path('/uploads/staf_images/'.$filename));
+            $user->image = $filename;
+            $user->save();
+           }
+        $user->save();
+        // For Theme Setting
+        $theme = new ThemeSetting();
+        $theme->user_id = $user->id;
+        $theme->theme_mode = 0;
+        $theme->save();
+        // Theme Setting End //
+        return redirect()->back();
     }
 }

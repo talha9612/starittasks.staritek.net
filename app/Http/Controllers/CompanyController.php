@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Image;
 use App\User;
 use App\ThemeSetting;
 use App\CompanySetting;
@@ -11,6 +10,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Crypt;
+use Intervention\Image\Facades\Image;
 
 class CompanyController extends Controller
 {

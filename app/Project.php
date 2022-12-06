@@ -21,6 +21,6 @@ class Project extends Model
     }
     public function assign_project()
     {
-        return $this->belongsTo('App\ProjectAssign','project_head', 'manager_id');
+         return $this->hasMany('App\ProjectAssign','project_id', 'id');
     }
 }

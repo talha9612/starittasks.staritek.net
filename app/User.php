@@ -44,8 +44,12 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Designation','department', 'id');
     }
-    public function getskill()
+    public function getskill() 
     {
         return $this->belongsTo('App\Skill','skill', 'id');
     }
+    public function getTasks(){
+        return $this->hasMany('App\Task','user_id','id')->where('approved', 0);
+    }
 }
+

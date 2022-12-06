@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Manager;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Auth;
+use App\Task;
+use App\User;
 use App\Project;
+use Carbon\Carbon;
 use App\ProjectAssign;
 use App\ProjectCatagory;
-use Auth;
-use Carbon\Carbon;
-use App\User;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 class ProjectController extends Controller
 {
     public function index(){
@@ -68,6 +70,11 @@ class ProjectController extends Controller
     }
     public function DeleteProject(Request $req){
         $project = Project::find($req->id);
+        $tasks = Task::where('project_id',$req->id)->get();
+        for ($i=0; $i <sizeof($tasks) ; $i++) { 
+            $task = $tasks[$i];
+            $task->delete();
+        }
         $project2 = ProjectAssign::where('project_id',$req->id)->get();
         $project->delete();
         if ($project2 != null) {
@@ -79,6 +86,7 @@ class ProjectController extends Controller
     }
     public function UpdatedProject(Request $req){
         $project = Project::find($req->id);
+        $pre_value = $project->project_complete;
         $project->project_name = $req->name;
         $project->project_summary = $req->summary;
         $project->project_head = $req->head;
@@ -87,6 +95,7 @@ class ProjectController extends Controller
         $project->category_id = $req->catagory;
         $project->create_project = $req->id;
         $project->status = $req->status;
+        $project->project_complete = $pre_value;
         $project->save();
         return redirect('/manager/projects')->with('success','Project Updated Successfully!');
     }

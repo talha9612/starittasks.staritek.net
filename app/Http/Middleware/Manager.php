@@ -30,5 +30,9 @@ class Manager
         if(Auth::user()->role == 3){
             return redirect()->route('user');    
         }
+         // For Role 4
+         if(Auth::user()->role == 4){
+            return redirect()->route('ceo');    
+        }
     }
 }

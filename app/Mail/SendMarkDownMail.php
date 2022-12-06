@@ -12,6 +12,7 @@ class SendMarkDownMail extends Mailable
     use Queueable, SerializesModels;
     public $task;
     public $user;
+    
     /**
      * Create a new message instance.
      *
@@ -21,6 +22,7 @@ class SendMarkDownMail extends Mailable
     {
         $this->task = $task;
         $this->user = $user;
+        $this->subject($task['heading']);
     }
 
     /**
@@ -30,6 +32,6 @@ class SendMarkDownMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('markdownmail');
+        return $this->subject($this->subject)->markdown('markdownmail');
     }
 }

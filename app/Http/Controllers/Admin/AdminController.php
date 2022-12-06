@@ -14,6 +14,7 @@ use App\Task;
 class AdminController extends Controller
 {
     public function index(){
+        
         $id = Auth::user()->id;
         $setting = CompanySetting::where('user_id', $id)->first();
         // $projects = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
@@ -29,10 +30,9 @@ class AdminController extends Controller
             array_push($projects, $project);
         }
 
-        $managers = User::where('user_type',Auth::user()->id)->get();
+        $managers = User::where('user_type',Auth::user()->id)->where('role', 3)->with('getTasks')->get();
         $managerscount = User::where('user_type',Auth::user()->id)->where('role',2)->count();
-    
-        $manager_ids = [];
+        $manager_ids = [Auth::user()->id];
         $projectCount = 0;
         $CompleteprojectCount = 0;
         $memCount = 0;
@@ -50,9 +50,9 @@ class AdminController extends Controller
         $CompleteprojectCount = $CompleteprojectCount + $projectComplete;
         $memCount +=$memberscount;
         $taskCount +=$taskscount;
-            
         }
-        return view('admin.dashboard',compact('projects','projectCount','CompleteprojectCount','managerscount','memCount','taskCount','setting'));
+       
+        return view('admin.dashboard',compact('projects','projectCount','CompleteprojectCount','managerscount','memCount','taskCount','setting','managers'));
     }
     public function ProjectHeads(){
         $id = Auth::user()->id;

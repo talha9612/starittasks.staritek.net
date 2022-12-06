@@ -6,6 +6,73 @@
   height: 239px;
 }
 </style>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<?php
+    $chart_array = [];
+    $check_sm = [
+            $project->project_name,
+            $project->project_name,
+            null,
+            date('Y,m,d', strtotime($project->start_date)),
+            date('Y,m,d', strtotime($project->deadline)),
+            $left_days* 24 * 60 * 60 * 1000,
+            round($project->project_complete),
+            null,
+    ];
+    array_push($chart_array,$check_sm);
+    $check_sm = [];
+    for($i=0; $i<sizeof($tasks); $i++){
+        array_push($check_sm,$tasks[$i]->heading);
+        array_push($check_sm,$tasks[$i]->heading);
+        array_push($check_sm,$tasks[$i]->heading);
+        array_push($check_sm, date('Y,m,d', strtotime($tasks[$i]->start_date)));
+        array_push($check_sm, date('Y,m,d', strtotime($tasks[$i]->due_date)));
+        array_push($check_sm,10* 24 * 60 * 60 * 1000);
+        array_push($check_sm,$tasks[$i]->progress_int );
+        if($i == 0 ){
+            array_push($check_sm,null);
+        }else{
+            array_push($check_sm,$tasks[$i-1]->heading);
+        }
+        array_push($chart_array,$check_sm);
+        $check_sm = [];
+    }
+?>
+    <script>
+        google.charts.load("current", { packages: ["gantt"] });
+        google.charts.setOnLoadCallback(drawChart);
+        function daysToMilliseconds(days) {
+        return days * 24 * 60 * 60 * 1000;
+        }
+        function drawChart() {
+            var otherData = new google.visualization.DataTable();
+            otherData.addColumn("string", "Task ID");
+            otherData.addColumn("string", "Task Name");
+            otherData.addColumn("string", "Resource");
+            otherData.addColumn("date", "Start");
+            otherData.addColumn("date", "End");
+            otherData.addColumn("number", "Duration");
+            otherData.addColumn("number", "Percent Complete");
+            otherData.addColumn("string", "Dependencies");
+            var user = [];
+            // user = <?php echo json_encode($chart_array); ?>;
+            user = @json($chart_array);
+            for(var i=0; i<user.length; i++){
+                user[i][3] = new Date(user[i][3]);
+                user[i][4] = new Date(user[i][4]);
+            }
+            // console.log(user);
+            otherData.addRows(user);
+            var options = {
+            height: 500,
+            gantt: {
+                defaultStartDate: new Date(),
+            },
+            };
+            var chart = new google.visualization.Gantt(document.getElementById("chart_div"));
+            chart.draw(otherData, options);
+        }
+    </script>
         <div class="section-body mt-3">
             <div class="container-fluid">
                 <div class="row clearfix">
@@ -74,118 +141,24 @@
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="list" role="tabpanel">
                         <div class="row clearfix">
-                            <div class="col-md-9 col-sm-12">
+                            <div class="col-md-12 col-sm-12">
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">Project Details</h3>
                                     </div>
                                     <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <th>Project Name</th>
-                                                        <td>{{ ucfirst($project->project_name) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Project Created By</th>
-                                                        <td>{{ ucfirst($project->createproject->name) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Project Manager</th>
-                                                        <td>{{ ucfirst($project->head->name) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Start Date</th>
-                                                        <td>{{ $project->start_date }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Last date</th>
-                                                        <td>{{ $project->deadline }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Project Category</th>
-                                                        <td>{{  ucfirst($project->projectcatagory->name) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Description</th>
-                                                        <td  class="text-capitalize">
-                                                            {{\Illuminate\Support\Str::limit(trim(preg_replace('/ +/', ' ', preg_replace('/[^A-Za-z0-9 ]/', ' ', urldecode(html_entity_decode(strip_tags($project->project_summary)))))), 40)}}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Status</th>
-                                                        <td>
-                                                            @if($project->status ==1)
-                                                            <span class="tag tag-danger">Not Started</span>
-                                                            @elseif($project->status ==2)
-                                                            <span class="tag tag-info">In Progress</span>
-                                                            @elseif($project->status ==3)
-                                                            <span class="tag tag-warning">On Hold</span>
-                                                            @elseif($project->status ==4)
-                                                            <span class="tag tag-success">Cancelled</span>
-                                                            @else
-                                                            <span class="tag tag-secondary">Completed</span>
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="form-group">
+                                            <select id="ShowDetails"  class="browser-default custom-select col-md-3 text-capitalize" >
+                                                <option selected><b>View Task Details</b></option>
+                                                @foreach ($tasks as $task)
+                                                    <option value="{{ $task->id }}">{{ $task->heading }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
+                                        <div id="chart_div"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-3 col-sm-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Tasks Summary</h3>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
-                                                <tbody>
-                                                    <tr>
-                                                        <th>Project Name</th>
-                                                        <td>{{ ucfirst($project->project_name) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Project Created By</th>
-                                                        <td>{{ ucfirst($project->create_project) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Project Manager</th>
-                                                        <td>{{ ucfirst($project->project_head) }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Start Date</th>
-                                                        <td>{{ $project->start_date }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Last date</th>
-                                                        <td>{{ $project->deadline }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Project Category</th>
-                                                        <td>{{ $project->category_id }}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Description</th>
-                                                        <td>
-                                                            {{ $project->project_summary }}
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Status</th>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        
-                        
                         </div>
                     </div>
                     <div class="tab-pane fade" id="projectmember" role="tabpanel">
@@ -294,7 +267,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                    </d>
+                                    </div>
                                 </div>
                                
                             </div>
@@ -304,7 +277,15 @@
                 </div>
             </div>
         </div>
-       
+        <script>
+            $('#ShowDetails').change(function(){
+                var value ="";
+                value = $(this).val();
+                if(value !== ""){
+                    location.href = "showtaskdetail/"+value;
+                }else{}
+            });
+        </script>
 
 
 @endsection

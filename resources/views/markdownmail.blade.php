@@ -20,23 +20,19 @@
 <p>Task Description:- {{ strip_tags($task->description) }}</p>
 <?php $url=''; 
 if($user->role == 1){
-    $url = url('login/'.\App\Helpers\AppHelper::instance()->CompanySettingAdmin()->name );
+    $url = url('/');
 }elseif($user->role == 2){
-    $url = url('login/'.\App\Helpers\AppHelper::instance()->CompanySettingManager()->name );
+    $url = url('/');
 }elseif($user->role == 3){
-    $url = url('login/'.\App\Helpers\AppHelper::instance()->CompanySettingUser()->name );
+    $url = url('/');
+}elseif($user->role == 4){
+    $url = url('/');
 }
 ?>
 @component('mail::button', ['url' => $url])
 View Task
 @endcomponent
 Thanks,<br>
-<?php if($user->role == 1){ ?>
-   <span style="color:crimson;text-transform: capitalize;">{{ \App\Helpers\AppHelper::instance()->CompanySettingAdmin()->name }}</span>
-<?php }elseif($user->role == 2){ ?>
-    <span style="color:crimson;text-transform: capitalize;">{{ \App\Helpers\AppHelper::instance()->CompanySettingManager()->name }}</span>
-<?php }elseif($user->role == 3){ ?>
-    <span style="color:crimson;text-transform: capitalize;">{{ \App\Helpers\AppHelper::instance()->CompanySettingUser()->name }}</span>
-<?php } ?>
+
 
 @endcomponent

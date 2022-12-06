@@ -41,13 +41,15 @@
                                     <table id="example" class="display" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <!--<th>#</th>-->
                                                 <th>Task Name</th>
                                                 <th>Project</th>
                                                 <th>Assigned To</th>
-                                                <th>Assigned By</th>
+                                                {{-- <th>Assigned By</th> --}}
                                                 <th>Due Date</th>
                                                 <th>Task Complete</th>
+                                                <th>Task Approved</th>
+                                                <th>Show Task CEO</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -55,80 +57,133 @@
                                         <tbody>
                                             @foreach($tasks as $datas)
                                             @foreach($datas as $key=>$task)
-                                                <tr>
-                                                    <td>{{$task->id}}</td>
-                                                    <td class="text-capitalize task_heading_width"><a href="javascript:void(0)" class="getmodel" data-id="{{$task->id}}" data-toggle="modal" data-target="#exampleModal"><h6 class="mb-0">{{$task->heading}}</h6></a>
-                                                    <td>
-                                                        <form method="post" action="/admin/projectdetails" id="my_form_{{ $key }}">
-                                                            @csrf
-                                                            <input type="hidden" name="project_id" value="{{ $task->project->id }}">
-                                                            <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $key }}').submit();"><b>{{ $task->project->project_name}}</b></a>
-                                                        </form>
-                                                    </td>
-                                                    <td>{{$task->AssignTo->name}}</td>
-                                                    <td>{{$task->AssignBy->name}}</td>
-                                                    <td>{{$task->due_date}}</td>
-                                                    <td>
-                                                        <div class="form-group mt-3">
-                                                            <input type="radio" style="display:none;" value="{{ $task->progress }}" id="a-{{ $task->progress }}" checked>
-                                                            <div class="progress">
-                                                              <div class="progress-bar" style="position: relative">
-                                                                @if( $task->progress == 'five')
-                                                                    <span style="position: absolute; left:105px;color:#292b30;">5%</span>
-                                                                @elseif ($task->progress == 'twentyfive')
-                                                                    <span style="position: absolute; left:105px;color:#292b30;">25%</span>
-                                                              @elseif ($task->progress == 'fifty')
-                                                                    <span style="position: absolute; left:105px;color:#292b30;">50%</span>
-                                                                @elseif ($task->progress == 'seventyfive')
-                                                                <span style="position: absolute; left:105px;color:#292b30;">75%</span>
-                                                                @elseif ($task->progress == 'onehundred')
-                                                                <span style="position: absolute; left:105px;color:#292b30;">100%</span>
-                                                                @else
-                                                                <span style="position: absolute; left:105px;color:#292b30;">0%</span>
-                                                                @endif
-                                                              </div>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                    <td>
-                                                        @if($task->status ==1)
-                                                        <span class="tag tag-danger">Not Started</span>
-                                                        @elseif($task->status ==2)
-                                                        <span class="tag tag-info">In Progress</span>
-                                                        @elseif($task->status ==3)
-                                                        <span class="tag tag-warning">On Hold</span>
-                                                        @elseif($task->status ==4)
-                                                        <span class="tag tag-success">Cancelled</span>
-                                                        @else
-                                                        <span class="tag tag-secondary">Completed</span>
+                                            <tr>
+                                                <!--<td>{{$task->id}}</td>-->
+                                                {{-- <td class="task_heading_width">{{ $task->heading}}</td> --}}
+                                                <td class="text-capitalize task_heading_width"><a href="javascript:void(0)" class="getmodel" data-id="{{$task->id}}" data-toggle="modal" data-target="#exampleModal"><h6 class="mb-0">{{$task->heading}}</h6></a>
+                                                </td>
+                                                {{-- <td>{{\Illuminate\Support\Str::limit($task->heading, 30, $end=' ...')}}</td> --}}
+                                                <td>{{$task->project->project_name}}</td>
+                                                <td>
+                                                    <ul class="list-unstyled team-info sm margin-0 w150">
+                                                        @if($task->GetUsers != null)
+                                                            <li><img src="{{asset('uploads/staf_images/'.$task->GetUsers->image)}}" alt="Avatar">
+                                                                <span>{{ $task->GetUsers->name }}</span>
+                                                            </li>
                                                         @endif
-                                                    </td>
-                                                    <td>
-                                                        <form action="/admin/edit-task" method="post" class="d-inline">
-                                                            @csrf
-                                                            <input type="hidden" name="id" value="{{$task->id}}">    
-                                                            <button class="btn btn-primary">Edit</button>
-                                                        </form>
-                                                        | 
-                                                        <form action="/admin/task-delete" method="post" class="d-inline">
-                                                            @csrf
-                                                            <input type="hidden" name="id" value="{{$task->id}}">    
-                                                            <button class="btn btn-danger">Del</button>
-                                                        </form>
-                                                    </td>
-                                                </tr>
+                                                    </ul>
+                                                </td>
+                                                {{-- <td>
+                                                    <ul class="list-unstyled team-info sm margin-0 w150">
+                                                        @if($task->AssignBy != null)
+                                                            <li><img src="{{asset('uploads/staf_images/'.$task->AssignBy->image)}}" alt="Avatar">
+                                                                <span> {{$task->AssignBy->name}}</span>
+                                                            </li>
+                                                        @endif
+                                                    </ul>
+                                                </td> --}}
+                                                <td>{{$task->due_date}}</td>
+                                                <td>
+                                                    <div class="form-group mt-3">
+                                                        <input type="radio" style="display:none;" value="{{ $task->progress }}" id="a-{{ $task->progress }}" checked>
+                                                        <div class="progress" style="width: 160px">
+                                                          <div class="progress-bar" style="position: relative">
+                                                            @if( $task->progress == 'five')
+                                                                <span style="position: absolute; left:75px;color:#292b30;">5%</span>
+                                                            @elseif ($task->progress == 'twentyfive')
+                                                                <span style="position: absolute; left:75px;color:#292b30;">25%</span>
+                                                            @elseif ($task->progress == 'fifty')
+                                                                <span style="position: absolute; left:75px;color:#292b30;">50%</span>
+                                                            @elseif ($task->progress == 'seventyfive')
+                                                            <span style="position: absolute; left:75px;color:#292b30;">75%</span>
+                                                            @elseif ($task->progress == 'onehundred')
+                                                            <span style="position: absolute; left:75px;color:#292b30;">100%</span>
+                                                            @else
+                                                            <span style="position: absolute; left:75px;color:#292b30;">0%</span>
+                                                            @endif
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <label class="custom-switch m-0">
+                                                    <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}" 
+                                                    data-toggle="toggle" data-onstyle="outline-success" {{$task->approved == 1? 'checked':''}}>
+                                                    <span class="custom-switch-indicator"></span>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    <label class="custom-switch m-0">
+                                                    <input type="checkbox" value="0" class="custom-switch-input task-shows-ceo" data-id="{{$task->id}}" 
+                                                    data-toggle="toggle" data-onstyle="outline-success" {{$task->task_view_ceo == 1? 'checked':''}}>
+                                                    <span class="custom-switch-indicator"></span>
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    @if($task->status ==1)
+                                                    <span class="tag tag-danger">Not Started</span>
+                                                    @elseif($task->status ==2)
+                                                    <span class="tag tag-info">In Progress</span>
+                                                    @elseif($task->status ==3)
+                                                    <span class="tag tag-warning">On Hold</span>
+                                                    @elseif($task->status ==4)
+                                                    <span class="tag tag-success">Cancelled</span>
+                                                    @else
+                                                    <span class="tag tag-secondary">Completed</span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <form action="/admin/edit-task" method="post" class="d-inline">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{$task->id}}">    
+                                                        <button class="btn btn-primary">Edit</button>
+                                                    </form>
+                                                     | 
+                                                    <form action="/admin/delete-task" method="post" class="d-inline">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{$task->id}}">    
+                                                        <button class="btn btn-danger" onclick="archiveFunction()">Del</button>
+                                                    </form>
+                                                    <script>
+                                                        function archiveFunction() {
+                                                             event.preventDefault(); // prevent form submit
+                                                             var form = event.target.form; // storing the form
+                                                             Swal.fire({
+                                                             title: 'Are you sure?',
+                                                             text: "You won't be able to revert this!",
+                                                             icon: 'warning',
+                                                             showCancelButton: true,
+                                                             confirmButtonColor: '#3085d6',
+                                                             cancelButtonColor: '#d33',
+                                                             confirmButtonText: 'Yes, delete it!'
+                                                             }).then((result) => {
+                                                             if (result.isConfirmed) {
+                                                                 form.submit(); 
+                                                                 Swal.fire(
+                                                                 'Deleted!',
+                                                                 'Task has been deleted.',
+                                                                 'success'
+                                                                 )
+                                                             }
+                                                             })
+                                                         }
+                                                     </script>
+                                                </td>
+                                            </tr>
                                             @endforeach
                                           @endforeach
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th>#</th>
+                                                <!--<th>#</th>-->
                                                 <th>Task Name</th>
                                                 <th>Project</th>
                                                 <th>Assigned To</th>
-                                                <th>Assigned By</th>
+                                                {{-- <th>Assigned By</th> --}}
                                                 <th>Due Date</th>
                                                 <th>Task Complete</th>
+                                                <th>TaskApproved</th>
+                                                <th>Show Task CEO</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -196,6 +251,18 @@
                                                     <label>Assigned To</label>
                                                     <select class="form-control show_head" name="assign_to">
                                                        
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Status To</label>
+                                                    <select class="form-control" name="status">
+                                                        <option value="1">Not Started</option>
+                                                        <option value="2">In Progress</option>
+                                                        <option value="3">On Hold</option>
+                                                        <option value="4">Cancelled</option>
+                                                        <option value="5">Finished</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -274,6 +341,8 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form method="post" action="{{url('/admin/single-task-model-complete/')}}" enctype="multipart/form-data">
+                @csrf
             <div class="modal-body" style="background-color: #ebebeb;">
                 <div class="row">
                     <div class="col-md-12 ">
@@ -308,7 +377,8 @@
                         </div>
                         <div class="form-group mt-3">
                             <label for="exampleInputPassword1">Description</label>
-                            <p class="form-control task-desc" name="desc"></p>
+                            <input type="hidden" name="task_id" class="task-idd">
+                            <textarea rows="10" id="editor" name="desc" class="form-control no-resize task-desc" placeholder="Please type what you want..."></textarea>
                         </div>
                         <div class="row">
                             <div class="form-group mt-3">
@@ -327,6 +397,15 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-md-12" style="background: aliceblue;">
+                                <div class="float-right form-group mt-3">
+                                    <button type="submit" class="btn btn-danger" >Update Task</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-10">
                                 <h3 class="m-4">Task History</h3>
                                 <ul class="new_timeline">
@@ -337,7 +416,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </form>
+</div>
 
 </div>
 {{-- ----------- --}}
@@ -354,6 +434,7 @@
             $(".check_progress").empty();
             $('.screenshots').empty();
             $(".new_timeline").empty();
+            $("#editor").empty();
             $.ajax({
                     type:"GET",
                     dataType:"json",
@@ -366,9 +447,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success:function(response){
-                        if(response.data.status == 5){
-                            $('.mark_complete').prop('disabled', true);
-                        }
+                        
                         var regex = /(<([^>]+)>)/ig;
                         var rehtml = response.data.description.replace(/(<([^>]+)>)/gi, "");
                         var progresscheck =  response.data.progress;
@@ -382,8 +461,11 @@
                             $('.check_progress').append("<input type='radio' style='display:none;' value='seventyfive' id='a-seventyfive' checked><div class='progress'><div class='progress-bar' style='position: relative'><span style='position: absolute; left:105px;color:#292b30;'>75%</span></div></div>");
                         }else if(progresscheck == 'onehundred'){
                             $('.check_progress').append("<input type='radio' style='display:none;' value='onehundred' id='a-onehundred' checked><div class='progress'><div class='progress-bar' style='position: relative'><span style='position: absolute; left:105px;color:#292b30;'>100%</span></div></div>");
+                        }else if(progresscheck == null){
+                            $('.check_progress').append("<input type='radio' style='display:none;' value='0' id='a-0' checked><div class='progress'><div class='progress-bar' style='position: relative'><span style='position: absolute; left:105px;color:#292b30;'>0%</span></div></div>");
                         }
                         $('.task-desc').text(rehtml.replace(/\&nbsp;/g, ''));
+                        $('.task-idd').val(response.data.id);
                         $('.mark_as_complete').attr('data-id',task_id);
                         $('.task-start-date').append(response.data.start_date);
                         $('.task_id').val(response.data.id);
@@ -434,7 +516,7 @@
                             }
                             var historyscreenshots =  response.activities[i].properties.attributes.screen_shot;
                             var his_screens = $.parseJSON(historyscreenshots);
-                            $(".new_timeline").append("<li><div class='bullet pink'></div><div class='time'>"+moment( response.activities[i].created_at).format('DD-MM-YYYY h:mm:ss a')+"<span class='tag tag-default' style='border-radius:20px;'>"+name+"</span><span>"+((response.activities[i].properties.attributes['priority']==1)?'<spane class="tag tag-success" style="border-radius:20px;">Priority:- High</spane>':'')+"</span><span>"+((response.activities[i].properties.attributes['priority']==2)?'<spane class="tag tag-default" style="border-radius:20px; background-color:#fbbd08;">Priority:- Medium</spane>':'')+"</span><span>"+((response.activities[i].properties.attributes['priority']==3)?'<spane class="tag tag-default" style="border-radius:20px; background-color:#28a745;">Priority:- Low</spane>':'')+"</span></div><div class='desc'><h3 class='text-capitalize'>"+response.activities[i].description+"</h3><h4 class='text-capitalize'>"+((JSON.stringify(response.activities[i].properties.attributes) != undefined) ? JSON.stringify(response.activities[i].properties.attributes['heading']).replace(/^"(.*)"$/, '$1') :'Not Found')+"</h4>"+((JSON.stringify(response.activities[i].properties.attributes['description'])!=undefined)?JSON.stringify(response.activities[i].properties.attributes['description']).replace(/^"(.*)"$/, '$1'):'')+"</div>"+((historyscreenshots != null)?((his_screens[0]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[0]+"' width='150' class='img-thumbnail'/>":"")+((his_screens[1]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[1]+"' width='150' class='img-thumbnail'/>":"")+((his_screens[2]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[2]+"' width='150' class='img-thumbnail'/>":"")+((his_screens[3]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[3]+"' width='150' class='img-thumbnail'/>":"")+((his_screens[4]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[4]+"' width='150' class='img-thumbnail'/>":""):"")+"</li>");
+                            $(".new_timeline").append("<li><div class='bullet pink'></div><div class='time'>"+moment( response.activities[i].created_at).format('DD-MM-YYYY h:mm:ss a')+"<span class='tag tag-default' style='border-radius:20px;'>"+name+"</span><span>"+((response.activities[i].properties.attributes['priority']==1)?'<spane class="tag tag-success" style="border-radius:20px;">Priority:- High</spane>':'')+"</span><span>"+((response.activities[i].properties.attributes['priority']==2)?'<spane class="tag tag-default" style="border-radius:20px; background-color:#fbbd08;">Priority:- Medium</spane>':'')+"</span><span>"+((response.activities[i].properties.attributes['priority']==3)?'<spane class="tag tag-default" style="border-radius:20px; background-color:#28a745;">Priority:- Low</spane>':'')+"</span></div><div class='desc'><h3 class='text-capitalize'>"+response.activities[i].description+"</h3><h4 class='text-capitalize'>"+((JSON.stringify(response.activities[i].properties.attributes) != undefined) ? JSON.stringify(response.activities[i].properties.attributes['heading']).replace(/^"(.*)"$/, '$1') :'Not Found')+"</h4>"+((JSON.stringify(response.activities[i].properties.attributes['description'])!=undefined)?response.activities[i].properties.attributes['description']:'')+"</div>"+((historyscreenshots != null)?((his_screens[0]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[0]+"' width='150' class='img-thumbnail'/>":"")+((his_screens[1]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[1]+"' width='150' class='img-thumbnail'/>":"")+((his_screens[2]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[2]+"' width='150' class='img-thumbnail'/>":"")+((his_screens[3]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[3]+"' width='150' class='img-thumbnail'/>":"")+((his_screens[4]!=undefined)?"<img src='"+window.location.origin+"/uploads/screenshots/"+his_screens[4]+"' width='150' class='img-thumbnail'/>":""):"")+"</li>");
                         }
                         // End For History /////////////////////
                     }
@@ -444,38 +526,38 @@
 
 
         $(document).ready(function(){
-           
-                $('#example').DataTable({
-                    scrollX: true,
-                    responsive: true
-                });
+            $('#example').DataTable({
+                scrollX: true,
+                responsive: true
+            });
             $( "#target_category" ).submit(function( event ) {
                 event.preventDefault();
                 $('#catagory_name').focus();
             });
-                ClassicEditor
+            ClassicEditor
             .create( document.querySelector( '#editor' ) )
             .catch( error => {
                 console.error( error );
             } );
             GetCatagory();
-        
-        
         });
         $('.select_project').on('click',function(){
             $(".show_head").empty();
             var id = $('.select_project').val();
             $.ajax({
-                       type:"GET",
-                       dataType:"json",
-                       url:'/admin/select-head/',
-                       data:{
-                        "_token": "{{ csrf_token() }}",
-                        'id':id},
-                       success:function(response){
-                            $(".show_head").append("<option value="+response.user.id+">"+response.user.name+"</option>");
-                       }
-                   })
+                    type:"GET",
+                    dataType:"json",
+                    url:'/admin/select-head/',
+                    data:{
+                    "_token": "{{ csrf_token() }}",
+                    'id':id},
+                    success:function(response){
+                        for(var i=0; i<response.users.length; i++){
+                            $(".show_head").append("<option value="+response.users[i].id+">"+response.users[i].name+"</option>");
+                        }
+                        
+                    }
+                })
         });
         // Custom function for get category
         function GetCatagory(){

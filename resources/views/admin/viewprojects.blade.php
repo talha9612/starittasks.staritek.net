@@ -16,7 +16,7 @@
                                     <ul class="nav nav-tabs b-none">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Project List</a></li>                                        
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addnew"><i class="fa fa-plus"></i> Add New Project</a></li>
-                                        <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addmembers"><i class="fa fa-plus"></i> Add Member into Project</a></li> -->
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addmembers"><i class="fa fa-plus"></i> Add Member into Project</a></li>
                                     </ul>
                                 </div>
                                
@@ -30,90 +30,161 @@
             <div class="container-fluid">
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="list" role="tabpanel">
-                    <div class="row clearfix">
-                    <div class="col-12 col-sm-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Project Summary</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Project</th>
-                                                <th>Project Head</th>
-                                                <th>Project Team</th>
-                                                <th>Start Date</th>
-                                                <th>Last Date</th>
-                                                <th>Project Catagory</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($projects as $checks)
-                                            @foreach($checks as $key=>$project)
-                                                <tr>
-                                                    <td>{{$project->id}}</td>
-                                                    <td>
-                                                        <form method="post" action="/admin/projectdetails" id="my_form_{{ $project->id }}">
-                                                            @csrf
-                                                            <input type="hidden" name="project_id" value="{{ $project->id }}">
-                                                            <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
-                                                        </form>
-                                                    </td>
-                                                    <td>{{$project->head['name']}}</td>
-                                                    <td>
-                                                        
-                                                        <ul class="list-unstyled team-info sm margin-0 w150">
-                                                            @if(!empty($project->assign_project->GetUsers))
-                                                                <li><img src="{{asset('uploads/staf_images/'.$project->assign_project->GetUsers->image)}}" alt="Avatar"></li>
-                                                            @else
+                        <div class="row clearfix">
+                            <div class="col-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Project Summary</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-striped table-vcenter mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <!--<th>#</th>-->
+                                                        <th>Project</th>
+                                                        <th>Project Head</th>
+                                                        <th>Project Team</th>
+                                                        <th>Start Date</th>
+                                                        <th>Last Date</th>
+                                                        <th>Project Catagory</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($projects as $project)
+                                                  
+                                                        <tr>
+                                                            <!--<td>{{$project->id}}</td>-->
+                                                            <td>
+                                                                <form method="post" action="/admin/projectdetails" id="my_form_{{ $project->id }}">
+                                                                    @csrf
+                                                                    <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                                                    <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
+                                                                </form>
+                                                            </td>
+                                                            <td>{{$project->head['name']}}</td>
+                                                            <td>
+                                                                <ul class="list-unstyled team-info sm margin-0 w150">
+                                                                     @foreach($project->assign_project as $user)
+                                                                        @if(!empty($user->getusers))
+                                                                            <li> {{ $user->getusers->name }} </li>
+                                                                        @else
+                                                                        @endif
+                                                                    @endforeach
+                                                                </ul>
+                                                            </td>
+                                                            <td>{{$project->start_date}}</td>
+                                                            <td>{{$project->deadline}}</td>
+                                                            <td>{{$project->projectcatagory->name}}</td>
+                                                            <td>
+                                                            @if($project->status == 1)
+                                                            <label class="tag tag-yellow">Not Started</label>
+                                                            @elseif($project->status == 2)
+                                                            <label class="tag tag-blue">In Progress</label>
+                                                            @elseif($project->status == 3)
+                                                            <label class="tag tag-info">Hold On</label>
+                                                            @elseif($project->status == 4)
+                                                            <label class="tag tag-green">Cancelled</label>
+                                                            @elseif($project->status == 5)
+                                                            <label class="tag tag-red">Finished</label>
                                                             @endif
-                                                        </ul>
-                                                    </td>
-                                                    <td>{{$project->start_date}}</td>
-                                                    <td>{{$project->deadline}}</td>
-                                                    <td>{{$project->projectcatagory->name}}</td>
-                                                    <td>
-                                                    @if($project->status == 1)
-                                                    <label class="tag tag-yellow">Not Started</label>
-                                                    @elseif($project->status == 2)
-                                                    <label class="tag tag-blue">In Progress</label>
-                                                    @elseif($project->status == 3)
-                                                    <label class="tag tag-info">Hold On</label>
-                                                    @elseif($project->status == 4)
-                                                    <label class="tag tag-green">Cancelled</label>
-                                                    @elseif($project->status == 5)
-                                                    <label class="tag tag-red">Finished</label>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <form action="/admin/project-edit" method="post" class="d-inline">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{$project->id}}">    
-                                                        <button class="btn btn-primary">Edit</button>
-                                                    </form>
-                                                     | 
-                                                     <form action="/admin/project-delete" method="post" class="d-inline">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{$project->id}}">    
-                                                        <button class="btn btn-danger">Del</button>
-                                                    </form>
-                                                </td>
-                                                </tr>
-                                            @endforeach
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                                        </td>
+                                                        <td>
+                                                            <form action="/admin/project-edit" method="post" class="d-inline">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{$project->id}}">    
+                                                                <button class="btn btn-primary">Edit</button>
+                                                            </form>
+                                                            | 
+                                                            <form action="/admin/project-delete" method="post" class="d-inline">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{$project->id}}">    
+                                                                <button class="btn btn-danger" onclick="archiveFunction()">Del</button>
+                                                            </form>
+                                                            <script>
+                                                                function archiveFunction() {
+                                                                    event.preventDefault(); // prevent form submit
+                                                                    var form = event.target.form; // storing the form
+                                                                    Swal.fire({
+                                                                    title: 'Are you sure?',
+                                                                    text: "You won't be able to revert this!",
+                                                                    icon: 'warning',
+                                                                    showCancelButton: true,
+                                                                    confirmButtonColor: '#3085d6',
+                                                                    cancelButtonColor: '#d33',
+                                                                    confirmButtonText: 'Yes, delete it!'
+                                                                    }).then((result) => {
+                                                                    if (result.isConfirmed) {
+                                                                        form.submit(); 
+                                                                        Swal.fire(
+                                                                        'Deleted!',
+                                                                        'Project has been deleted.',
+                                                                        'success'
+                                                                        )
+                                                                    }
+                                                                    })
+                                                                }
+                                                            </script>
+                                                        </td>
+                                                        </tr>
+                                                   
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                    </div>
+                        <!-- For Add Member Into Project -->
+                        <div class="tab-pane fade" id="addmembers" role="tabpanel">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Add Members</h3>
+                                           
+                                        </div>
+                                        <form class="card-body" method="post" action="{{url('/admin/assign-project')}}" enctype="multipart/form-data">
+                                            @csrf()
+                                            <div class="row clearfix">
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label>Project Name</label>
+                                                        <select class="form-control get_projects" name="project_id">
+                                                            <option value="">:: Select Project ::</option>
+                                                            @foreach($projects as $project)
+                                                                <option value="{{$project->id}}">{{$project->project_name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-sm-12">
+                                                    <div class="form-group">
+                                                        <label>Team Members</label>
+                                                        <select class="form-control selectpicker" value="" multiple data-live-search="true" name="user_id[]">
+                                                            @foreach($users as $user)
+                                                                <option value="{{$user->id}}">{{$user->name}}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-12">
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" class="btn btn-outline-secondary">Cancel</button>
+                                                    
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Here End For Add Member Into Project -->
                     <div class="tab-pane fade" id="addnew" role="tabpanel">
                         <div class="row">
                             <div class="col-sm-12">
@@ -190,51 +261,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- For Add Member Into Project -->
-                    <div class="tab-pane fade" id="addmembers" role="tabpanel">
-                        <div class="row">
-                            <div class="col-sm-10">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Add Members</h3>
-                                       
-                                    </div>
-                                    <form class="card-body" method="post" action="{{url('/admin/assign-project')}}" enctype="multipart/form-data">
-                                        @csrf()
-                                        <div class="row clearfix">
-                                            <div class="col-md-6 col-sm-12">
-                                                <div class="form-group">
-                                                    <label>Project Name</label>
-                                                    <select class="form-control" name="project_id">
-                                                        @foreach($project_lists as $project)
-                                                            <option value="{{$project->id}}">{{$project->project_name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 col-sm-12">
-                                                <div class="form-group">
-                                                    <label>Team Members</label>
-                                                    <select class="form-control" name="user_id">
-                                                        @foreach($users as $user)
-                                                            <option value="{{$user->id}}">{{$user->name}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-12">
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                                <button type="submit" class="btn btn-outline-secondary">Cancel</button>
-                                                
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                               
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Here End For Add Member Into Project -->
                 </div>
             </div>
         </div>
@@ -267,6 +293,34 @@
     </div>
 </div>
 <script>
+    $('select').selectpicker();
+</script>
+<script>
+
+            $('.get_projects').on('click',function(){
+                var id = $('.get_projects').val();
+               
+                    $.ajax({
+                    type:'GET',
+                    dataType:'JSON',
+                    url:'/admin/admin-change-project-assign',
+                    data:{
+                        "_token": "{{ csrf_token() }}",
+                        'id':id,
+                    },
+                    success:function(data){
+                        var users = data.users;
+                        var arr =[];
+                        for(var i=0; i<users.length; i++){
+                            arr.push(users[i].user_id);
+                        }
+                        $('.selectpicker').selectpicker('val',arr);
+                        console.log(arr);
+                    }
+                    });
+              
+                
+            });
             $(document).ready(function(){
                 $( "#target_category" ).submit(function( event ) {
                     event.preventDefault();

@@ -300,7 +300,7 @@ function setStyleSheet(url){
 
 // H menu
 $(window).bind("resize", function () {
-    console.log($(this).width())
+    // console.log($(this).width())
     if ($(this).width() < 1201) {
         $('.horizontal').removeClass('h_menu')
     } else {

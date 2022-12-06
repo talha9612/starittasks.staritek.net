@@ -30,5 +30,9 @@ class User
         if(Auth::user()->role == 3){
              return $next($request);    
         }
+         // For Role 4
+         if(Auth::user()->role == 4){
+            return redirect()->route('ceo');    
+        }
     }
 }

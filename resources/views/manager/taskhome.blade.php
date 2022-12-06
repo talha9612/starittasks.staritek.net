@@ -90,7 +90,7 @@
                                                                 <span style="position: absolute; left:105px;color:#292b30;">5%</span>
                                                             @elseif ($task->progress == 'twentyfive')
                                                                 <span style="position: absolute; left:105px;color:#292b30;">25%</span>
-                                                          @elseif ($task->progress == 'fifty')
+                                                            @elseif ($task->progress == 'fifty')
                                                                 <span style="position: absolute; left:105px;color:#292b30;">50%</span>
                                                             @elseif ($task->progress == 'seventyfive')
                                                             <span style="position: absolute; left:105px;color:#292b30;">75%</span>
@@ -133,8 +133,32 @@
                                                     <form action="/manager/delete-task" method="post" class="d-inline">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{$task->id}}">    
-                                                        <button class="btn btn-danger">Del</button>
+                                                        <button class="btn btn-danger" onclick="archiveFunction()">Del</button>
                                                     </form>
+                                                    <script>
+                                                        function archiveFunction() {
+                                                             event.preventDefault(); // prevent form submit
+                                                             var form = event.target.form; // storing the form
+                                                             Swal.fire({
+                                                             title: 'Are you sure?',
+                                                             text: "You won't be able to revert this!",
+                                                             icon: 'warning',
+                                                             showCancelButton: true,
+                                                             confirmButtonColor: '#3085d6',
+                                                             cancelButtonColor: '#d33',
+                                                             confirmButtonText: 'Yes, delete it!'
+                                                             }).then((result) => {
+                                                             if (result.isConfirmed) {
+                                                                 form.submit(); 
+                                                                 Swal.fire(
+                                                                 'Deleted!',
+                                                                 'Task has been deleted.',
+                                                                 'success'
+                                                                 )
+                                                             }
+                                                             })
+                                                         }
+                                                     </script>
                                                 </td>
                                             </tr>
                                           @endforeach
@@ -207,7 +231,7 @@
                                             </div>
                                             <div class="col-md-6 col-sm-12">
                                                 <div class="form-group">
-                                                    <label>Assigned To</label>
+                                                    <label>Status To</label>
                                                     <select class="form-control" name="status">
                                                         <option value="1">Not Started</option>
                                                         <option value="2">In Progress</option>

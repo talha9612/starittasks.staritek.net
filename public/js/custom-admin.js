@@ -209,3 +209,49 @@ $('.admin-change-status-user').on('change',function(){
             }
         });
     });
+//////////////////Change Users Status////////////
+$('.admin-task-approved').on('change',function(){
+    var status = $(this).prop('checked') == true ?1:0;
+    var status_id = $(this).data('id');
+    $.ajax({
+      type:'GET',
+      dataType:'JSON',
+      url:'/admin/admin-approved-task',
+      data:{
+        'status':status,
+        'status_id':status_id
+      },
+      success:function(data){
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: data.success,
+            showConfirmButton: false,
+            timer: 1500
+          })
+      }
+    });
+  });
+  //////////////////Change Users Status////////////
+$('.task-shows-ceo').on('change',function(){
+    var task_view_ceo = $(this).prop('checked') == true ?1:0;
+    var status_id = $(this).data('id');
+    $.ajax({
+      type:'GET',
+      dataType:'JSON',
+      url:'/admin/admin-shows-task-ceo',
+      data:{
+        'status':task_view_ceo,
+        'status_id':status_id
+      },
+      success:function(data){
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: data.success,
+            showConfirmButton: false,
+            timer: 1500
+          })
+      }
+    });
+  });

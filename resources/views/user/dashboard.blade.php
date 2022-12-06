@@ -194,7 +194,9 @@
                         </div>
                         <div class="form-group mt-3">
                             <label for="exampleInputPassword1">Description</label>
-                            <textarea class="form-control task-desc" name="desc"></textarea>
+                            <input type="hidden" name="task_id" class="task-idd">
+                            <input type="hidden" name="project_id" class="project-idd">
+                            <textarea rows="10" id="editor" name="desc" class="form-control no-resize task-desc" placeholder="Please type what you want..."></textarea>
                         </div>
                         <div class="row">
                             <div class="form-group mt-3">
@@ -217,11 +219,14 @@
                         </div>
                         <div class="col-md-6 col-sm-12">
                             <label for="screenshot">Task Completed</label><br>
+                            
+                            <input type="radio" class="radio " name="progress" value="five" id="five">
                             <label for="five" class="label">5%</label>
-                            <input type="radio" class="radio" name="progress" value="five" id="five">
-                            <input type="radio" class="radio" name="progress" value="twentyfive" id="twentyfive">
+                            
+                            <input type="radio" class="radio" name="progress" value="twentyfive" id="twentyfive" >
                             <label for="twentyfive" class="label">25%</label>
-                        
+                            
+                            
                             <input type="radio" class="radio" name="progress" value="fifty" id="fifty">
                             <label for="fifty" class="label">50%</label>
                         
@@ -235,19 +240,24 @@
                             <div class="progress-bar"></div>
                             </div>
                         </div>
-                    </div>
-                     <div class="row">
+                        <div class="row mt-4">
+                            <div class="col-md-12" style="background: aliceblue;">
+                                <div class="float-right form-group mt-3">
+                                    <button type="submit" class="btn btn-danger mark_complete">Update Task</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+                                </div>
+                            </div>
+                        </div>
+                         <div class="row">
                             <div class="col-md-10">
                                 <h3 class="m-4">Task History</h3>
                                 <ul class="new_timeline">
                                 </ul>
                             </div>
                         </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-danger mark_complete">Update Task</button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
                     </div>
+                    
                 </div>
             </div>
        
@@ -286,20 +296,26 @@
                             $('.mark_complete').prop('disabled', true);
                         }
                         var regex = /(<([^>]+)>)/ig;
-                        var rehtml = response.data.description.replace(/(<([^>]+)>)/gi, "");
+                        if(response.data.description != null){
+                            var rehtml = response.data.description.replace(/(<([^>]+)>)/gi, "");
+                            $('.task-desc').text(rehtml.replace(/\&nbsp;/g, ''));
+                        }else{
+                            $('.task-desc').text(response.data.description);
+                        }
+                        
                         var progresscheck =  response.data.progress;
                         if(progresscheck == 'five'){
-                            $(".check_progress").append("<input type='radio' style='display:none;' value='five' id='a-five' checked><div class='progress'><div class='progress-bar' style='position: relative'><span style='position: absolute; left:105px;color:#292b30;'>5%</span></div></div>");
+                            $('#five').prop('checked', true);
                         }else if(progresscheck == 'twentyfive'){
-                            $('.check_progress').append("<input type='radio' style='display:none;' value='twentyfive' id='a-twentyfive' checked><div class='progress'><div class='progress-bar' style='position: relative'><span style='position: absolute; left:105px;color:#292b30;'>25%</span></div></div>");
+                            $('#twentyfive').prop('checked', true);
                         }else if(progresscheck == 'fifty'){
-                            $('.check_progress').append("<input type='radio' style='display:none;' value='fifty' id='a-fifty' checked><div class='progress'><div class='progress-bar' style='position: relative'><span style='position: absolute; left:105px;color:#292b30;'>50%</span></div></div>");
+                            $('#fifty').prop('checked', true);
                         }else if(progresscheck == 'seventyfive'){
-                            $('.check_progress').append("<input type='radio' style='display:none;' value='seventyfive' id='a-seventyfive' checked><div class='progress'><div class='progress-bar' style='position: relative'><span style='position: absolute; left:105px;color:#292b30;'>75%</span></div></div>");
+                            $('#seventyfive').prop('checked', true);
                         }else if(progresscheck == 'onehundred'){
-                            $('.check_progress').append("<input type='radio' style='display:none;' value='onehundred' id='a-onehundred' checked><div class='progress'><div class='progress-bar' style='position: relative'><span style='position: absolute; left:105px;color:#292b30;'>100%</span></div></div>");
+                            $('#onehundred').prop('checked', true);
                         }
-                        $('.task-desc').text(rehtml.replace(/\&nbsp;/g, ''));
+                        
                         $('.mark_as_complete').attr('data-id',task_id);
                         $('.task-start-date').append(response.data.start_date);
                         $('.task_id').val(response.data.id);

@@ -14,10 +14,13 @@ class ProjectDetailController extends Controller
 {
     public function index(Request $req){
         $project = Project::where('id',$req->project_id)->with('projectcatagory','createproject','head')->first();
-        $date1 = new DateTime($project->start_date);
-        $date2 = new DateTime($project->deadline);
-        $interval = $date1->diff($date2);
-        $left_days = $interval->format('%a');
+        // $date1 = new DateTime($project->start_date);
+        $date2 = strtotime($project->deadline);
+        $now = time();
+        $datediff = $date2 - $now;
+        $left_days = round($datediff / (60 * 60 * 24));
+        // $interval = $date1->diff($date2);
+        // $left_days = $interval->format('%a');
         $pending_tasks = Task::where('project_id',$req->project_id)->where('status','!=',4)->where('status','!=',5)->count();
         $complete_task = Task::where('project_id',$req->project_id)->where('status',5)->count();
         $assign_tables = ProjectAssign::where('project_id',$req->project_id)->with('Getusers')->get();

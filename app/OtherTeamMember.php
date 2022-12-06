@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class OtherTeamMember extends Model
 {
-    protected $table = 'Other_team_members';
+    protected $table = 'other_team_members';
 }

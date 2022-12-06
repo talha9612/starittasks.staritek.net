@@ -52,10 +52,8 @@
                                                 <div class="form-group">
                                                     <label>Task Category</label>
                                                     <select class="form-control show_pro_cata" name="catagory">
-                                                        @foreach($task_catagories as $catagories)
-                                                            @foreach($catagories as $catagory)
-                                                                <option value="{{$catagory->id}}" <?php echo ($catagory->id == $task->task_category_id ?'selected':'') ?> >{{$catagory->category_name}}</option>
-                                                            @endforeach
+                                                        @foreach($task_catagories as $catagory)
+                                                            <option value="{{$catagory->id}}" <?php echo ($catagory->id == $task->task_category_id ?'selected':'') ?> >{{$catagory->category_name}}</option>
                                                         @endforeach
                                                         
                                                     </select>
@@ -72,7 +70,7 @@
                                             <div class="col-md-6 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Start Date</label>
-                                                    <input type="datetime-local" name="start_date" value="{{date('Y-m-d H:i:s', strtotime($task->startdate))}}" data-date-autoclose="true" class="form-control" placeholder="Start date">
+                                                    <input type="datetime-local" name="start_date" value="{{date('Y-m-d H:i:s', strtotime($task->start_date))}}" data-date-autoclose="true" class="form-control" placeholder="Start date">
                                                 </div>
                                             </div>
                                             <div class="col-md-6 col-sm-12">
@@ -86,7 +84,11 @@
                                                 <div class="form-group">
                                                     <label>Assigned To</label>
                                                     <select class="form-control show_head" name="assign_to">
-                                                        <option value="{{$task->AssignTo->id}}">{{$task->AssignTo->name}}</option>
+                                                        @foreach ($managers as $manager)
+                                                            <option value="{{$manager->id}}"<?php if($manager->id === $task->AssignTo->id){echo'selected';}?>>
+                                                                {{$manager->name}}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>

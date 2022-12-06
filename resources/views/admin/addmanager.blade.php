@@ -10,7 +10,8 @@
                                 <div class="d-md-flex justify-content-between mb-2">
                                     <ul class="nav nav-tabs b-none">
                                         <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i>Company Staff List</a></li>                                        
-                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addnew"><i class="fa fa-plus"></i> Add New</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addnew"><i class="fa fa-plus"></i> Add Team</a></li>
+                                        <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addceo"><i class="fa fa-plus"></i> Add CEO</a></li>
                                     </ul>
                                 </div>
                                
@@ -32,16 +33,14 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                                    <table id="example" class="display" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th>#</th>
+                                                <!--<th>#</th>-->
                                                 <th>Name</th>
                                                 <th>Image</th>
                                                 <th>Email</th>
                                                 <th>Phone No</th>
-                                                <th>Address</th>
-                                                <th>Role</th>
                                                 <th>Team Member</th>
                                                 <th>Account Status</th>
                                                 <th>Actions</th>
@@ -50,20 +49,11 @@
                                         <tbody>
                                             @foreach($users as $user)
                                             <tr>
-                                                <td>{{$user->id}}</td>
+                                                <!--<td>{{$user->id}}</td>-->
                                                 <td class="text-capitalize">{{$user->name}}</td>
                                                 <td><img src="{{asset('uploads/staf_images/'.$user->image)}}" width="80" style="border: 1px solid lightgray; padding:5px;" alt="Avatar"></td>
                                                 <td class="text-capitalize">{{$user->email}}</td>
                                                 <td>{{$user->phone}}</td>
-                                                <td class="text-capitalize">{{$user->address}}</td>
-                                                <td> 
-                                                    @if($user->role == 1)
-                                                        Super Admin
-                                                    @elseif($user->role == 2)
-                                                        Manager
-                                                    @else
-                                                        User
-                                                    @endif</td>
                                                 <td class="text-capitalize">
                                                    {{$user->getusers->name}}
                                                 </td>
@@ -99,13 +89,25 @@
                                             </tr>
                                             @endforeach
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <!--<th>#</th>-->
+                                                <th>Name</th>
+                                                <th>Image</th>
+                                                <th>Email</th>
+                                                <th>Phone No</th>
+                                                <th>Team Member</th>
+                                                <th>Account Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </tfoot>
                                     </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                    </div>
+            </div>
                     <div class="tab-pane fade" id="addnew" role="tabpanel">
                         <div class="row">
                             <div class="col-sm-12">
@@ -120,32 +122,32 @@
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Name</label>
-                                                    <input type="text" name="name" class="form-control" required>
+                                                    <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Email</label>
-                                                    <input type="text" id="check-email" name="email" class="form-control" required>
+                                                    <input type="email" id="check-email" name="email" class="form-control" placeholder="Email" required>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Password</label>
                                                     <div class="input-group mb-3">
-                                                        <input type="password" name="password" id="myInput" class="form-control" aria-label="Amount (to the nearest dollar)">
+                                                        <input type="password" name="password" id="myInput" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="Password">
                                                         <div class="input-group-append">
                                                           <span class="input-group-text" onclick="myFunction()"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-sm-12">
+                                            {{-- <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Date of Birth</label>
                                                     <input type="date" value="2000-01-22" name="dob" data-date-autoclose="true" class="form-control" placeholder="Date of Birth" required>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="col-md-4 col-sm-12">
                                                 <label>Gender</label>
                                                 <select class="form-control" name="gender">
@@ -156,15 +158,11 @@
                                             </div>
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
-                                                    <label>Department <button type="button" class="btn btn-success btn-sm" onclick="GetDepartment()" data-toggle="modal" data-target="#addtask">Add Department</button></label>
-                                                    <select class="form-control show_department" name="department">
-                                                        @foreach($designations as $designation)
-                                                            <option value="{{$designation->id}}">{{$designation->name}}</option>
-                                                        @endforeach
-                                                    </select>
+                                                    <label>Designation</label> 
+                                                    <input type="text" name="department" class="form-control" placeholder="Designation" required>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-sm-12">
+                                            {{-- <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Skills <button type="button" class="btn btn-success btn-sm" onclick="GetSkill()" data-toggle="modal" data-target="#addskill">Add Skill</button></label>
                                                     <select class="form-control show_skill" name="skill">
@@ -173,20 +171,20 @@
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Phone</label>
-                                                    <input type="text" name="phone" class="form-control" required>
+                                                    <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
                                                 </div>
                                             </div>
-                                            <div class="col-md-4 col-sm-12">
+                                            {{-- <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Address</label>
-                                                    <input type="text" name="address" class="form-control" required>
+                                                    <input type="text" name="address" class="form-control" placeholder="Address" required>
                                                 </div>
-                                            </div>
-                                            <div class="col-md-4 col-sm-12">
+                                            </div> --}}
+                                            {{-- <div class="col-md-4 col-sm-12">
                                                 <div class="form-group">
                                                     <label>User Type</label>
                                                     <select class="form-control show-members" name="role" >
@@ -194,7 +192,7 @@
                                                     <option value="3">Worker</option>
                                                 </select>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="col-md-4 col-sm-12 manager_value d-none">
                                                 <div class="form-group">
                                                     <label>Select Manager</label>
@@ -207,7 +205,6 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group mt-2 mb-3">
                                                     <input type="file" name="image" class="dropify" required>
-                                                    <small id="fileHelp" class="form-text text-muted">This is some placeholder block-level help text for the above input. It's a bit lighter and easily wraps to a new line.</small>
                                                 </div>
                                             </div>
                                            
@@ -221,6 +218,119 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Add CEO Form -->
+                    <div class="tab-pane fade" id="addceo" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Make Company CEO Account</h3>
+                                        
+                                    </div>
+                                    <form class="card-body" method="post" action="{{url('/admin/add-ceo')}}" enctype="multipart/form-data">
+                                        @csrf()
+                                        <div class="row clearfix">
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Name</label>
+                                                    <input type="text" name="name" class="form-control" placeholder="Enter Name" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Email</label>
+                                                    <input type="email" id="check-email" name="email" class="form-control" placeholder="Email" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Password</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="password" name="password" id="myInput" class="form-control" aria-label="Amount (to the nearest dollar)" placeholder="Password">
+                                                        <div class="input-group-append">
+                                                          <span class="input-group-text" onclick="myFunction()"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{-- <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Date of Birth</label>
+                                                    <input type="date" value="2000-01-22" name="dob" data-date-autoclose="true" class="form-control" placeholder="Date of Birth" required>
+                                                </div>
+                                            </div> --}}
+                                            <div class="col-md-4 col-sm-12">
+                                                <label>Gender</label>
+                                                <select class="form-control" name="gender">
+                                                    <option value="">-- Gender --</option>
+                                                    <option value="1">Male</option>
+                                                    <option value="2">Female</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Designation</label> 
+                                                    <input type="text" name="department" class="form-control" placeholder="Designation" required>
+                                                </div>
+                                            </div>
+                                            {{-- <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Skills <button type="button" class="btn btn-success btn-sm" onclick="GetSkill()" data-toggle="modal" data-target="#addskill">Add Skill</button></label>
+                                                    <select class="form-control show_skill" name="skill">
+                                                        @foreach($skills as $skill)
+                                                            <option value="{{$skill->id}}">{{$skill->name}}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div> --}}
+                                            <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Phone</label>
+                                                    <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
+                                                </div>
+                                            </div>
+                                            {{-- <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>Address</label>
+                                                    <input type="text" name="address" class="form-control" placeholder="Address" required>
+                                                </div>
+                                            </div> --}}
+                                            {{-- <div class="col-md-4 col-sm-12">
+                                                <div class="form-group">
+                                                    <label>User Type</label>
+                                                    <select class="form-control show-members" name="role" >
+                                                    <option value="2">Manager</option>
+                                                    <option value="3">Worker</option>
+                                                </select>
+                                                </div>
+                                            </div> --}}
+                                            <div class="col-md-4 col-sm-12 manager_value d-none">
+                                                <div class="form-group">
+                                                    <label>Select Manager</label>
+                                                    <select class="form-control select-members text-capitalize" name="team_memeber">
+                                                   
+                                                </select>
+                                                </div>
+                                            </div>
+                                          
+                                            <div class="col-sm-12">
+                                                <div class="form-group mt-2 mb-3">
+                                                    <input type="file" name="image" class="dropify" required>
+                                                </div>
+                                            </div>
+                                           
+                                            <div class="col-sm-12">
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                                <button type="submit" class="btn btn-outline-secondary">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Here Add CEO Form -->
+
                 </div>
             </div>
         </div>
@@ -290,6 +400,11 @@
                 }
             }
             $(document).ready(function(){
+           
+           $('#example').DataTable({
+               scrollX: true,
+               responsive: true
+           });
                 $( "#target_department" ).submit(function( event ) {
                     event.preventDefault();
                     $('#department_name').focus();

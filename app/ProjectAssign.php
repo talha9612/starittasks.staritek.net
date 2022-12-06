@@ -10,6 +10,6 @@ class ProjectAssign extends Model
     
     public function GetUsers()
     {
-        return $this->belongsTo('App\User','user_id', 'id');
+         return $this->belongsTo('App\User','user_id', 'id');
     }
 }

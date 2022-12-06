@@ -30,89 +30,113 @@
             <div class="container-fluid">
                 <div class="tab-content">
                     <div class="tab-pane fade show active" id="list" role="tabpanel">
-                    <div class="row clearfix">
-                    <div class="col-12 col-sm-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Project Summary</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Project</th>
-                                                <th>Project Head</th>
-                                                <th>Project Team</th>
-                                                <th>Start Date</th>
-                                                <th>Last Date</th>
-                                                <th>Project Catagory</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($projects as $key=>$project)
-                                                <tr>
-                                                    <td>{{$project->id}}</td>
-                                                    <td>
-                                                        <form method="post" action="/manager/projectdetails" id="my_form_{{ $project->id }}">
-                                                            @csrf
-                                                            <input type="hidden" name="project_id" value="{{ $project->id }}">
-                                                            <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
-                                                        </form>
-                                                    </td>
-                                                    <td>{{$project->head['name']}}</td>
-                                                    <td>
-                                                    <ul class="list-unstyled team-info sm margin-0 w150">
-                                                        @foreach($assigns as $assign)
-                                                            @if($project->id == $assign->project_id)
-                                                                <li><img src="{{asset('uploads/staf_images/'.$assign->GetUsers->image)}}" alt="Avatar"></li>
-                                                            @else
-                                                               
+                        <div class="row clearfix">
+                            <div class="col-12 col-sm-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Project Summary</h3>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Project</th>
+                                                        <th>Project Head</th>
+                                                        <th>Project Team</th>
+                                                        <th>Start Date</th>
+                                                        <th>Last Date</th>
+                                                        <th>Project Catagory</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($projects as $key=>$project)
+                                                        <tr>
+                                                            <td>{{$project->id}}</td>
+                                                            <td>
+                                                                <form method="post" action="/manager/projectdetails" id="my_form_{{ $project->id }}">
+                                                                    @csrf
+                                                                    <input type="hidden" name="project_id" value="{{ $project->id }}">
+                                                                    <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
+                                                                </form>
+                                                            </td>
+                                                            <td>{{$project->head['name']}}</td>
+                                                            <td>
+                                                            <ul class="list-unstyled team-info sm margin-0 w150">
+                                                                @foreach($assigns as $assign)
+                                                                    @if($project->id == $assign->project_id)
+                                                                        <li><img src="{{asset('uploads/staf_images/'.$assign->GetUsers->image)}}" alt="Avatar"></li>
+                                                                    @else
+                                                                    
+                                                                    @endif
+                                                                @endforeach
+                                                                </ul>
+                                                            </td>
+                                                            <td>{{$project->start_date}}</td>
+                                                            <td>{{$project->deadline}}</td>
+                                                            <td>{{$project->projectcatagory->name}}</td>
+                                                            <td>
+                                                            @if($project->status == 1)
+                                                            <label class="tag tag-yellow">Not Started</label>
+                                                            @elseif($project->status == 2)
+                                                            <label class="tag tag-blue">In Progress</label>
+                                                            @elseif($project->status == 3)
+                                                            <label class="tag tag-info">Hold On</label>
+                                                            @elseif($project->status == 4)
+                                                            <label class="tag tag-green">Cancelled</label>
+                                                            @elseif($project->status == 5)
+                                                            <label class="tag tag-red">Finished</label>
                                                             @endif
-                                                        @endforeach
-                                                        </ul>
-                                                    </td>
-                                                    <td>{{$project->start_date}}</td>
-                                                    <td>{{$project->deadline}}</td>
-                                                    <td>{{$project->projectcatagory->name}}</td>
-                                                    <td>
-                                                    @if($project->status == 1)
-                                                    <label class="tag tag-yellow">Not Started</label>
-                                                    @elseif($project->status == 2)
-                                                    <label class="tag tag-blue">In Progress</label>
-                                                    @elseif($project->status == 3)
-                                                    <label class="tag tag-info">Hold On</label>
-                                                    @elseif($project->status == 4)
-                                                    <label class="tag tag-green">Cancelled</label>
-                                                    @elseif($project->status == 5)
-                                                    <label class="tag tag-red">Finished</label>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <form action="/manager/project-edit" method="post" class="d-inline">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{$project->id}}">    
-                                                        <button class="btn btn-primary">Edit</button>
-                                                    </form>
-                                                     | 
-                                                     <form action="/manager/project-delete" method="post" class="d-inline">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{$project->id}}">    
-                                                        <button class="btn btn-danger">Del</button>
-                                                    </form>
-                                                </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                                        </td>
+                                                        <td>
+                                                            <form action="/manager/project-edit" method="post" class="d-inline">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{$project->id}}">    
+                                                                <button class="btn btn-primary" >Edit</button>
+                                                            </form>
+                                                            | 
+                                                            <form action="/manager/project-delete" id="delete-form" method="post" class="d-inline">
+                                                                @csrf
+                                                                <input type="hidden" name="id" value="{{$project->id}}">    
+                                                                <button class="btn btn-danger" onclick="archiveFunction()">Del</button>
+                                                            </form>
+                                                            <script>
+                                                            function archiveFunction() {
+                                                                    event.preventDefault(); // prevent form submit
+                                                                    var form = event.target.form; // storing the form
+                                                                    Swal.fire({
+                                                                    title: 'Are you sure?',
+                                                                    text: "You won't be able to revert this!",
+                                                                    icon: 'warning',
+                                                                    showCancelButton: true,
+                                                                    confirmButtonColor: '#3085d6',
+                                                                    cancelButtonColor: '#d33',
+                                                                    confirmButtonText: 'Yes, delete it!'
+                                                                    }).then((result) => {
+                                                                    if (result.isConfirmed) {
+                                                                        form.submit(); 
+                                                                        Swal.fire(
+                                                                        'Deleted!',
+                                                                        'Project has been deleted.',
+                                                                        'success'
+                                                                        )
+                                                                    }
+                                                                    })
+                                                                }
+                                                            </script>
+                                                        </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
                     </div>
                     <div class="tab-pane fade" id="addnew" role="tabpanel">
                         <div class="row">

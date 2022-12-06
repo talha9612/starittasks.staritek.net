@@ -2,30 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Project;
+use Auth;
+use App\Task;
 use App\User;
+use App\Project;
 use App\ProjectAssign;
 use App\ProjectCatagory;
-use Auth;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 class ProjectController extends Controller
 {
     public function index(){
-        $id = Auth::user()->id;
-        $project_lists = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
-        $users = User::where('user_type',$id)->where('role',2)->get();
-        $user =[Auth::user()->id];
-        $projects =[];
-        for($i=0; $i<count($users); $i++){
-            array_push($user, $users[$i]->id);
-        }
-        for($i=0; $i<sizeof($user); $i++){
-            $project = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$user[$i])->get();
-            array_push($projects, $project);
-        }
-        
-        return view('admin.viewprojects',compact('projects','users','project_lists'));
+        $id = Auth::user()->id;  
+        $projects = Project::with('head','createproject','projectcatagory','assign_project.getusers')->where('create_project',Auth::user()->id)->get();
+        $users = User::where('user_type',$id)->where('role',3)->get();
+
+        // $user =[Auth::user()->id];
+        // $projects =[];
+        // for($i=0; $i<count($users); $i++){
+        //     array_push($user, $users[$i]->id);
+        // }
+        // for($i=0; $i<sizeof($user); $i++){
+        //     $project = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$user[$i])->get();
+        //     array_push($projects, $project);
+        // }
+        //   dd($projects[0]->assign_project[0]->getusers->name);
+        return view('admin.viewprojects',compact('projects','users'));
     }
     public function AddProject(Request $req){
         $id = Auth::user()->id;
@@ -52,7 +55,7 @@ class ProjectController extends Controller
     public function ProjectEdit(Request $req){
         $id = Auth::user()->id;
         $project = Project::where('id',$req->id)->with('projectcatagory')->first();
-        $users = User::where('user_type',$id)->where('role',2)->get();
+        $users = User::where('team_member',$id)->where('role',3)->get();
         $catagories = ProjectCatagory::where('user_id',Auth::user()->id)->orwhere('user_id',Auth::user()->user_type)->get();
         return view('admin.editproject',compact('project','catagories','users'));
     }
@@ -71,6 +74,11 @@ class ProjectController extends Controller
     }
     public function ProjectDelete(Request $req){
         $project = Project::find($req->id);
+        $tasks = Task::where('project_id',$req->id)->get();
+        for ($i=0; $i <sizeof($tasks) ; $i++) { 
+            $task = $tasks[$i];
+            $task->delete();
+        }
         $project2 = ProjectAssign::where('project_id',$req->id)->get();
         $project->delete();
         if ($project2 != null) {
@@ -79,5 +87,42 @@ class ProjectController extends Controller
             }
         }
         return back()->with('success','Project Deleted Successfully!');
+    }
+    public function AssignProject(Request $req){
+        $checks = ProjectAssign::where('project_id',$req->project_id)->get();
+        
+        foreach ($checks as $key => $check) {
+            $check->delete();
+        }
+        $users = $req->user_id;
+        if(is_array($users)){
+            
+            for ($i=0; $i <sizeof($users) ; $i++) {
+
+                $check = ProjectAssign::where('user_id',$users[$i])->where('project_id',$req->project_id)->count();
+                if($check != 0){
+                    continue;
+                }else{
+                    $status = Project::find($req->project_id);
+                    if($status->status == 1){
+                        $status->status = 2;
+                        $status->save();
+                    }else{}
+                    $project = new ProjectAssign();
+                    $project->user_id = $users[$i];
+                    $project->project_id = $req->project_id;
+                    $project->manager_id = Auth::user()->id;
+                    $project->save();
+                }
+            }
+        }else{
+            return back()->with('error','Please First Select Project and Users!');
+        }
+       
+        return back()->with('success','Project Assigned successfully!');
+    }
+    public function GetChangeProjectAssign(Request $req){
+        $datas = ProjectAssign::where('project_id',$req->id)->get();
+        return response()->json(['users'=>$datas]);
     }
 }

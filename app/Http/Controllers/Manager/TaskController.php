@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Manager;
 
 use App\Task;
 use App\User;
+use App\Skill;
 use App\Project;
 use App\TaskCatagory;
+use App\ProjectAssign;
 use App\OtherTeamMember;
 use Illuminate\Http\Request;
 use App\Mail\SendMarkDownMail;
@@ -46,6 +48,27 @@ class TaskController extends Controller
         $task->priority = $req->priority;
         $task->status = $req->status;
         $task->created_by = $id;
+        // Project Complition Calculation
+            $project = Project::where('id',$req->project_id)->first();
+            $tasks = Task::where('project_id',$req->project_id)->get();
+            $NumberOfTasks = sizeof($tasks);
+        
+            $TasksInProjectNum = (100/($NumberOfTasks+1));
+            // For Remove Privous added Value Into Project Progress Bar
+                $project_com = 0;
+                for ($i=0; $i < sizeof($tasks) ; $i++) { 
+                    if($project->project_complete>0){
+                        $pproject_progress = ($tasks[$i]->progress_int*($TasksInProjectNum))/100;
+                        $project_com += $pproject_progress;
+                    }
+                }
+            // Prvious Value remove End Here //
+            $task_progress = intval($task->progress_int);
+            $project_progress = ($task_progress*($TasksInProjectNum))/100;
+            $project_com += $project_progress;
+            $project->project_complete= $project_com;
+            $project->save();
+        // Calculation end //
         $task->save();
         // For Email
         $tasks = Task::where('id',$task->id)->with('project','AssignBy')->first();
@@ -82,20 +105,49 @@ class TaskController extends Controller
         $task->project_id = $req->project_id;
         $task->task_category_id = $req->catagory;
         $task->priority = $req->priority;
+        $privous_progress = $task->progress_int;
         $task->created_by = Auth::user()->id;
         $task->progress = $req->progress;
+        if($req->progress =='five'){
+            $task->progress_int = 5;
+        }else if($req->progress =='twentyfive'){
+            $task->progress_int = 25;
+        }else if($req->progress =='fifty'){
+            $task->progress_int = 50;
+        }else if($req->progress =='seventyfive'){
+            $task->progress_int = 75;
+        }else if($req->progress =='onehundred'){
+            $task->progress_int = 100;
+        }
         if($req->progress == 'onehundred'){
             $task->status = 5;
         }else{
             $task->status = $req->status;
         }
-        // if($req->hasFile('image')){
-        //     $avatar = $req->file('image');
-        //     $filename = time().'.'.$avatar->getClientOriginalExtension();
-        //     Image::make($avatar)->save(public_path('/uploads/screenshots/'.$filename));
-        //     $task->screen_shot = $filename;
-        //     $task->save();
-        // }
+        // Project Complition Calculation
+            $project = Project::where('id',$req->project_id)->first();
+            $tasks = Task::where('project_id',$req->project_id)->get();
+            $NumberOfTasks = sizeof($tasks);
+            $TasksInProjectNum = (100/$NumberOfTasks);
+            // For Remove Privous added Value Into Project Progress Bar
+            $project_com = 0;
+            for ($i=0; $i < sizeof($tasks) ; $i++) { 
+                
+                    $pproject_progress = ($tasks[$i]->progress_int*(100/$NumberOfTasks))/100;
+                    $project_com += $pproject_progress;
+              
+            }
+                if($project_com>0 && $privous_progress>0){
+                    $pproject_progress = ($privous_progress*$TasksInProjectNum)/100;
+                    $project_com -= $pproject_progress;
+                }
+            // Prvious Value remove End Here //
+            $task_progress = intval($task->progress_int);
+            $project_progress = ($task_progress*$TasksInProjectNum)/100;
+            $project_com += $project_progress;
+            $project->project_complete= $project_com;
+            $project->save();
+        // Calculation end //
         if($req->hasFile('images')){
             $images = $req->file('images');
             for($i=0; $i<sizeof($images); $i++){
@@ -142,5 +194,24 @@ class TaskController extends Controller
             'activities'=>$backups,
             'users'=>$users
         ]);
+    }
+    public function ShowTaskDetail(Request $req){
+        
+        $task = Task::where('id',$req->id)->with('project','AssignTo','AssignBy','GetTaskCatagory')->first();
+        $date2 = strtotime($task->due_date);
+        $now = time();
+        $datediff = $date2 - $now;
+        $left_days = round($datediff / (60 * 60 * 24));
+        $pending_tasks = Task::where('id',$req->id)->where('status','!=',4)->where('status','!=',5)->count();
+        $complete_task = Task::where('id',$req->id)->where('status',5)->count();
+        $backups = Activity::where('subject_id',$req->id)->orderBy('id', 'desc')->get();
+        $users = User::get();
+        // $assign_tables = ProjectAssign::where('project_id',$req->project_id)->with('Getusers')->get();
+        // $skills = [];
+        // $skills = Skill::where('user_id',$project->create_project)->get();
+        // if(count($skills) == 0){
+        //     $skills = Skill::where('user_id',$project->project_head)->get();
+        // }
+        return view('manager.taskdetails',compact('left_days','pending_tasks','complete_task','task','backups','users'));
     }
 }

@@ -12,7 +12,7 @@
                     </div>
                 </div>
                 <div class="row clearfix row-deck">
-                    <div class="col-xl-2 col-lg-4 col-md-6">
+                    <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Projects</h3>
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-lg-4 col-md-6">
+                    <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Complete Projects</h3>
@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-lg-4 col-md-6">
+                    {{-- <div class="col-xl-2 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Managers</h3>
@@ -45,8 +45,8 @@
                                
                             </div>
                         </div>
-                    </div>
-                    <div class="col-xl-2 col-lg-4 col-md-6">
+                    </div> --}}
+                    <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Team Members</h3>
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-xl-2 col-lg-4 col-md-6">
+                    <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Task Pending</h3>
@@ -77,82 +77,66 @@
         <div class="section-body">
             <div class="container-fluid">    
                 <div class="row clearfix">
-                    <div class="col-12 col-sm-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Project Summary</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Project</th>
-                                                <th>Project Head</th>
-                                                <th>Start Date</th>
-                                                <th>Last Date</th>
-                                                <th>Project Category</th>
-                                                <th>Status</th>
-                                                <th>Action</th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($projects as $datas)
-                                            @foreach($datas as $key=>$project)
-                                            <tr>
-                                                <td>{{$project->id}}</td>
-                                                <td>
-                                                    <form method="post" action="/admin/projectdetails" id="my_form_{{ $project->id }}">
-                                                        @csrf
-                                                        <input type="hidden" name="project_id" value="{{ $project->id }}">
-                                                        <a href="javascript:{}" onclick="document.getElementById('my_form_{{ $project->id }}').submit();"><b>{{ $project->project_name}}</b></a>
-                                                    </form>
-                                                </td>
-                                                <td>
-                                                    <ul class="list-unstyled team-info sm margin-0 w150 d-inline">
-                                                        <li><img src="{{asset('uploads/staf_images/'.$project->head->image)}}" alt="Avatar"></li>
-                                                    </ul>
-                                                <span class="d-inine">{{$project->head->name}}</span>
-                                                </td>
-                                                <td>{{$project->start_date}}</td>
-                                                <td>{{$project->deadline}}</td>
-                                                <td>{{$project->projectcatagory->name}}</td>
-                                                <td> 
-                                                    @if($project->status == 1)
-                                                    <label class="tag tag-yellow">Not Started</label>
-                                                    @elseif($project->status == 2)
-                                                    <label class="tag tag-blue">In Progress</label>
-                                                    @elseif($project->status == 3)
-                                                    <label class="tag tag-info">Hold On</label>
-                                                    @elseif($project->status == 4)
-                                                    <label class="tag tag-green">Cancelled</label>
-                                                    @elseif($project->status == 5)
-                                                    <label class="tag tag-red">Finished</label>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <form action="/admin/project-edit" method="post" class="d-inline">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{$project->id}}">    
-                                                        <button class="btn btn-primary">Edit</button>
-                                                    </form>
-                                                     | 
-                                                     <form action="/admin/project-delete" method="post" class="d-inline">
-                                                        @csrf
-                                                        <input type="hidden" name="id" value="{{$project->id}}">    
-                                                        <button class="btn btn-danger">Del</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                    @foreach($managers as $manager)
+                        <div class="col-md-6 col-sm-12">
+                            <div class="card">
+                                <div class="card-header bg-danger">
+                                    <h3 class="card-title">Tasks of ({{ $manager->name }})</h3>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover table-striped  table-vcenter mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Task</th>
+                                                        <th>Project</th>
+                                                        <th>Progress</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($manager->getTasks as $task)
+                                                    <tr>
+                                                        <td>{{$task->heading}}</td>
+                                                        <td>{{$task->project->project_name}}</td>
+                                                        <td>
+                                                            <div class="form-group mt-3">
+                                                                <input type="radio" style="display:none;" value="{{ $task->progress }}" id="a-{{ $task->progress }}" checked>
+                                                                <div class="progress" style="width: 160px">
+                                                                  <div class="progress-bar" style="position: relative">
+                                                                    @if( $task->progress == 'five')
+                                                                        <span style="position: absolute; left:75px;color:#292b30;">5%</span>
+                                                                    @elseif ($task->progress == 'twentyfive')
+                                                                        <span style="position: absolute; left:75px;color:#292b30;">25%</span>
+                                                                    @elseif ($task->progress == 'fifty')
+                                                                        <span style="position: absolute; left:75px;color:#292b30;">50%</span>
+                                                                    @elseif ($task->progress == 'seventyfive')
+                                                                    <span style="position: absolute; left:75px;color:#292b30;">75%</span>
+                                                                    @elseif ($task->progress == 'onehundred')
+                                                                    <span style="position: absolute; left:75px;color:#292b30;">100%</span>
+                                                                    @else
+                                                                    <span style="position: absolute; left:75px;color:#292b30;">0%</span>
+                                                                    @endif
+                                                                  </div>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <label class="custom-switch m-0">
+                                                                <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}" 
+                                                                data-toggle="toggle" data-onstyle="outline-success" {{$task->approved == 1? 'checked':''}}>
+                                                                <span class="custom-switch-indicator"></span>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>       

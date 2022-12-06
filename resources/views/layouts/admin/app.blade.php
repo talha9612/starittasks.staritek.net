@@ -20,9 +20,12 @@
 <link rel="stylesheet" href="{{asset('assets/plugins/charts-c3/c3.min.css')}}"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 <!-- Core css -->
 <link rel="stylesheet" href="{{asset('assets/css/main.css')}}"/>
 <link rel="stylesheet" href="{{asset('assets/css/theme1.css')}}"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css"/>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css"/>
 <script src="https://cdn.ckeditor.com/ckeditor5/11.0.1/classic/ckeditor.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -138,17 +141,18 @@
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul class="metismenu">
                 <li class="g_heading">Project</li>
-                <li class="active"><a href="/admin/"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
-                <li><a href="/admin/manager"><i class="fa fa-user"></i><span>Team Members</span></a></li>
-                <li>
+                <li class="{{(request()->path()=="admin")?"active":null}}"><a href="/admin/"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+                <li class="{{(request()->path()=="admin/manager")?"active":null}}"><a href="/admin/manager"><i class="fa fa-user"></i><span>Team Members</span></a></li>
+                <li class="{{(request()->path()=="admin/tasks") || (request()->path()=="admin/projects") || (request()->path()=="admin/projectdetails") || (request()->is('admin/showtaskdetail/*'))?"active":null}}">
                     <a href="javascript:void(0)" class="has-arrow arrow-c"><i class="fa fa-lock"></i><span>Work</span></a>
                     <ul>
-                        <li><a href="/admin/projects">Project</a></li>
-                        <li><a href="/admin/tasks">Tasks</a></li>
-                       
+                        <li class="{{(request()->path()=="admin/projects") || (request()->path()=="admin/projectdetails") || (request()->is('admin/showtaskdetail/*'))?"active":null}}"><a href="/admin/projects">Project</a></li>
+                        <li class="{{(request()->path()=="admin/tasks")?"active":null}}"><a class="" href="/admin/tasks">Tasks</a></li>
+                      
                     </ul>
                 </li>
-                <li><a href="/admin/setting"><i class="fa fa-gear"></i><span>Setting</span></a></li>
+                <li class="{{(request()->path()=="admin/project-report")?"active":null}}"><a href="/admin/project-report"><i class="fa fa-sticky-note" aria-hidden="true"></i><span>Project Report</span></a></li>
+                <li class="{{(request()->path()=="admin/tasks")?"active":null}}"><a href="/admin/setting"><i class="fa fa-gear"></i><span>Setting</span></a></li>
             </ul>
         </nav>        
     </div>
@@ -219,9 +223,16 @@
 <script src="{{asset('assets/bundles/knobjs.bundle.js')}}"></script>
 <script src="{{asset('assets/bundles/c3.bundle.js')}}"></script>
 <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+
 <script src="{{asset('assets/js/core.js')}}"></script>
 <script src="{{asset('js/custom-admin.js')}}"></script>
 <script src="{{asset('assets/js/page/project-index.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 </body>
 
 <!-- soccer/project/  07 Jan 2020 03:37:22 GMT -->

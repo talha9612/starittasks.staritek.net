@@ -19,15 +19,24 @@ class AppHelper
         $setting = CompanySetting::where('user_id',Auth::user()->id)->first();
         return $setting;
     }
-    public function CompanySettingManager(){
-        $id = Auth::user()->user_type;
-        $setting = CompanySetting::where('user_id',$id)->first();
-        return $setting;
-    }
+    // public function CompanySettingManager(){
+    //     $id = Auth::user()->user_type;
+    //     $setting = CompanySetting::where('user_id',$id)->first();
+    //     return $setting;
+    // }
     public function CompanySettingUser(){
         $id = Auth::user()->user_type;
         $manager = User::where('id',$id)->first();
         $setting = CompanySetting::where('user_id',$manager->user_type)->first();
+        return $setting;
+    }
+    public function CompanySettingCEO(){
+        $id = Auth::user()->user_type;
+        $setting = CompanySetting::where('user_id',$id)->first();
+        return $setting;
+    }
+    public function CompanySettingForEmail(){
+        $setting = CompanySetting::where('user_id',$id)->first();
         return $setting;
     }
 }
