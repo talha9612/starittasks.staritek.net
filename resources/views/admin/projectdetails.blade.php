@@ -81,13 +81,13 @@
                             <div class="card-body">
                                 <div class="d-md-flex justify-content-between mb-2">
                                     <ul class="nav nav-tabs b-none">
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Project Details</a></li>                                        
+                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Project Details</a></li>
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#projectmember"><i class="fa fa-plus"></i> Project Members</a></li>
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#projecttask"><i class="fa fa-plus"></i> Project Tasks</a></li>
                                         <!-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addmembers"><i class="fa fa-plus"></i> Add Member into Project</a></li> -->
                                     </ul>
                                 </div>
-                            
+
                             </div>
                         </div>
                     </div>
@@ -96,19 +96,33 @@
         </div>
         <div class="section-body mt-3">
             <div class="container-fluid">
-                
+
                 <div class="row clearfix row-deck">
-                    <div class="col-xl-4 col-lg-4 col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Days Left</h3>
-                            </div>
-                            <div class="card-body">
-                                <span class="float-left"><i class="fa fa-clock-o" style="font-size: 40px;color:#EB6F62" aria-hidden="true"></i></span>
-                                <h5 class="number mb-0 font-32 counter float-right">{{ $left_days }}</h5>
+                    @if($datecheck == false)
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Days Left</h3>
+                                </div>
+                                <div class="card-body">
+                                    <span class="float-left"><i class="fa fa-clock-o" style="font-size: 40px;color:#EB6F62" aria-hidden="true"></i></span>
+                                    <h5 class="number mb-0 font-32 counter float-right">{{ $left_days }}</h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @else
+                        <div class="col-xl-4 col-lg-4 col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Delay Days</h3>
+                                </div>
+                                <div class="card-body">
+                                    <span class="float-left"><i class="fa fa-clock-o" style="font-size: 40px;color:#EB6F62" aria-hidden="true"></i></span>
+                                    <h5 class="number mb-0 font-32 counter float-right">{{ $left_days }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-xl-4 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
@@ -132,10 +146,10 @@
                         </div>
                     </div>
                 </div>
-                   
+
             </div>
         </div>
-            
+
         <div class="section-body">
             <div class="container-fluid">
                 <div class="tab-content">
@@ -206,7 +220,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">Project Tasks</h3>
-                                       
+
                                     </div>
                                     <div class="card-body" >
                                     <div class="table-responsive">
@@ -224,25 +238,25 @@
                                         </thead>
                                         <tbody>
                                            @foreach($tasks as $task)
-                                          
+
                                             <tr>
                                                 <td>{{$task->id}}</td>
                                                 <td class="text-capitalize">
-                                                   
+
                                                         <h6 class="mb-0 text-dark">{{$task->heading}}</h6>
-                                                   
+
                                                 </td>
                                                 <td class="text-capitalize">
                                                        {{$task->project->project_name}}
                                                 </td>
                                                 <td>
-                                                    <ul class="list-unstyled d-inline team-info sm margin-0 w150">   
+                                                    <ul class="list-unstyled d-inline team-info sm margin-0 w150">
                                                         <li><img src="{{asset('uploads/staf_images/'.$task->AssignTo->image)}}" alt="Avatar"></li>
                                                     </ul>
-                                                    <p class="text-capitalize d-inline">{{$task->AssignTo->name}}</p> 
+                                                    <p class="text-capitalize d-inline">{{$task->AssignTo->name}}</p>
                                                 </td>
                                                 <td>
-                                                    <ul class="list-unstyled d-inline team-info sm margin-0 w150">   
+                                                    <ul class="list-unstyled d-inline team-info sm margin-0 w150">
                                                         <li><img src="{{asset('uploads/staf_images/'.$task->AssignBy->image)}}" alt="Avatar"></li>
                                                     </ul>
                                                     <p class="text-capitalize d-inline">{{$task->AssignBy->name}}</p>
@@ -262,14 +276,14 @@
                                                     @endif
                                                 </td>
                                             </tr>
-                                          
+
                                            @endforeach
                                         </tbody>
                                     </table>
                                 </div>
                                     </div>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>

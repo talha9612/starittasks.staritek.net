@@ -14,12 +14,12 @@
                             <div class="card-body">
                                 <div class="d-md-flex justify-content-between mb-2">
                                     <ul class="nav nav-tabs b-none">
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Project List</a></li>                                        
+                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Project List</a></li>
                                         {{-- <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addnew"><i class="fa fa-plus"></i> Add New Project</a></li>
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addmembers"><i class="fa fa-plus"></i> Add Member into Project</a></li> --}}
                                     </ul>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -38,7 +38,7 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="table-responsive">
-                                            <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                                            <table id="example" class="display" style="width:100%">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -54,7 +54,7 @@
                                                 </thead>
                                                 <tbody>
                                                     @foreach($projects as $project)
-                                                  
+
                                                         <tr>
                                                             <td>{{$project->id}}</td>
                                                             <td>
@@ -66,12 +66,14 @@
                                                             </td>
                                                             <td>{{$project->head['name']}}</td>
                                                             <td>
-                                                                
+
                                                                 <ul class="list-unstyled team-info sm margin-0 w150">
-                                                                    @if(!empty($project->assign_project->GetUsers))
-                                                                        <li><img src="{{asset('uploads/staf_images/'.$project->assign_project->GetUsers->image)}}" alt="Avatar"></li>
-                                                                    @else
-                                                                    @endif
+                                                                    @foreach($project->assign_project as $user)
+                                                                        @if(!empty($user->getusers))
+                                                                            <li> {{ $user->getusers->name }} </li>
+                                                                        @else
+                                                                        @endif
+                                                                    @endforeach
                                                                 </ul>
                                                             </td>
                                                             <td>{{$project->start_date}}</td>
@@ -93,13 +95,13 @@
                                                         {{-- <td>
                                                             <form action="/admin/project-edit" method="post" class="d-inline">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{$project->id}}">    
+                                                                <input type="hidden" name="id" value="{{$project->id}}">
                                                                 <button class="btn btn-primary">Edit</button>
                                                             </form>
-                                                            | 
+                                                            |
                                                             <form action="/admin/project-delete" method="post" class="d-inline">
                                                                 @csrf
-                                                                <input type="hidden" name="id" value="{{$project->id}}">    
+                                                                <input type="hidden" name="id" value="{{$project->id}}">
                                                                 <button class="btn btn-danger" onclick="archiveFunction()">Del</button>
                                                             </form>
                                                             <script>
@@ -116,7 +118,7 @@
                                                                     confirmButtonText: 'Yes, delete it!'
                                                                     }).then((result) => {
                                                                     if (result.isConfirmed) {
-                                                                        form.submit(); 
+                                                                        form.submit();
                                                                         Swal.fire(
                                                                         'Deleted!',
                                                                         'Project has been deleted.',
@@ -128,9 +130,22 @@
                                                             </script>
                                                         </td> --}}
                                                         </tr>
-                                                   
+
                                                     @endforeach
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Project</th>
+                                                        <th>Project Head</th>
+                                                        <th>Project Team</th>
+                                                        <th>Start Date</th>
+                                                        <th>Last Date</th>
+                                                        <th>Project Catagory</th>
+                                                        <th>Status</th>
+                                                        {{-- <th>Action</th> --}}
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -145,7 +160,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <h3 class="card-title">Add Members</h3>
-                                           
+
                                         </div>
                                         <form class="card-body" method="post" action="{{url('/admin/assign-project')}}" enctype="multipart/form-data">
                                             @csrf()
@@ -174,12 +189,12 @@
                                                 <div class="col-sm-12">
                                                     <button type="submit" class="btn btn-primary">Submit</button>
                                                     <button type="submit" class="btn btn-outline-secondary">Cancel</button>
-                                                    
+
                                                 </div>
                                             </div>
                                         </form>
                                     </div>
-                                   
+
                                 </div>
                             </div>
                         </div>
@@ -190,7 +205,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">Add Project</h3>
-                                       
+
                                     </div>
                                     <form class="card-body" method="post" action="{{url('/ceo/add-project')}}" enctype="multipart/form-data">
                                         @csrf()
@@ -252,7 +267,7 @@
                                             <div class="col-sm-12">
                                                 <button type="submit" class="btn btn-primary">Submit</button>
                                                 <button type="submit" class="btn btn-outline-secondary">Cancel</button>
-                                                
+
                                             </div>
                                         </div>
                                     </form>
@@ -273,15 +288,15 @@
             <div class="modal-body">
                 <div class="row clearfix">
                 <div class="col-12">
-                        <div class="form-group show_catagory">                                    
+                        <div class="form-group show_catagory">
                             <p></p>
                         </div>
-                    </div>    
+                    </div>
                 <div class="col-12">
-                        <div class="form-group">                                    
+                        <div class="form-group">
                             <input type="text" id="catagory_name" class="form-control" placeholder="Catagory Name">
                         </div>
-                    </div>                   
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -292,35 +307,13 @@
     </div>
 </div>
 <script>
-    // $('select').selectpicker();
-</script>
-<script>
 
-            // $('.get_projects').on('click',function(){
-            //     var id = $('.get_projects').val();
-               
-            //         $.ajax({
-            //         type:'GET',
-            //         dataType:'JSON',
-            //         url:'/admin/admin-change-project-assign',
-            //         data:{
-            //             "_token": "{{ csrf_token() }}",
-            //             'id':id,
-            //         },
-            //         success:function(data){
-            //             var users = data.users;
-            //             var arr =[];
-            //             for(var i=0; i<users.length; i++){
-            //                 arr.push(users[i].user_id);
-            //             }
-            //             $('.selectpicker').selectpicker('val',arr);
-            //             console.log(arr);
-            //         }
-            //         });
-              
-                
-            // });
+
             $(document).ready(function(){
+                $('#example').DataTable({
+                    scrollX: true,
+                    responsive: true
+                });
                 $( "#target_category" ).submit(function( event ) {
                     event.preventDefault();
                     $('#catagory_name').focus();
@@ -363,7 +356,7 @@
                        data:{
                         "_token": "{{ csrf_token() }}",
                         'catagoryname':catagoryname},
-                        
+
                        success:function(response){
                         GetCatagory();
                         $('#catagory_name').val('');

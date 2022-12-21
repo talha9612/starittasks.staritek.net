@@ -1,12 +1,12 @@
 @extends('layouts.admin.app')
 @section('mytitle','add-task')
 @section('content')
-<style>
- .ck.ck-editor__main .ck-content {
-  height: 239px;
-  
-}
-</style>
+    <style>
+         .ck.ck-editor__main .ck-content {
+            height: 239px;
+
+        }
+    </style>
 <div class="section-body mt-3">
             <div class="container-fluid">
                 <div class="row clearfix">
@@ -15,11 +15,11 @@
                             <div class="card-body">
                                 <div class="d-md-flex justify-content-between mb-2">
                                     <ul class="nav nav-tabs b-none">
-                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Tasks List</a></li>                                        
+                                        <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i class="fa fa-list-ul"></i> Tasks List</a></li>
                                         <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#addnew"><i class="fa fa-plus"></i> Add New</a></li>
                                     </ul>
                                 </div>
-                               
+
                             </div>
                         </div>
                     </div>
@@ -73,15 +73,6 @@
                                                         @endif
                                                     </ul>
                                                 </td>
-                                                {{-- <td>
-                                                    <ul class="list-unstyled team-info sm margin-0 w150">
-                                                        @if($task->AssignBy != null)
-                                                            <li><img src="{{asset('uploads/staf_images/'.$task->AssignBy->image)}}" alt="Avatar">
-                                                                <span> {{$task->AssignBy->name}}</span>
-                                                            </li>
-                                                        @endif
-                                                    </ul>
-                                                </td> --}}
                                                 <td>{{$task->due_date}}</td>
                                                 <td>
                                                     <div class="form-group mt-3">
@@ -107,14 +98,14 @@
                                                 </td>
                                                 <td>
                                                     <label class="custom-switch m-0">
-                                                    <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}" 
+                                                    <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}"
                                                     data-toggle="toggle" data-onstyle="outline-success" {{$task->approved == 1? 'checked':''}}>
                                                     <span class="custom-switch-indicator"></span>
                                                     </label>
                                                 </td>
                                                 <td>
                                                     <label class="custom-switch m-0">
-                                                    <input type="checkbox" value="0" class="custom-switch-input task-shows-ceo" data-id="{{$task->id}}" 
+                                                    <input type="checkbox" value="0" class="custom-switch-input task-shows-ceo" data-id="{{$task->id}}"
                                                     data-toggle="toggle" data-onstyle="outline-success" {{$task->task_view_ceo == 1? 'checked':''}}>
                                                     <span class="custom-switch-indicator"></span>
                                                     </label>
@@ -135,13 +126,13 @@
                                                 <td>
                                                     <form action="/admin/edit-task" method="post" class="d-inline">
                                                         @csrf
-                                                        <input type="hidden" name="id" value="{{$task->id}}">    
+                                                        <input type="hidden" name="id" value="{{$task->id}}">
                                                         <button class="btn btn-primary">Edit</button>
                                                     </form>
-                                                     | 
+                                                     |
                                                     <form action="/admin/delete-task" method="post" class="d-inline">
                                                         @csrf
-                                                        <input type="hidden" name="id" value="{{$task->id}}">    
+                                                        <input type="hidden" name="id" value="{{$task->id}}">
                                                         <button class="btn btn-danger" onclick="archiveFunction()">Del</button>
                                                     </form>
                                                     <script>
@@ -158,7 +149,7 @@
                                                              confirmButtonText: 'Yes, delete it!'
                                                              }).then((result) => {
                                                              if (result.isConfirmed) {
-                                                                 form.submit(); 
+                                                                 form.submit();
                                                                  Swal.fire(
                                                                  'Deleted!',
                                                                  'Task has been deleted.',
@@ -201,7 +192,7 @@
                                 <div class="card">
                                     <div class="card-header">
                                         <h3 class="card-title">New Task</h3>
-                                       
+
                                     </div>
                                     <form class="card-body" method="post" action="{{url('/admin/add-task')}}" enctype="multipart/form-data">
                                         @csrf()
@@ -223,7 +214,7 @@
                                                 <div class="form-group">
                                                     <label>Task Category <button type="button" class="btn btn-success btn-sm" onclick="GetCatagory()" data-toggle="modal" data-target="#addtask">Add Catagory</button></label>
                                                     <select class="form-control show_pro_cata" name="catagory">
-                                                        
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -233,7 +224,7 @@
                                                     <input type="text" name="title" class="form-control" placeholder="Task Title" required>
                                                 </div>
                                             </div>
-                                        
+
                                             <div class="col-md-6 col-sm-12">
                                                 <div class="form-group">
                                                     <label>Start Date</label>
@@ -250,7 +241,7 @@
                                                 <div class="form-group">
                                                     <label>Assigned To</label>
                                                     <select class="form-control show_head" name="assign_to">
-                                                       
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -312,15 +303,15 @@
             <div class="modal-body">
                 <div class="row clearfix">
                 <div class="col-12">
-                        <div class="form-group show_catagory">                                    
+                        <div class="form-group show_catagory">
                             <p></p>
                         </div>
-                    </div>    
+                    </div>
                 <div class="col-12">
-                        <div class="form-group">                                    
+                        <div class="form-group">
                             <input type="text" id="catagory_name" class="form-control" placeholder="Catagory Name">
                         </div>
-                    </div>                   
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -333,7 +324,7 @@
 {{-- For Task Details --}}
 <div class="modal fade bd-example-modal-lg" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="max-width:1250px;" role="document">
-        
+
         <div class="modal-content">
         <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Task Details</h5>
@@ -384,7 +375,7 @@
                             <div class="form-group mt-3">
                                 <label for="screenshot">Task ScreenShot</label><br>
                                 <span class="screenshots">
-                                   
+
                                 </span>
                             </div>
                         </div>
@@ -447,7 +438,7 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success:function(response){
-                        
+
                         var regex = /(<([^>]+)>)/ig;
                         var rehtml = response.data.description.replace(/(<([^>]+)>)/gi, "");
                         var progresscheck =  response.data.progress;
@@ -555,7 +546,7 @@
                         for(var i=0; i<response.users.length; i++){
                             $(".show_head").append("<option value="+response.users[i].id+">"+response.users[i].name+"</option>");
                         }
-                        
+
                     }
                 })
         });
@@ -586,7 +577,7 @@
                        data:{
                         "_token": "{{ csrf_token() }}",
                         'catagoryname':catagoryname},
-                        
+
                        success:function(response){
                         GetCatagory();
                         $('#catagory_name').val('');

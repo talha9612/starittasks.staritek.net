@@ -15,7 +15,7 @@ class ProjectController extends Controller
 {
     public function index(){
         $id = Auth::user()->id;
-        $projects = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->user_type)->get();
+        $projects = Project::with('head','createproject','projectcatagory','assign_project.getusers')->where('create_project',Auth::user()->user_type)->get();
         $users = User::where('user_type',$id)->where('role',3)->get();
 
         // $user =[Auth::user()->id];
@@ -27,7 +27,7 @@ class ProjectController extends Controller
         //     $project = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$user[$i])->get();
         //     array_push($projects, $project);
         // }
-          
+
         return view('ceo.viewprojects',compact('projects','users'));
     }
     public function AddProject(Request $req){
@@ -49,7 +49,7 @@ class ProjectController extends Controller
         $assign_project->user_id = $get_project->project_head;
         $assign_project->project_id = $get_project->id;
         $assign_project->save();
-        
+
         return redirect()->back();
     }
     public function ProjectEdit(Request $req){
@@ -75,7 +75,7 @@ class ProjectController extends Controller
     public function ProjectDelete(Request $req){
         $project = Project::find($req->id);
         $tasks = Task::where('project_id',$req->id)->get();
-        for ($i=0; $i <sizeof($tasks) ; $i++) { 
+        for ($i=0; $i <sizeof($tasks) ; $i++) {
             $task = $tasks[$i];
             $task->delete();
         }
@@ -90,13 +90,13 @@ class ProjectController extends Controller
     }
     public function AssignProject(Request $req){
         $checks = ProjectAssign::where('project_id',$req->project_id)->get();
-        
+
         foreach ($checks as $key => $check) {
             $check->delete();
         }
         $users = $req->user_id;
         if(is_array($users)){
-            
+
             for ($i=0; $i <sizeof($users) ; $i++) {
 
                 $check = ProjectAssign::where('user_id',$users[$i])->where('project_id',$req->project_id)->count();
@@ -118,7 +118,7 @@ class ProjectController extends Controller
         }else{
             return back()->with('error','Please First Select Project and Users!');
         }
-       
+
         return back()->with('success','Project Assigned successfully!');
     }
     public function GetChangeProjectAssign(Request $req){

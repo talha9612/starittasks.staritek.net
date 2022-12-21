@@ -15,7 +15,7 @@ class ProjectController extends Controller
 {
     public function index(Request $req){
         $project = project::where('id',$req->project_id)->with('projectcatagory')->first();
-        $date1 = new DateTime($project->start_date);
+        $date1 = new DateTime();
         $date2 = new DateTime($project->deadline);
         $interval = $date1->diff($date2);
         $left_days = $interval->format('%a');

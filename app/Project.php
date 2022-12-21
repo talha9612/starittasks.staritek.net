@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    
+
     public function head()
     {
         return $this->belongsTo('App\User','project_head', 'id');
@@ -22,5 +22,13 @@ class Project extends Model
     public function assign_project()
     {
          return $this->hasMany('App\ProjectAssign','project_id', 'id');
+    }
+    public function getTasks(){
+        return $this->hasMany('App\Task','project_id','id');
+    }
+    public function getTasksCeo(){
+        return $this->hasMany('App\Task','project_id','id')
+            ->where('approved', 0)
+            ->where('task_view_ceo', 1);
     }
 }

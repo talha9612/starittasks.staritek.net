@@ -51,7 +51,7 @@
                 <div class="dropdown">
                     <a href="javascript:void(0)" class="nav-link icon settingbar"><i class="fa fa-gear fa-spin" data-toggle="tooltip" data-placement="right" title="Settings"></i></a>
                     <a href="javascript:void(0)" class="nav-link icon menu_toggle"><i class="fa  fa-align-left"></i></a>
-                </div>            
+                </div>
             </div>
         </div>
     </div>
@@ -76,7 +76,7 @@
                     </label>
                 </div>
             </div>
-            
+
             <hr>
             <div>
                 <h6 class="font-14 font-weight-bold mt-4 text-muted">General Settings</h6>
@@ -116,11 +116,11 @@
                             <span class="custom-switch-indicator"></span>
                         </label>
                     </li>
-                    
+
                 </ul>
             </div>
             <hr>
-           
+
         </div>
     </div>
 
@@ -140,18 +140,19 @@
             <ul class="metismenu">
                 <li class="g_heading">Project</li>
                 <li class="{{(request()->path()=="ceo")?"active":null}}"><a href="/ceo/"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
+                <li class="{{(request()->path()=="ceo/dashboardv2")?"active":null}}"><a href="/ceo/dashboardv2"><i class="fa fa-dashboard"></i><span>Dashboard v2</span></a></li>
                 <li class="{{(request()->path()=="ceo/manager")?"active":null}}"><a href="/ceo/manager"><i class="fa fa-user"></i><span>Team Members</span></a></li>
                 <li class="{{(request()->path()=="ceo/tasks") || (request()->path()=="ceo/projects") || (request()->path()=="ceo/projectdetails") || (request()->is('ceo/showtaskdetail/*'))?"active":null}}">
                     <a href="javascript:void(0)" class="has-arrow arrow-c"><i class="fa fa-lock"></i><span>Work</span></a>
                     <ul>
                         <li class="{{(request()->path()=="ceo/projects") || (request()->path()=="ceo/projectdetails") || (request()->is('ceo/showtaskdetail/*'))?"active":null}}"><a href="/ceo/projects">Project</a></li>
                         <li class="{{(request()->path()=="ceo/tasks")?"active":null}}"><a class="" href="/ceo/tasks">Tasks</a></li>
-                      
+
                     </ul>
                 </li>
                 <li class="{{(request()->path()=="ceo/tasks")?"active":null}}"><a href="/ceo/setting"><i class="fa fa-gear"></i><span>Setting</span></a></li>
             </ul>
-        </nav>        
+        </nav>
     </div>
 
     <div class="page">
@@ -195,7 +196,7 @@
                 </div>
             </div>
         </div>
-        @yield('content')     
+        @yield('content')
         <div class="section-body" style=" ">
             <footer class="footer">
                 <div class="container-fluid">
@@ -207,11 +208,11 @@
                 </div>
             </footer>
         </div>
-    </div>    
+    </div>
 </div>
 <script>
-  
-   
+
+
 </script>
 <script src="{{asset('assets/bundles/lib.vendor.bundle.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.js"></script>

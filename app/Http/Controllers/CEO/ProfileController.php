@@ -33,15 +33,16 @@ class ProfileController extends Controller
         return view('ceo.profile',compact('user','company'));
     }
     public function UpdateProfile(Request $request){
+//        dd($request->all());
         $user = User::where('id',$request->id)->first();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->address = $request->address;
-        $user->role = 1;
-        $user->department = $request->department;
+        $user->role = 4;
+        $user->department = 0;
         $user->dob = $request->dob;
-        $user->skill = $request->skill;
+        $user->skill = 0;
         $user->gender = $request->gender;
         if($request->hasFile('image')){
             $avatar = $request->file('image');
@@ -50,7 +51,7 @@ class ProfileController extends Controller
             $user->image = $filename;
             $user->save();
            }
-        
+
         $user->save();
         return redirect()->back();
     }

@@ -33,7 +33,7 @@ Route::get('/', function(){
     }else{
         return view('auth.login');
     }
-    
+
 });
 Route::get('/login', 'CompanyController@ForLogin');
 Route::get('/register-company', 'CompanyController@RegisterCompany');
@@ -46,46 +46,45 @@ Route::group(['middleware' => ['CEO']],function(){
     Route::post('/ceo/single-task-model-complete/', 'CEO\TasksController@SingleTaskComplete');
 
     Route::get('/ceo','CEO\CeoController@index');
+    Route::get('/ceo/dashboardv2', 'CEO\CeoController@Dashboardv');
+    Route::get('/ceo/logout/', 'CEO\CeoController@Logout');
+
     Route::get('/ceo/manager', 'CEO\ManagerController@index');
     Route::post('/ceo/add-manager', 'CEO\ManagerController@AddManager');
-
     Route::post('/ceo/add-ceo', 'CEO\ManagerController@AddCEO');
-
     Route::post('/ceo/edit-manager', 'CEO\ManagerController@EditManager');
     Route::post('/ceo/update-manager', 'CEO\ManagerController@UpdateManager');
     Route::post('/ceo/delete-manager', 'CEO\ManagerController@DeleteUser');
+
     Route::get('/ceo/projects', 'CEO\ProjectController@index');
     Route::post('/ceo/project-edit', 'CEO\ProjectController@ProjectEdit');
     Route::post('/ceo/update-project', 'CEO\ProjectController@UpdateProject');
     Route::post('/ceo/project-delete', 'CEO\ProjectController@ProjectDelete');
-    Route::get('/ceo/save-catagory', 'CEO\ProCatagoryController@SaveCatagory');
     Route::post('/ceo/add-project', 'CEO\ProjectController@AddProject');
+
     Route::get('/ceo/tasks', 'CEO\TasksController@index');
     Route::post('/ceo/add-task', 'CEO\TasksController@AddTask');
     Route::post('/ceo/edit-task', 'CEO\TasksController@EditTask');
     Route::post('/ceo/update-task', 'CEO\TasksController@UpdateTask');
     Route::post('/ceo/task-delete', 'CEO\TasksController@DeleteTask');
-    Route::get('/ceo/setting/', 'CEO\SettingController@index');
-    Route::get('/ceo/logout/', 'CEO\CeoController@Logout');
-    // Admin Profile 
+    Route::get('/ceo/single-task-model/', 'CEO\TasksController@SingleTaskModel');
+    // Admin Profile
     Route::get('/ceo/profile/', 'CEO\ProfileController@index');
     Route::post('/ceo/update-profile', 'CEO\ProfileController@UpdateProfile');
     Route::get('/ceo/check-password', 'CEO\ProfileController@CheckPassword');
     Route::post('/ceo/update-password', 'CEO\ProfileController@UpdatePassword');
+    Route::get('/ceo/checkEmail', 'CEO\ProfileController@CheckEamil');
     // Admin Setting Update
+    Route::get('/ceo/setting/', 'CEO\SettingController@index');
     Route::post('/ceo/update-setting', 'CEO\SettingController@UpdateSetting');
 
-    // Admin Check Email
-    Route::get('/ceo/checkEmail', 'CEO\ProfileController@CheckEamil');
-    Route::get('/ceo/single-task-model/', 'CEO\TasksController@SingleTaskModel');
     Route::post('/ceo/projectdetails/', 'CEO\ProjectDetailController@index');
-
-
+    Route::get('/ceo/save-catagory', 'CEO\ProCatagoryController@SaveCatagory');
     // Ajax Links
     Route::get('/ceo/prjectheads', 'CEO\CeoController@ProjectHeads');
     Route::get('/ceo/admin-change-status-user', 'CEO\ManagerController@ChangeStatus');
     Route::get('/ceo/catagory', 'CEO\ProCatagoryController@index');
-    Route::get('/ceo/delete-project-catagory/', 'CEO\ProCatagoryController@DelProCategory'); 
+    Route::get('/ceo/delete-project-catagory/', 'CEO\ProCatagoryController@DelProCategory');
     Route::get('/ceo/task-catagory', 'CEO\TaskCataController@TaskCatagory');
     Route::get('/ceo/add-task-catagory', 'CEO\TaskCataController@AddTaskCatagory');
     Route::get('/ceo/delete-task-catagory/', 'CEO\TaskCataController@DeleteTaskCatagory');
@@ -114,6 +113,7 @@ Route::group(['middleware' => ['admin']],function(){
     Route::post('/admin/single-task-model-complete/', 'Admin\TasksController@SingleTaskComplete');
     Route::get('/home', 'Admin\AdminController@index');
     Route::get('/admin/', 'Admin\AdminController@index');
+    Route::get('/admin/dashboardv2', 'Admin\AdminController@Dashboardv');
     Route::get('/admin/manager', 'Admin\ManagerController@index');
     Route::post('/admin/add-manager', 'Admin\ManagerController@AddManager');
 
@@ -135,7 +135,7 @@ Route::group(['middleware' => ['admin']],function(){
     Route::post('/admin/delete-task', 'Admin\TasksController@DeleteTask');
     Route::get('/admin/setting/', 'Admin\SettingController@index');
     Route::get('/admin/logout/', 'Admin\AdminController@Logout');
-    // Admin Profile 
+    // Admin Profile
     Route::get('/admin/profile/', 'Admin\ProfileController@index');
     Route::post('/admin/update-profile', 'Admin\ProfileController@UpdateProfile');
     Route::get('/admin/check-password', 'Admin\ProfileController@CheckPassword');
@@ -147,13 +147,11 @@ Route::group(['middleware' => ['admin']],function(){
     Route::get('/admin/checkEmail', 'Admin\ProfileController@CheckEamil');
     Route::get('/admin/single-task-model/', 'Admin\TasksController@SingleTaskModel');
     Route::post('/admin/projectdetails/', 'Admin\ProjectDetailController@index');
-
-
     // Ajax Links
     Route::get('/admin/prjectheads', 'Admin\AdminController@ProjectHeads');
     Route::get('/admin/admin-change-status-user', 'Admin\ManagerController@ChangeStatus');
     Route::get('/admin/catagory', 'Admin\ProCatagoryController@index');
-    Route::get('/admin/delete-project-catagory/', 'Admin\ProCatagoryController@DelProCategory'); 
+    Route::get('/admin/delete-project-catagory/', 'Admin\ProCatagoryController@DelProCategory');
     Route::get('/admin/task-catagory', 'Admin\TaskCataController@TaskCatagory');
     Route::get('/admin/add-task-catagory', 'Admin\TaskCataController@AddTaskCatagory');
     Route::get('/admin/delete-task-catagory/', 'Admin\TaskCataController@DeleteTaskCatagory');
@@ -200,7 +198,7 @@ Route::group(['middleware' => ['manager']],function(){
     Route::post('/manager/edit-task', 'Manager\TaskController@EditTask');
     Route::post('/manager/update-task', 'Manager\TaskController@UpdateTask');
     Route::post('/manager/delete-task', 'Manager\TaskController@DeleteTask');
-    // Manager Profile 
+    // Manager Profile
     Route::get('/manager/profile/', 'Manager\ProfileController@index');
     Route::post('/manager/update-profile', 'Manager\ProfileController@UpdateProfile');
     Route::get('/manager/setting', 'Manager\SettingController@index');
@@ -211,7 +209,7 @@ Route::group(['middleware' => ['manager']],function(){
     Route::post('/manager/privous-add-user', 'Manager\ManagerController@OtherTeamMember');
     Route::get('/manager/showtaskdetail/{id}', 'Manager\TaskController@ShowTaskDetail');
 
-    // Ajax Links 
+    // Ajax Links
     Route::get('/manager/prjectheads', 'Manager\ManagerController@ProjectHeads');
     Route::get('/manager/catagory', 'Manager\ProCatagoryController@index');
     Route::get('/manager/save-catagory', 'Manager\ProCatagoryController@SaveCategory');
@@ -243,7 +241,7 @@ Route::group(['middleware' => ['user']],function(){
     Route::get('/home', 'User\UserController@index');
     Route::get('/user/', 'User\UserController@index');
     Route::post('/user/project', 'User\ProjectController@index');
-    // Manager Profile 
+    // Manager Profile
     Route::get('/user/profile/', 'User\ProfileController@index');
     Route::post('/user/update-profile', 'User\ProfileController@UpdateProfile');
     Route::get('/user/setting', 'User\SettingController@index');
@@ -262,9 +260,9 @@ Route::group(['middleware' => ['user']],function(){
 });
 Route::get('checkEmail','CompanyController@CheckEamil');
 Route::get('sendEmail',function(){
-    $task = []; 
+    $task = [];
     $user = [];
-    Mail::to("abidijaz280@gmail.com")->send( new SendMarkDownMail($task,$user)); 
+    Mail::to("abidijaz280@gmail.com")->send( new SendMarkDownMail($task,$user));
     echo "send Email";
 });
 Route::get("/active", function(){

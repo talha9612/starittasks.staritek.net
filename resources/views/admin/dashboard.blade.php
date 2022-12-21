@@ -7,8 +7,7 @@
                     <div class="col-lg-12">
                         <div class="mb-4">
                             <h4><i class="fa fa-address-book" aria-hidden="true"></i> Welcome {{Auth::user()->name}}</h4>
-                            <small>Measure How Fast You’re Growing Monthly Recurring Revenue. <a href="#">Learn More</a></small>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
                 <div class="row clearfix row-deck">
@@ -42,22 +41,10 @@
                             <div class="card-body">
                             <span class="float-left"><i class="fa fa-user-circle" style="font-size: 40px;color:#2196f3" aria-hidden="true"></i></span>
                                 <h5 class="number mb-0 font-32 counter float-right">{{$managerscount}}</h5>
-                               
+
                             </div>
                         </div>
                     </div> --}}
-                    <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">Team Members</h3>
-                            </div>
-                            <div class="card-body">
-                            <span class="float-left"><i class="fa fa-user" style="font-size: 40px;color:#00bcd4" aria-hidden="true"></i></span>
-                                <h5 class="number mb-0 font-32 counter float-right">{{$memCount}}</h5>
-                               
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
@@ -66,16 +53,28 @@
                             <div class="card-body">
                             <span class="float-left"><i class="fa fa-file" style="font-size: 40px;color:#ff9800bf" aria-hidden="true"></i></span>
                                 <h5 class="number mb-0 font-32 counter float-right">{{$taskCount}}</h5>
-                                
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-4 col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Team Members</h3>
+                            </div>
+                            <div class="card-body">
+                                <span class="float-left"><i class="fa fa-user" style="font-size: 40px;color:#00bcd4" aria-hidden="true"></i></span>
+                                <h5 class="number mb-0 font-32 counter float-right">{{$memCount}}</h5>
+
                             </div>
                         </div>
                     </div>
                 </div>
-               
+
             </div>
         </div>
         <div class="section-body">
-            <div class="container-fluid">    
+            <div class="container-fluid">
                 <div class="row clearfix">
                     @foreach($managers as $manager)
                         <div class="col-md-6 col-sm-12">
@@ -123,7 +122,7 @@
                                                         </td>
                                                         <td>
                                                             <label class="custom-switch m-0">
-                                                                <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}" 
+                                                                <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}"
                                                                 data-toggle="toggle" data-onstyle="outline-success" {{$task->approved == 1? 'checked':''}}>
                                                                 <span class="custom-switch-indicator"></span>
                                                             </label>
@@ -139,6 +138,6 @@
                     @endforeach
                 </div>
             </div>
-        </div>       
-       
+        </div>
+
 @endsection

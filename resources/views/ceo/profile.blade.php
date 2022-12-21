@@ -140,7 +140,7 @@
                                             <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
                                         </div>
                                     </div>
-                                    <form class="card-body" method="post" action="{{url('/admin/update-profile')}}" enctype="multipart/form-data">
+                                    <form class="card-body" method="post" action="{{url('/ceo/update-profile')}}" enctype="multipart/form-data">
                                         @csrf()
                                         <div class="row clearfix">
                                             <div class="col-md-4 col-sm-12">
@@ -186,7 +186,7 @@
                                                 <div class="form-group">
                                                     <label>User Type</label>
                                                     <select class="form-control show-tick" name="role">
-                                                    <option value="1" <?php echo($user->role == 1)?'selected':'';?>>Admin</option>
+                                                    <option value="4" <?php echo($user->role == 4)?'selected':'';?>>Ceo</option>
                                                 </select>
                                                 </div>
                                             </div>

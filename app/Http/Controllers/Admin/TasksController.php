@@ -21,7 +21,7 @@ class TasksController extends Controller
 {
     public function index(){
         $id = Auth::user()->id;
-        $project_lists = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
+
         $users = User::where('user_type',$id)->where('role',2)->get();
         $user =[Auth::user()->id];
         $projects =[];
@@ -54,11 +54,11 @@ class TasksController extends Controller
             $project = Project::where('id',$req->project_id)->first();
             $tasks = Task::where('project_id',$req->project_id)->get();
             $NumberOfTasks = sizeof($tasks);
-        
+
             $TasksInProjectNum = (100/($NumberOfTasks+1));
             // For Remove Privous added Value Into Project Progress Bar
                 $project_com = 0;
-                for ($i=0; $i < sizeof($tasks) ; $i++) { 
+                for ($i=0; $i < sizeof($tasks) ; $i++) {
                     if($project->project_complete>0){
                         $pproject_progress = ($tasks[$i]->progress_int*($TasksInProjectNum))/100;
                         $project_com += $pproject_progress;
@@ -80,7 +80,7 @@ class TasksController extends Controller
         $user2 = User::where('id',$task->created_by)->first();
         $user3s = User::where('user_type',Auth::user()->id)->where('role',4)->get();
         foreach($user3s as $user){
-            if($task->task_view_ceo ===1){
+            if($task->task_view_ceo === 1){
                 array_push($users,$user);
             }
         }
@@ -226,7 +226,7 @@ class TasksController extends Controller
         $task = Task::where('id',$req->task_id)->with('project','AssignTo','AssignBy','GetTaskCatagory')->first();
         $backups = Activity::where('subject_id',$req->task_id)->orderBy('id', 'desc')->get();
         $users = User::get();
-        
+
         return response()->json([
             'data'=>$task,
             'activities'=>$backups,

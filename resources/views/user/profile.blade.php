@@ -97,14 +97,8 @@
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th>Department</th>
-                                                <td>{{ ucfirst($user->getdepartment['name']) }}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Skill</th>
-                                                <td>{{ ucfirst($user->getskill['name']) }}</td>
-                                            </tr>
+                                            
+                                           
                                             <tr>
                                                 <th>Image</th>
                                                 <td><img src="{{asset('uploads/staf_images/'.$user->image)}}" style="width:100px;padding:5px;border:3px solid lightgray;" alt="Avatar"></td>

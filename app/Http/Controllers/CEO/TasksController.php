@@ -19,11 +19,11 @@ use App\Jobs\SendEmail;
 class TasksController extends Controller
 {
     public function index(){
-       
-        $id = Auth::user()->id;
-        $projects = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->user_type)->get();
-        $project = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->user_type)->get();
-        $tasks = Task::where('created_by',Auth::user()->user_type)->with('project','AssignTo','AssignBy')->get();
+
+        $id = Auth::user()->user_type;
+        $projects = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$id)->get();
+
+        $tasks = Task::where('created_by',$id)->where('task_view_ceo',1)->with('project','AssignTo','AssignBy')->get();
         return view('ceo.addtasks',compact('projects','tasks'));
     }
     public function AddTask(Request $req){
@@ -62,11 +62,11 @@ class TasksController extends Controller
             $project = Project::where('id',$req->project_id)->first();
             $tasks = Task::where('project_id',$req->project_id)->get();
             $NumberOfTasks = sizeof($tasks);
-        
+
             $TasksInProjectNum = (100/($NumberOfTasks+1));
             // For Remove Privous added Value Into Project Progress Bar
                 $project_com = 0;
-                for ($i=0; $i < sizeof($tasks) ; $i++) { 
+                for ($i=0; $i < sizeof($tasks) ; $i++) {
                     if($project->project_complete>0){
                         $pproject_progress = ($tasks[$i]->progress_int*($TasksInProjectNum))/100;
                         $project_com += $pproject_progress;
@@ -180,11 +180,11 @@ class TasksController extends Controller
             $TasksInProjectNum = (100/$NumberOfTasks);
             // For Remove Privous added Value Into Project Progress Bar
             $project_com = 0;
-            for ($i=0; $i < sizeof($tasks) ; $i++) { 
-                
+            for ($i=0; $i < sizeof($tasks) ; $i++) {
+
                     $pproject_progress = ($tasks[$i]->progress_int*(100/$NumberOfTasks))/100;
                     $project_com += $pproject_progress;
-              
+
             }
                 if($project_com>0 && $privous_progress>0){
                     $pproject_progress = ($privous_progress*$TasksInProjectNum)/100;
@@ -227,7 +227,7 @@ class TasksController extends Controller
         $task = Task::where('id',$req->task_id)->with('project','AssignTo','AssignBy','GetTaskCatagory')->first();
         $backups = Activity::where('subject_id',$req->task_id)->orderBy('id', 'desc')->get();
         $users = User::get();
-        
+
         return response()->json([
             'data'=>$task,
             'activities'=>$backups,
@@ -255,13 +255,13 @@ class TasksController extends Controller
     }
     public function SingleTaskComplete(Request $request){
         // dd($request->all());
-       
+
         $task = Task::find($request->task_id);
         $task->description = $request->desc;
         $task->save();
         // For Email
         $tasks = Task::where('id',$request->task_id)->with('project','AssignBy')->first();
-        
+
         // Get Users For Email ////////
         $assign_projects = ProjectAssign::where('project_id',$task->project_id)->get();
         $users = [];
@@ -280,7 +280,7 @@ class TasksController extends Controller
             // Mail::to($users[$i]->email)->send( new SendMarkDownMail($tasks, $users[$i]));
             SendEmail::dispatch($tasks,$users[$i]);
         }
-        
+
         // End For Email
         return redirect()->back();
     }
