@@ -33,7 +33,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="col-xl-2 col-lg-4 col-md-6">
+                   <div class="col-xl-2 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Managers</h3>
@@ -44,7 +44,7 @@
 
                             </div>
                         </div>
-                    </div> --}}
+                    </div> 
                     <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
