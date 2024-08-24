@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\TaskCatagory;
 use Illuminate\Http\Request;
-use Auth;
+// use Auth;
+use Illuminate\Support\Facades\Auth;
 class TaskCataController extends Controller
 {
     public function TaskCatagory(){

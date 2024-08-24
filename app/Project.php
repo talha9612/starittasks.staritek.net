@@ -23,6 +23,10 @@ class Project extends Model
     {
          return $this->hasMany('App\ProjectAssign','project_id', 'id');
     }
+    public function project_id()
+    {
+         return $this->hasMany('App\ProjectAssign','project_id', 'id');
+    }
     public function getTasks(){
         return $this->hasMany('App\Task','project_id','id');
     }

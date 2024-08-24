@@ -12,4 +12,8 @@ class ProjectAssign extends Model
     {
          return $this->belongsTo('App\User','user_id', 'id');
     }
+    public function project_id()
+    {
+         return $this->belongsTo('App\Project','project_id', 'id');
+    }
 }

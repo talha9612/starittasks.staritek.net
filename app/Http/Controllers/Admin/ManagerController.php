@@ -9,7 +9,8 @@ use App\Designation;
 use App\Skill;
 use App\ThemeSetting;
 use Image;
-use Auth;
+// use Auth;
+use Illuminate\Support\Facades\Auth;
 class ManagerController extends Controller
 {
     public function index(){

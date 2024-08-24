@@ -200,7 +200,7 @@
             </div>
         </div>
         @yield('content')
-        <div class="section-body" style=" ">
+        <div class="section-body">
             <footer class="footer">
                 <div class="container-fluid">
                     <div class="row">

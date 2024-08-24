@@ -77,11 +77,11 @@
         <div class="section-body">
             <div class="container-fluid">
                 <div class="row clearfix">
-                    @foreach($managers as $manager)
+                    @foreach($users as $user)
                         <div class="col-md-6 col-sm-12">
                             <div class="card">
                                 <div class="card-header bg-danger">
-                                    <h3 class="card-title">Tasks of ({{ $manager->name }})</h3>
+                                    <h3 class="card-title">Tasks of ({{ $user->name }})</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -95,7 +95,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @foreach($manager->getTasks as $task)
+                                            @foreach($user->getTasks as $task)
                                                 <tr>
                                                     <td>{{$task->heading}}</td>
                                                     <td>{{$task->project->project_name}}</td>

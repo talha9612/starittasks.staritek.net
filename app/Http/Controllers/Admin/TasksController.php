@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Auth;
+// use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Task;
 use App\User;
 use App\Skill;

@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\ProjectCatagory;
-use Auth;
+// use Auth;
+use Illuminate\Support\Facades\Auth;
 class ProCatagoryController extends Controller
 {
     public function index(){

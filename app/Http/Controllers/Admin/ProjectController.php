@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Auth;
+// use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Task;
 use App\User;
 use App\Project;
@@ -49,7 +50,6 @@ class ProjectController extends Controller
         $assign_project->user_id = $get_project->project_head;
         $assign_project->project_id = $get_project->id;
         $assign_project->save();
-        
         return redirect()->back();
     }
     public function ProjectEdit(Request $req){

@@ -116,12 +116,16 @@
                                                         $interval = $date1->diff($date2);
                                                         $d_left = $interval->format('%a');
 
-//                                                        echo $d_left;
+                                                        $d_left = $d_left + 1;
                                                         ?>
-                                                    @if($date1>$date2)
-                                                        <span style="color: #c43232">-{{$d_left}}</span>
+                                                    @if($task->progress == 'onehundred')
+                                                        0
                                                     @else
-                                                        {{$d_left}}
+                                                        @if($date1>=$date2)
+                                                            <span style="color: #c43232">-{{$d_left}}</span>
+                                                        @else
+                                                            {{$d_left}}
+                                                        @endif
                                                     @endif
 
                                                 </td>

@@ -33,7 +33,6 @@ Route::get('/', function(){
     }else{
         return view('auth.login');
     }
-
 });
 Route::get('/login', 'CompanyController@ForLogin');
 Route::get('/register-company', 'CompanyController@RegisterCompany');
