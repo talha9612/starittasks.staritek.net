@@ -34,7 +34,7 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="col-xl-2 col-lg-4 col-md-6">
+                    <div class="col-xl-2 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
                                 <h3 class="card-title">Managers</h3>
@@ -45,7 +45,7 @@
 
                             </div>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="card">
                             <div class="card-header">
@@ -65,7 +65,7 @@
                             </div>
                             <div class="card-body">
                             <span class="float-left"><i class="fa fa-file" style="font-size: 40px;color:#ff9800bf" aria-hidden="true"></i></span>
-                                <h5 class="number mb-0 font-32 counter float-right">{{$taskCount}}</h5>
+                                <h5 class="number mb-0 font-32 counter float-right">{{$pendingTaskCount}}</h5>
 
                             </div>
                         </div>
