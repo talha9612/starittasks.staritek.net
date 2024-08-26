@@ -83,11 +83,11 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @foreach($project->getTasksCeo as $task)
-
+                                        {{-- @foreach($project->getTasksCeo as $task) --}}
+                                        @foreach($projects as $task)
                                             <tr>
                                                 <td>{{$task->heading}}</td>
-                                                <td>{{$task->project->project_name}}</td>
+                                                <td>{{$task->project_name}}</td>
                                                 <td>
                                                     <div class="form-group mt-3">
                                                         <input type="radio" style="display:none;" value="{{ $task->progress }}" id="a-{{ $task->progress }}" checked>
