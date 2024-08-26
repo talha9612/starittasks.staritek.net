@@ -45,6 +45,8 @@ Route::group(['middleware' => ['CEO']],function(){
     Route::post('/ceo/single-task-model-complete/', 'CEO\TasksController@SingleTaskComplete');
 
     Route::get('/ceo','CEO\CeoController@index');
+    Route::post('/update-task-status', 'CEO\TasksController@updateTaskStatus')->name('task/update/status');
+
     Route::get('/ceo/dashboardv2', 'CEO\CeoController@Dashboardv');
     Route::get('/ceo/logout/', 'CEO\CeoController@Logout');
 
@@ -104,7 +106,7 @@ Route::group(['middleware' => ['CEO']],function(){
     Route::get('/ceo/admin-change-sidebar-setting', 'CEO\ThemeSettingController@SideBar');
     Route::get('/ceo/admin-change-boxshadow-setting', 'CEO\ThemeSettingController@BoxShadow');
     Route::get('/ceo/single-task-model/', 'CEO\TasksController@SingleTaskModel');
-    Route::get('/ceo/showtaskdetail/{id}', 'CEO\TasksController@ShowTaskDetail');
+    Route::get('/ceo/showtaskhome/{id}', 'CEO\TasksController@ShowTaskhome');
     Route::get('/ceo/admin-change-project-assign', 'CEO\ProjectController@GetChangeProjectAssign');
     Route::post('/ceo/assign-project', 'CEO\ProjectController@AssignProject');
 });

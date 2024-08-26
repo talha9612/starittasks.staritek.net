@@ -145,7 +145,7 @@
                 <li class="{{(request()->path()=="ceo/tasks") || (request()->path()=="ceo/projects") || (request()->path()=="ceo/projectdetails") || (request()->is('ceo/showtaskdetail/*'))?"active":null}}">
                     <a href="javascript:void(0)" class="has-arrow arrow-c"><i class="fa fa-lock"></i><span>Work</span></a>
                     <ul>
-                        <li class="{{(request()->path()=="ceo/projects") || (request()->path()=="ceo/projectdetails") || (request()->is('ceo/showtaskdetail/*'))?"active":null}}"><a href="/ceo/projects">Project</a></li>
+                        <li class="{{(request()->path()=="ceo/projects") || (request()->path()=="ceo/projectdetails") || (request()->is('ceo/showtaskhome/*'))?"active":null}}"><a href="/ceo/projects">Project</a></li>
                         <li class="{{(request()->path()=="ceo/tasks")?"active":null}}"><a class="" href="/ceo/tasks">Tasks</a></li>
 
                     </ul>

@@ -119,6 +119,7 @@ class CeoController extends Controller
             ->where('status', '!=', 4)
             ->where('status', '!=', 5)
             ->count();
+           // dd($pendingTaskCount);
         $memCount = $users->count(); // Count of team members
     
         // Return the view with all the necessary data

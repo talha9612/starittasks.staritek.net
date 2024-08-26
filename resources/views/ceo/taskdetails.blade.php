@@ -1,5 +1,5 @@
 @extends('layouts.ceo.app')
-@section('mytitle','Tasks')
+@section('mytitle','ViewProject')
 @section('content')
 <style>
  .ck.ck-editor__main .ck-content {
@@ -31,7 +31,7 @@
                         <div class="col-12 col-sm-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Tasks Details</h3>
+                                    <h3 class="card-title">Tasks Datails</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">

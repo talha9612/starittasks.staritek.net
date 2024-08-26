@@ -122,12 +122,11 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <label class="custom-switch m-0">
-                                                            <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}"
-                                                                   data-toggle="toggle" data-onstyle="outline-success" {{$task->approved == 1? 'checked':''}}>
-                                                            <span class="custom-switch-indicator"></span>
-                                                        </label>
-                                                    </td>
+    <label class="custom-switch m-0">
+        <input type="checkbox" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}" {{$task->approved == 1 ? 'checked' : ''}}>
+        <span class="custom-switch-indicator"></span>
+    </label>
+</td>
                                                 </tr>
                                             @endforeach
                                             </tbody>
@@ -140,5 +139,29 @@
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.admin-task-approved').change(function() {
+            var taskId = $(this).data('id');
+            var isApproved = $(this).is(':checked') ? 1 : 0;
 
+            $.ajax({
+                url: "{{ route('task/update/status') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    task_id: taskId,
+                    approved: isApproved
+                },
+                success: function(response) {
+                    alert('Task status updated successfully!');
+                },
+                error: function(xhr) {
+                    alert('An error occurred while updating the task status.');
+                }
+            });
+        });
+    });
+</script>
 @endsection
