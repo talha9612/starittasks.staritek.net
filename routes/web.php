@@ -21,13 +21,13 @@ use Spatie\Activitylog\Models\Activity;
 
 Route::get('/', function(){
     if (Auth::check()) {
-       if(Auth::user()->role == 1){
+       if(Auth::user()->role == 1 && Auth::user()->status == 1  ){
             return redirect('admin');
-       }else if(Auth::user()->role == 2){
+       }else if(Auth::user()->role == 2 && Auth::user()->status == 1 ){
             return redirect('manager');
-       }else if(Auth::user()->role == 3){
+       }else if(Auth::user()->role == 3 && Auth::user()->status == 1 ){
             return redirect('user');
-       }else if(Auth::user()->role == 4){
+       }else if(Auth::user()->role == 4 && Auth::user()->status == 1 ){
         return redirect('ceo');
         }
     }else{
@@ -236,6 +236,7 @@ Route::group(['middleware' => ['manager']],function(){
     Route::get('/manager/manager-change-sidebar-setting', 'Manager\ThemeSettingController@SideBar');
     Route::get('/manager/manager-change-boxshadow-setting', 'Manager\ThemeSettingController@BoxShadow');
     Route::get('/manager/single-task-model/', 'Manager\TaskController@SingleTaskModel');
+    Route::post('/update-user-status', 'Manager\ManagerController@updateStatus');
 });
 
 Route::group(['middleware' => ['user']],function(){

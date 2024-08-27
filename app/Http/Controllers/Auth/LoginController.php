@@ -3,23 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-// use Auth;
 use Illuminate\Support\Facades\Auth;
+
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
-
     use AuthenticatesUsers;
 
     /**
@@ -27,31 +15,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    // protected $redirectTo = RouteServiceProvider::HOME;
-    public function redirectTo(){
-        switch(Auth::user()->role){
-            case 1:
-                $this->redirectTo = '/admin';
-                return $this->redirectTo;
-                break;
-            case 2:
-                $this->redirectTo = '/manager';
-                return $this->redirectTo;
-                break;
-            case 3:
-                $this->redirectTo = '/user';
-                return $this->redirectTo;
-                break;
-            case 4:
-                $this->redirectTo = '/ceo';
-                return $this->redirectTo;
-                break;
-            default:
-                $this->redirectTo = '/login';
-                return $this->redirectTo;
-                break;
-        }
-    }
+    protected $redirectTo = '/login'; // Default redirection URL
 
     /**
      * Create a new controller instance.
@@ -62,4 +26,42 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+
+    /**
+     * Handle the user after authentication.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Contracts\Auth\Authenticatable  $user
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
+     */
+    protected function authenticated($request, $user)
+    {
+        if ($user->status != 1) {
+            Auth::logout();
+            return redirect('/login')->withErrors(['error' => 'Your account is inactive.']);
+        }
+    
+        // Redirect based on user role
+        switch ($user->role) {
+            case 1:
+                $this->redirectTo = '/admin';
+                break;
+            case 2:
+                $this->redirectTo = '/manager';
+                break;
+            case 3:
+                $this->redirectTo = '/user';
+                break;
+            case 4:
+                $this->redirectTo = '/ceo';
+                break;
+            default:
+                $this->redirectTo = '/login';
+                break;
+        }
+    
+        return redirect($this->redirectTo);
+    }
+    
+    
 }
