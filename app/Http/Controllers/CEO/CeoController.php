@@ -130,8 +130,119 @@ class CeoController extends Controller
     }
     
       
-    public function Dashboardv(){
-        // $id = Auth::user()->user_type;
+    // public function Dashboardv() {
+    //     $user = Auth::user();
+    //     $userType = $user->user_type;
+    
+    //     $setting = CompanySetting::where('user_id', $user->id)->first();
+    
+    //     $project = Project::with('head', 'createproject', 'projectcatagory', 'assign_project.GetUsers')
+    //         ->where('create_project', $userType)
+    //         ->get();
+    
+    //     $users = User::where('user_type', $userType)
+    //         ->where('role', 3)
+    //         ->get();
+    
+    //     $managerscount = User::where('user_type', $userType)
+    //         ->where('role', 2)
+    //         ->count();
+    
+    //     $userIds = User::where('user_type', $userType)->pluck('id');
+    
+    //     $projectCount = Project::whereIn('create_project', $userIds)->count();
+    //     $CompleteprojectCount = Project::whereIn('create_project', $userIds)
+    //         ->where('status', 5)
+    //         ->count();
+    
+    //     $tasksByProject = Task::select('tasks.*', 'projects.project_name')
+    //         ->join('projects', 'tasks.project_id', '=', 'projects.id')
+    //         ->whereIn('tasks.created_by', $userIds)
+    //         ->where('tasks.status', '!=', 4)
+    //         ->where('tasks.status', '!=', 5)
+    //         ->get()
+    //         ->groupBy('project_id');
+    
+    //     $taskCount = Task::whereIn('created_by', $userIds)
+    //         ->where('status', '!=', 4)
+    //         ->where('status', '!=', 5)
+    //         ->count();
+    
+    //     $memCount = $users->count();
+    //     return view('ceo.dashboardv', compact(
+    //         'project',
+    //         'projectCount',
+    //         'CompleteprojectCount',
+    //         'memCount',
+    //         'taskCount',
+    //         'setting',
+    //         'managerscount',
+    //         'tasksByProject'
+    //     ));
+    // }
+    public function Dashboardv() {
+        $user = Auth::user();
+        $userType = $user->user_type;
+    
+        // Fetch company settings
+        $setting = CompanySetting::where('user_id', $user->id)->first();
+    
+        // Get IDs of managers
+        $managerIds = User::where('user_type', $userType)
+            ->where('role', 2) // Assuming role 2 is for managers
+            ->pluck('id');
+    
+        // Fetch projects created by managers
+        $projects = Project::with('head', 'createproject', 'projectcatagory', 'assign_project.GetUsers')
+            ->whereIn('create_project', $managerIds)
+            ->get();
+    
+        // Fetch users with role 3 (team members)
+        $users = User::where('user_type', $userType)
+            ->where('role', 3)
+            ->get();
+    
+        // Count managers
+        $managerscount = $managerIds->count();
+    
+        // Collect all user IDs in the same company
+        $userIds = User::where('user_type', $userType)->pluck('id');
+    
+        // Aggregate counts
+        $projectCount = Project::whereIn('create_project', $userIds)->count();
+        $CompleteprojectCount = Project::whereIn('create_project', $userIds)
+            ->where('status', 5)
+            ->count();
+    
+        // Group tasks by project_id
+        $tasksByProject = Task::select('tasks.*', 'projects.project_name')
+            ->join('projects', 'tasks.project_id', '=', 'projects.id')
+            ->whereIn('tasks.created_by', $userIds)
+            ->where('tasks.status', '!=', 4)
+            ->where('tasks.status', '!=', 5)
+            ->get()
+            ->groupBy('project_id');
+    
+        $taskCount = Task::whereIn('created_by', $userIds)
+            ->where('status', '!=', 4)
+            ->where('status', '!=', 5)
+            ->count();
+    
+        $memCount = $users->count();
+    
+        return view('ceo.dashboardv', compact(
+            'projects',
+            'projectCount',
+            'CompleteprojectCount',
+            'memCount',
+            'taskCount',
+            'setting',
+            'managerscount',
+            'tasksByProject'
+        ));
+    }
+    
+            // $id = Auth::user()->user_type;
 
         // $setting = CompanySetting::where('user_id', $id)->first();
         // $projects = Project::with('head','getTasksCeo','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$id)->get();
@@ -156,57 +267,7 @@ class CeoController extends Controller
         //     $taskCount +=$taskscount;      
         //}
         
-            $user = Auth::user();
-            $userType = $user->user_type;
-        
-            // Fetch company settings
-            $setting = CompanySetting::where('user_id', $user->id)->first();
-        
-            // Fetch completed projects created by users of the same company
-            $projects = Project::with('head', 'createproject', 'projectcatagory', 'assign_project.GetUsers')
-                ->where('create_project', $userType)
-                ->where('status', 5)
-                ->get();
-        
-            // Fetch users with role 3 (team members)
-            $users = User::where('user_type', $userType)
-                ->where('role', 3)
-                ->get();
-        
-            // Count managers (role 2)
-            $managerscount = User::where('user_type', $userType)
-                ->where('role', 2)
-                ->count();
-        
-            // Collect all user IDs in the same company
-            $userIds = User::where('user_type', $userType)->pluck('id');
-        
-            // Aggregate counts without using loops
-            $projectCount = Project::whereIn('create_project', $userIds)->count();
-            $CompleteprojectCount = Project::whereIn('create_project', $userIds)
-                ->where('status', 5)
-                ->count();
-        
-            // Count tasks for all users excluding status 4 and 5
-            $taskCount = Task::whereIn('created_by', $userIds)
-                ->where('status', '!=', 4)
-                ->where('status', '!=', 5)
-                ->count();
-        
-            // Count team members directly
-            $memCount = $users->count();
-        
-            // Return the view with all the necessary data
-            return view('ceo.dashboardv', compact(
-                'projects',
-                'projectCount',
-                'CompleteprojectCount',
-                'memCount',
-                'taskCount',
-                'setting',
-                'managerscount'
-            ));
-        }
+
         
 
     

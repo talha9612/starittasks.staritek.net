@@ -72,73 +72,79 @@
                             </div>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-striped  table-vcenter mb-0">
+                                    <table class="table table-hover table-striped table-vcenter mb-0">
                                         <thead>
-                                        <tr>
-                                            <th>Task</th>
-                                            <th>Project</th>
-                                            <th>Progress</th>
-                                            <th>Left Days</th>
-                                            <th>Status</th>
-                                        </tr>
+                                            <tr>
+                                                <th>Task</th>
+                                                <th>Project</th>
+                                                <th>Progress</th>
+                                                <th>Left Days</th>
+                                                <th>Status</th>
+                                            </tr>
                                         </thead>
                                         <tbody>
-                                        {{-- @foreach($project->getTasksCeo as $task) --}}
-                                        @foreach($projects as $task)
-                                            <tr>
-                                                <td>{{$task->heading}}</td>
-                                                <td>{{$task->project_name}}</td>
-                                                <td>
-                                                    <div class="form-group mt-3">
-                                                        <input type="radio" style="display:none;" value="{{ $task->progress }}" id="a-{{ $task->progress }}" checked>
-                                                        <div class="progress" style="width: 160px">
-                                                            <div class="progress-bar" style="position: relative">
-                                                                @if( $task->progress == 'five')
-                                                                    <span style="position: absolute; left:75px;color:#292b30;">5%</span>
-                                                                @elseif ($task->progress == 'twentyfive')
-                                                                    <span style="position: absolute; left:75px;color:#292b30;">25%</span>
-                                                                @elseif ($task->progress == 'fifty')
-                                                                    <span style="position: absolute; left:75px;color:#292b30;">50%</span>
-                                                                @elseif ($task->progress == 'seventyfive')
-                                                                    <span style="position: absolute; left:75px;color:#292b30;">75%</span>
-                                                                @elseif ($task->progress == 'onehundred')
-                                                                    <span style="position: absolute; left:75px;color:#292b30;">100%</span>
-                                                                @else
-                                                                    <span style="position: absolute; left:75px;color:#292b30;">0%</span>
-                                                                @endif
+                                            @php
+                                                // Check if there are tasks for this project
+                                                $tasksForProject = $tasksByProject->get($project->id, collect());
+                                            @endphp
+                                            @if($tasksForProject->isNotEmpty())
+                                                @foreach($tasksForProject as $task)
+                                                    <tr>
+                                                        <td>{{ $task->heading }}</td>
+                                                        <td>{{ $task->project_name }}</td>
+                                                        <td>
+                                                            <div class="form-group mt-3">
+                                                                <input type="radio" style="display:none;" value="{{ $task->progress }}" id="a-{{ $task->progress }}" checked>
+                                                                <div class="progress" style="width: 160px">
+                                                                    <div class="progress-bar" style="position: relative">
+                                                                        @if($task->progress == 'five')
+                                                                            <span style="position: absolute; left:75px;color:#292b30;">5%</span>
+                                                                        @elseif($task->progress == 'twentyfive')
+                                                                            <span style="position: absolute; left:75px;color:#292b30;">25%</span>
+                                                                        @elseif($task->progress == 'fifty')
+                                                                            <span style="position: absolute; left:75px;color:#292b30;">50%</span>
+                                                                        @elseif($task->progress == 'seventyfive')
+                                                                            <span style="position: absolute; left:75px;color:#292b30;">75%</span>
+                                                                        @elseif($task->progress == 'onehundred')
+                                                                            <span style="position: absolute; left:75px;color:#292b30;">100%</span>
+                                                                        @else
+                                                                            <span style="position: absolute; left:75px;color:#292b30;">0%</span>
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                     <?php
-                                                        $date1 = new DateTime();
-                                                        $date2 = new DateTime($task->due_date);
-                                                        $interval = $date1->diff($date2);
-                                                        $d_left = $interval->format('%a');
-
-                                                        $d_left = $d_left + 1;
-                                                        ?>
-                                                    @if($task->progress == 'onehundred')
-                                                        0
-                                                    @else
-                                                        @if($date1>=$date2)
-                                                            <span style="color: #c43232">-{{$d_left}}</span>
-                                                        @else
-                                                            {{$d_left}}
-                                                        @endif
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    <label class="custom-switch m-0">
-                                                        <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{$task->id}}"
-                                                               data-toggle="toggle" data-onstyle="outline-success" {{$task->approved == 1? 'checked':''}}>
-                                                        <span class="custom-switch-indicator"></span>
-                                                    </label>
-                                                </td>
-                                            </tr>
-
-                                        @endforeach
+                                                        </td>
+                                                        <td>
+                                                            @php
+                                                                $date1 = new DateTime();
+                                                                $date2 = new DateTime($task->due_date);
+                                                                $interval = $date1->diff($date2);
+                                                                $d_left = $interval->format('%a') + 1;
+                                                            @endphp
+                                                            @if($task->progress == 'onehundred')
+                                                                0
+                                                            @else
+                                                                @if($date1 >= $date2)
+                                                                    <span style="color: #c43232">-{{ $d_left }}</span>
+                                                                @else
+                                                                    {{ $d_left }}
+                                                                @endif
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            <label class="custom-switch m-0">
+                                                                <input type="checkbox" value="0" class="custom-switch-input admin-task-approved" data-id="{{ $task->id }}"
+                                                                       data-toggle="toggle" data-onstyle="outline-success" {{ $task->approved == 1 ? 'checked' : '' }}>
+                                                                <span class="custom-switch-indicator"></span>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="5">No tasks available.</td>
+                                                </tr>
+                                            @endif
                                         </tbody>
                                     </table>
                                 </div>
@@ -149,4 +155,6 @@
             </div>
         </div>
     </div>
+    
+    
 @endsection
