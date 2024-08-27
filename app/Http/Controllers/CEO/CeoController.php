@@ -187,14 +187,14 @@ class CeoController extends Controller
         // Fetch company settings
         $setting = CompanySetting::where('user_id', $user->id)->first();
     
-        // Get IDs of managers
-        $managerIds = User::where('user_type', $userType)
-            ->where('role', 2) // Assuming role 2 is for managers
+        // Get IDs of managers and admins
+        $userIds = User::where('user_type', $userType)
+            ->whereIn('role', [2, 1]) // Assuming role 2 is for managers and role 1 is for admins
             ->pluck('id');
     
-        // Fetch projects created by managers
+        // Fetch projects created by managers or admins
         $projects = Project::with('head', 'createproject', 'projectcatagory', 'assign_project.GetUsers')
-            ->whereIn('create_project', $managerIds)
+            ->whereIn('create_project', $userIds)
             ->get();
     
         // Fetch users with role 3 (team members)
@@ -202,8 +202,10 @@ class CeoController extends Controller
             ->where('role', 3)
             ->get();
     
-        // Count managers
-        $managerscount = $managerIds->count();
+        // Count managers and admins
+        $managersAndAdminsCount = User::where('user_type', $userType)
+            ->whereIn('role', [2, 1]) // Count both managers and admins
+            ->count();
     
         // Collect all user IDs in the same company
         $userIds = User::where('user_type', $userType)->pluck('id');
@@ -237,10 +239,11 @@ class CeoController extends Controller
             'memCount',
             'taskCount',
             'setting',
-            'managerscount',
+            'managersAndAdminsCount',
             'tasksByProject'
         ));
     }
+    
     
             // $id = Auth::user()->user_type;
 
