@@ -179,6 +179,7 @@ Route::group(['middleware' => ['admin']],function(){
     Route::get('/admin/admin-approved-task', 'Admin\TasksController@TaskApproved');
     Route::get('/admin/admin-shows-task-ceo', 'Admin\TasksController@AdminShowsTaskCEO');
     Route::get('/admin/project-report', 'Admin\ProjectReportController@index');
+    Route::post('/update-task-status', 'Admin\TasksController@updatestatustask')->name('/update/task/status');
 });
 Route::group(['middleware' => ['manager']],function(){
     Route::get('/home', 'Manager\ManagerController@index');

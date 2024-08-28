@@ -298,6 +298,24 @@ class TasksController extends Controller
             return response()->json(['success'=>'Task Approved Successfully!']);
         }
     }
+    public function updatestatustask(Request $request){
+        try {
+            $task = Task::findOrFail($request->task_id);
+
+            if ($request->approved) {
+                $task->status = 5;
+            } else {
+                $task->status = 2;
+            }
+
+            $task->approved = $request->approved;
+            $task->save();
+
+            return response()->json(['success' => 'Task status updated successfully!']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed to update task status: ' . $e->getMessage()], 500);
+        }
+    }
     public function AdminShowsTaskCEO(Request $req){
         $task = Task::find($req->status_id);
         $task->task_view_ceo = $req->status;
