@@ -96,6 +96,7 @@
                                 </thead>
                                 <tbody>
                                     @foreach($user->getTasks as $task)
+                                    @if($task->status==1 || $task->status==2 || $task->status==3)
                                     <tr>
                                         <td>{{$task->heading}}</td>
                                         <td>{{$task->project->project_name}}</td>
@@ -128,6 +129,7 @@
                                             </label>
                                         </td>
                                     </tr>
+                                    @endif
                                     @endforeach
                                 </tbody>
                             </table>

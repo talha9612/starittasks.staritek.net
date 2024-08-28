@@ -69,6 +69,8 @@ Route::group(['middleware' => ['CEO']],function(){
     Route::post('/ceo/update-task', 'CEO\TasksController@UpdateTask');
     Route::post('/ceo/task-delete', 'CEO\TasksController@DeleteTask');
     Route::get('/ceo/single-task-model/', 'CEO\TasksController@SingleTaskModel');
+    Route::post('/ceo/task/update', 'CEO\TasksController@updateTaskStatus')->name('task/update/status');
+  
     // Admin Profile
     Route::get('/ceo/profile/', 'CEO\ProfileController@index');
     Route::post('/ceo/update-profile', 'CEO\ProfileController@UpdateProfile');
