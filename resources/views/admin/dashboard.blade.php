@@ -76,11 +76,11 @@
         <div class="section-body">
             <div class="container-fluid">
                 <div class="row clearfix">
-                    @foreach($managers as $manager)
+                    @foreach($users as $user)
                         <div class="col-md-6 col-sm-12">
                             <div class="card">
                                 <div class="card-header bg-danger">
-                                    <h3 class="card-title">Tasks of ({{ $manager->name }})</h3>
+                                    <h3 class="card-title">Tasks of ({{ $user->name }})</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
@@ -94,7 +94,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach($manager->getTasks as $task)
+                                                    @foreach($user->getTasks as $task)
                                                     <tr>
                                                         <td>{{$task->heading}}</td>
                                                         <td>{{$task->project->project_name}}</td>
@@ -139,5 +139,29 @@
                 </div>
             </div>
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.admin-task-approved').change(function() {
+            var taskId = $(this).data('id');
+            var isApproved = $(this).is(':checked') ? 1 : 0;
 
+            $.ajax({
+                url: "{{ route('/update/task/status') }}",
+                type: "POST",
+                data: {
+                    _token: "{{ csrf_token() }}",
+                    task_id: taskId,
+                    approved: isApproved
+                },
+                success: function(response) {
+                    alert('Task status updated successfully!');
+                },
+                error: function(xhr) {
+                    alert('An error occurred while updating the task status.');
+                }
+            });
+        });
+    });
+</script>
 @endsection

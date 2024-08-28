@@ -14,101 +14,122 @@ use App\Task;
 
 class AdminController extends Controller
 {
-    public function index(){
-
+    public function index()
+    {
+        $user = Auth::user();
         $id = Auth::user()->id;
-        $setting = CompanySetting::where('user_id', $id)->first();
-        // $projects = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
-        $project_lists = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
-        $managers = User::where('user_type',$id)->where('role',2)->get();
-        $user =[Auth::user()->id];
-        $projects =[];
-        for($i=0; $i<count($managers); $i++){
-            array_push($user, $managers[$i]->id);
-        }
-        //dd($users);
-        for($i=0; $i<sizeof($user); $i++){
-            $project = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$user[$i])->get();
-            array_push($projects, $project);
-        }
+        $userType = $user->user_type;
+        $managers = User::where('user_type', $id)->where('role', 2)->get();
 
-        $users = User::where('user_type',Auth::user()->id)->where('role', 3)->with('getTasks')->get();
-        $managerscount = User::where('user_type',Auth::user()->id)->where('role',2)->count();
-        $user_ids = [Auth::user()->id];
-        $projectCount = 0;
-        $CompleteprojectCount = 0;
-        $memCount = 0;
-        $taskCount = 0;
-        for($i=0; $i<sizeof($users); $i++){
-            array_push($user_ids,$users[$i]->id);
+        $setting = CompanySetting::where('user_id', $user->id)->first();
 
-        }
-       // dd($user_ids);
-        for($i=0; $i<sizeof($user_ids); $i++){
-        $project = Project::where('create_project',$user_ids[$i])->count();
-        $projectComplete = Project::where('create_project',$user_ids[$i])->where('status',5)->count();
-        $memberscount = User::where('user_type',$user_ids[$i])->where('role',3)->count();
-        //$taskscount = Task::where('created_by',$user_ids[$i])->where('status','!=',4)->where('status','!=',5)->count();
+        $projects = Project::with('head', 'createproject', 'projectcatagory', 'assign_project.GetUsers')
+            ->where('create_project', $userType)
+            ->where('status', 5)
+            ->get();
 
-        $projectCount = $projectCount + $project;
-        $CompleteprojectCount = $CompleteprojectCount + $projectComplete;
-        $memCount +=$memberscount;
-        //$taskCount +=$taskscount;
-        }
-        foreach ($users as $user) {
-            array_push($user_ids, $user->id);
-        }
+        $users = User::where('user_type', $userType)
+            ->where('role', 3)
+            ->get();
 
-        // Fetch tasks assigned to these users and not having status 4 or 5
-        $tasks = Task::whereIn('user_id', $user_ids)
-                     ->where('status', '!=', 4)
-                     ->where('status', '!=', 5)
-                     ->get();
-                     $taskCount = $tasks->count();
+        $managerscount = User::where('user_type', $userType)
+            ->where('role', 2)
+            ->count();
 
-        return view('admin.dashboard',compact('projects','projectCount','CompleteprojectCount','managerscount','memCount','taskCount','setting','managers'));
+        $userIds = User::where('user_type', $userType)->pluck('id')->toArray();
+
+        $projectCount = Project::whereIn('create_project', $userIds)->count();
+        $CompleteprojectCount = Project::whereIn('create_project', $userIds)
+            ->where('status', 5)
+            ->count();
+        $taskCount = Task::whereIn('created_by', $userIds)
+            ->where('status', '!=', 4)
+            ->where('status', '!=', 5)
+            ->count();
+        $memCount = $users->count();
+
+        return view('admin.dashboard', compact(
+            'projects',
+            'projectCount',
+            'CompleteprojectCount',
+            'managerscount',
+            'memCount',
+            'taskCount',
+            'setting',
+            'users',
+            'managers'
+        ));
     }
-    public function Dashboardv(){
-        $id = Auth::user()->id;
-        $setting = CompanySetting::where('user_id', $id)->first();
-        $projects = Project::with('head','getTasks','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
-//        $project_lists = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',Auth::user()->id)->get();
+    public function Dashboardv()
+    {
+        $user = Auth::user();
+        $userType = $user->user_type;
 
-        $users = User::where('user_type',Auth::user()->id)->where('role', 3)->with('getTasks')->get();
-        $user_ids = [Auth::user()->id];
-        $projectCount = 0;
-        $CompleteprojectCount = 0;
-        $memCount = 0;
-        $taskCount = 0;
-        for($i=0; $i<sizeof( $users); $i++){
-            array_push($user_ids,$users[$i]->id);
-        }
-        for($i=0; $i<sizeof($user_ids); $i++){
-            $project = Project::where('create_project',$user_ids[$i])->count();
-            $projectComplete = Project::where('create_project',$user_ids[$i])->where('status',5)->count();
-            $memberscount = User::where('user_type',$user_ids[$i])->where('role',3)->count();
-            $taskscount = Task::where('created_by',$user_ids[$i])->where('status','!=',4)->where('status','!=',5)->count();
+        // Fetch company settings
+        $setting = CompanySetting::where('user_id', $user->id)->first();
 
-            $projectCount = $projectCount + $project;
-            $CompleteprojectCount = $CompleteprojectCount + $projectComplete;
-            $memCount +=$memberscount;
-            $taskCount +=$taskscount;
-        }
-        // Fetch tasks assigned to these users and not having status 4 or 5
-                $tasks = Task::whereIn('user_id', $user_ids)
-                ->where('status', '!=', 4)
-                ->where('status', '!=', 5)
-                ->get();
-                $taskCount = $tasks->count();
-//        dd($projects);
-        return view('admin.dashboardv',compact('projects','projectCount','CompleteprojectCount','memCount','taskCount','setting','users'));
+        // Get IDs of managers and admins
+        $userIds = User::where('user_type', $userType)
+            ->whereIn('role', [2, 1]) // Assuming role 2 is for managers and role 1 is for admins
+            ->pluck('id');
+
+        // Fetch projects created by managers or admins
+        $projects = Project::with('head', 'createproject', 'projectcatagory', 'assign_project.GetUsers')
+            ->whereIn('create_project', $userIds)
+            ->get();
+
+        // Fetch users with role 3 (team members)
+        $users = User::where('user_type', $userType)
+            ->where('role', 3)
+            ->get();
+
+        // Count managers and admins
+        $managersAndAdminsCount = User::where('user_type', $userType)
+            ->whereIn('role', [2, 1]) // Count both managers and admins
+            ->count();
+
+        // Collect all user IDs in the same company
+        $userIds = User::where('user_type', $userType)->pluck('id');
+
+        // Aggregate counts
+        $projectCount = Project::whereIn('create_project', $userIds)->count();
+        $CompleteprojectCount = Project::whereIn('create_project', $userIds)
+            ->where('status', 5)
+            ->count();
+
+        // Group tasks by project_id
+        $tasksByProject = Task::select('tasks.*', 'projects.project_name')
+            ->join('projects', 'tasks.project_id', '=', 'projects.id')
+            ->whereIn('tasks.created_by', $userIds)
+            ->where('tasks.status', '!=', 4)
+            ->where('tasks.status', '!=', 5)
+            ->get()
+            ->groupBy('project_id');
+
+        $taskCount = Task::whereIn('created_by', $userIds)
+            ->where('status', '!=', 4)
+            ->where('status', '!=', 5)
+            ->count();
+
+        $memCount = $users->count();
+
+        return view('admin.dashboardv', compact(
+            'projects',
+            'projectCount',
+            'CompleteprojectCount',
+            'memCount',
+            'taskCount',
+            'setting',
+            'managersAndAdminsCount',
+            'tasksByProject'
+        ));
     }
-    public function ProjectHeads(){
+    public function ProjectHeads()
+    {
         $id = Auth::user()->id;
-        $users = User::where('user_type',$id)->where('role',2)->get();
+        $users = User::where('user_type', $id)->where('role', 2)->get();
         return response()->json([
-            'users'=>$users
+            'users' => $users
         ]);
     }
-
 }
