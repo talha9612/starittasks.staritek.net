@@ -56,7 +56,6 @@
                                                     @foreach($projects as $project)
 
                                                         <tr>
-                                                            <!--<td>{{$project->id}}</td>-->
                                                             <td>
                                                                 <form method="post" action="/admin/projectdetails" id="my_form_{{ $project->id }}">
                                                                     @csrf

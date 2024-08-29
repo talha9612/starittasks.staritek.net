@@ -11,26 +11,38 @@ use App\ProjectAssign;
 use App\ProjectCatagory;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\CompanySetting;
 
 class ProjectController extends Controller
 {
-    public function index(){
-        $id = Auth::user()->id;  
-        $projects = Project::with('head','createproject','projectcatagory','assign_project.getusers')->where('create_project',Auth::user()->id)->get();
-        $users = User::where('user_type',$id)->where('role',3)->get();
-
-        // $user =[Auth::user()->id];
-        // $projects =[];
-        // for($i=0; $i<count($users); $i++){
-        //     array_push($user, $users[$i]->id);
-        // }
-        // for($i=0; $i<sizeof($user); $i++){
-        //     $project = Project::with('head','createproject','projectcatagory','assign_project.GetUsers')->where('create_project',$user[$i])->get();
-        //     array_push($projects, $project);
-        // }
-        //   dd($projects[0]->assign_project[0]->getusers->name);
-        return view('admin.viewprojects',compact('projects','users'));
+    public function index()
+    {
+        $user = Auth::user();
+        $userType = $user->user_type;
+    
+        $setting = CompanySetting::where('user_id', $user->id)->first();
+    
+        // Fetch users of the same user_type with role 3
+        $users = User::where('user_type', $userType)
+            ->where('role', 3)
+            ->get();
+    
+        // Count managers of the same user_type
+        $managerscount = User::where('user_type', $userType)
+            ->where('role', 2)
+            ->count();
+    
+        // Get all user IDs with the same user_type
+        $userIds = User::where('user_type', $userType)->pluck('id')->toArray();
+    
+        // Fetch all projects where create_project matches any of the user IDs
+        $projects = Project::with('head', 'createproject', 'projectcatagory', 'assign_project.getusers')
+            ->whereIn('create_project', $userIds)
+            ->get();
+    
+        return view('admin.viewprojects', compact('projects', 'users'));
     }
+    
     public function AddProject(Request $req){
         $id = Auth::user()->id;
         $project = new Project();

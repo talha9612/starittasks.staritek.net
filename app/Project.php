@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    public function id()
+    {
+        return $this->belongsTo('App\User','id', 'id');
+    }
 
     public function head()
     {
