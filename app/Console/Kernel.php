@@ -60,7 +60,7 @@ class Kernel extends ConsoleKernel
                     Log::warning('Task missing user data:', ['task' => $task->toArray()]);
                 }
             }
-        })->everyMinute(); // Adjust as needed
+        })->daily(); // Adjust as needed
     }
 
 
