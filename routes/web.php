@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Spatie\Activitylog\Models\Activity;
+use App\Http\Controllers\Admin\ProDepartmentController;
 // use App\Http\Controllers\Admin\AdminControler;
 
 /*
@@ -162,7 +163,7 @@ Route::group(['middleware' => ['admin']],function(){
     Route::get('/admin/select-team-managers/', 'Admin\ManagerController@SelectTeamManager');
     // For Department
     Route::get('/admin/department', 'Admin\ProDepartmentController@index');
-    Route::get('/admin/save-department', 'Admin\ProDepartmentController@SaveDepartment');
+    Route::post('/admin/save-department', 'Admin\ProDepartmentController@SaveDepartment');
     Route::get('/admin/delete-project-department/', 'Admin\ProDepartmentController@DelProDepartment');
     // For Skill
     Route::get('/admin/skill', 'Admin\ProSkillController@index');
@@ -272,4 +273,7 @@ Route::get('sendEmail',function(){
 });
 Route::get("/active", function(){
     return Activity::where('subject_id',17)->get();
+});
+Route::fallback(function () {
+    dd('Route not found');
 });
