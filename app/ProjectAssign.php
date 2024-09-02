@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class ProjectAssign extends Model
 {
     protected $table='project_assign'; 
+
+    protected $fillable = ['project_id', 'user_id', 'manager_id'];
+
     
     public function GetUsers()
     {

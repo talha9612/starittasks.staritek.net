@@ -35,8 +35,9 @@ class TaskController extends Controller
 
         return view('manager.taskhome',compact('projects','users','tasks'));
     }
-    public function AddTask(Request $req){
-        $id = Auth::user()->id;
+    public function AddTask(Request $req)
+    {
+        $id = Auth::user()->id; // ID of the user creating the task
         $task = new Task();
         $task->heading = $req->title;
         $task->description = $req->summary;
@@ -48,35 +49,63 @@ class TaskController extends Controller
         $task->priority = $req->priority;
         $task->status = $req->status;
         $task->created_by = $id;
-        // Project Complition Calculation
-            $project = Project::where('id',$req->project_id)->first();
-            $tasks = Task::where('project_id',$req->project_id)->get();
-            $NumberOfTasks = sizeof($tasks);
-        
-            $TasksInProjectNum = (100/($NumberOfTasks+1));
-            // For Remove Privous added Value Into Project Progress Bar
-                $project_com = 0;
-                for ($i=0; $i < sizeof($tasks) ; $i++) { 
-                    if($project->project_complete>0){
-                        $pproject_progress = ($tasks[$i]->progress_int*($TasksInProjectNum))/100;
-                        $project_com += $pproject_progress;
-                    }
-                }
-            // Prvious Value remove End Here //
-            $task_progress = intval($task->progress_int);
-            $project_progress = ($task_progress*($TasksInProjectNum))/100;
-            $project_com += $project_progress;
-            $project->project_complete= $project_com;
-            $project->save();
-        // Calculation end //
+    
+        // Save the task
         $task->save();
-        // For Email
-        $tasks = Task::where('id',$task->id)->with('project','AssignBy')->first();
-        $user = User::where('id',$task->user_id)->first();
-        Mail::to($user->email)->send( new SendMarkDownMail($tasks, $user));
-        // End For Email
-        return redirect()->back()->with('success','Task Added Succefully!');
+    
+        // Ensure the user is assigned to the project
+        $projectId = $req->project_id;
+        $userId = $req->assign_to;
+        $managerId = $id; // ID of the user creating the task as manager
+    
+        // Check if the user is already assigned to the project
+        $projectAssign = ProjectAssign::where('project_id', $projectId)
+                                      ->where('user_id', $userId)
+                                      ->first();
+    
+        if (!$projectAssign) {
+            // Add the user to the project if they are not already assigned
+            ProjectAssign::create([
+                'project_id' => $projectId,
+                'user_id' => $userId,
+                'manager_id' => $managerId, // Set manager_id to the user creating the task
+            ]);
+        }
+    
+        // Project Completion Calculation
+        $project = Project::find($projectId);
+        $tasks = Task::where('project_id', $projectId)->get();
+        $NumberOfTasks = $tasks->count();
+        
+        $TasksInProjectNum = (100 / ($NumberOfTasks + 1));
+    
+        // Remove Previous added Value Into Project Progress Bar
+        $project_com = 0;
+        foreach ($tasks as $taskInProject) {
+            if ($project->project_complete > 0) {
+                $pproject_progress = ($taskInProject->progress_int * $TasksInProjectNum) / 100;
+                $project_com += $pproject_progress;
+            }
+        }
+    
+        // Add New Task Progress
+        $task_progress = intval($task->progress_int);
+        $project_progress = ($task_progress * $TasksInProjectNum) / 100;
+        $project_com += $project_progress;
+        $project->project_complete = $project_com;
+        $project->save();
+    
+        // Send Email
+        $taskDetails = Task::where('id', $task->id)
+                            ->with('project', 'AssignBy')
+                            ->first();
+        $user = User::find($task->user_id);
+        Mail::to($user->email)->send(new SendMarkDownMail($taskDetails, $user));
+    
+        return redirect()->back()->with('success', 'Task Added Successfully!');
     }
+    
+    
     public function EditTask(Request $req){
         $id = Auth::user()->id;
         $task = Task::where('id',$req->id)->first();

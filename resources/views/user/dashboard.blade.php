@@ -141,6 +141,63 @@
                                     </table>
                                 </div>
                             </div>
+                            
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Project Panel</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped text-nowrap table-vcenter mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Project</th>
+                                                <th>Manager Head</th>
+                                                <th>Due Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                           @foreach($tasks as $key=>$task)
+                                            <tr>
+                                                <td>{{$task->id}}</td>
+                                                <td class="text-capitalize">
+                                                    <form method="post" action="/user/project" id="my_form_{{$key}}">
+                                                        @csrf
+                                                        <input type="hidden" name="project_id" value="{{$task->project->id}}">
+                                                        <a href="javascript:void(0)" onclick="document.getElementById('my_form_{{$key}}').submit();">{{$task->project->project_name}}</a>
+                                                    </form>
+                                                </td>
+                                                <td>
+                                                    <ul class="list-unstyled d-inline team-info sm margin-0 w150">   
+                                                        <li><img src="{{asset('uploads/staf_images/'.$task->AssignBy->image)}}" alt="Avatar"></li>
+                                                    </ul>
+                                                    <p class="text-capitalize d-inline">{{$task->AssignBy->name}}</p>
+                                                </td>
+
+                                                <td>{{$task->due_date}}</td>
+                                                <td>
+                                                    @if($task->status == 1)
+                                                    <label class="tag tag-yellow">Not Started</label>
+                                                    @elseif($task->status == 2)
+                                                    <label class="tag tag-blue">In Progress</label>
+                                                    @elseif($task->status == 3)
+                                                    <label class="tag tag-info">Hold On</label>
+                                                    @elseif($task->status == 4)
+                                                    <label class="tag tag-green">Cancelled</label>
+                                                    @elseif($task->status == 5)
+                                                    <label class="tag tag-red">Finished</label>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                           @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
