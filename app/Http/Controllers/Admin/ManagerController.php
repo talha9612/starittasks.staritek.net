@@ -8,6 +8,7 @@ use App\User;
 use App\Designation;
 use App\Skill;
 use App\ThemeSetting;
+use App\Department;
 use Image;
 // use Auth;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,10 @@ class ManagerController extends Controller
         $users = User::where('user_type',$id)->with('getusers')->get();
         $designations = Designation::where('added_by',$id)->get();
         $skills = Skill::where('user_id',$id)->get();
-        return view('admin.addmanager',compact('users','designations','skills'));
+        $departments  = Designation::where('added_by', $id)->get();
+        //dd($departments);
+        //dd($skills);
+        return view('admin.addmanager',compact('users','designations','skills','departments'));
     }
     public function AddManager(Request $request){
         $user = new User();
@@ -28,9 +32,10 @@ class ManagerController extends Controller
         // $user->address = $request->address;
         $user->password = Hash::make($request->password);
         $user->user_type = Auth::user()->id;
-        $user->role = 3;
+        $user->role = $request->role;
+       // $user->role = 3;
         $user->department = $request->department;
-        $user->skill = 0;
+        $user->skill = $request->skill;
         // $user->dob = $request->dob;
         $user->gender = $request->gender;
         $user->team_member = Auth::user()->id;
