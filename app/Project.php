@@ -39,4 +39,8 @@ class Project extends Model
             ->where('approved', 0)
             ->where('task_view_ceo', 1);
     }
+    public function assigns()
+{
+    return $this->hasMany(ProjectAssign::class, 'project_id');
+}
 }

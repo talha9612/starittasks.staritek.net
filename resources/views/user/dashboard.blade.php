@@ -154,40 +154,37 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Project</th>
-                                                <th>Manager Head</th>
+                                                <th>Project Description</th>
                                                 <th>Due Date</th>
                                                 <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                           @foreach($tasks as $key=>$task)
+                                           @foreach($projects as $key=>$project)
                                             <tr>
-                                                <td>{{$task->id}}</td>
+                                                <td>{{$project->id}}</td>
                                                 <td class="text-capitalize">
                                                     <form method="post" action="/user/project" id="my_form_{{$key}}">
                                                         @csrf
-                                                        <input type="hidden" name="project_id" value="{{$task->project->id}}">
-                                                        <a href="javascript:void(0)" onclick="document.getElementById('my_form_{{$key}}').submit();">{{$task->project->project_name}}</a>
+                                                        <input type="hidden" name="project_id" value="{{$project->id}}">
+                                                        <a href="javascript:void(0)" onclick="document.getElementById('my_form_{{$key}}').submit();">{{$project->project_name}}</a>
                                                     </form>
                                                 </td>
                                                 <td>
-                                                    <ul class="list-unstyled d-inline team-info sm margin-0 w150">   
-                                                        <li><img src="{{asset('uploads/staf_images/'.$task->AssignBy->image)}}" alt="Avatar"></li>
-                                                    </ul>
-                                                    <p class="text-capitalize d-inline">{{$task->AssignBy->name}}</p>
+                                                    <p class="text-capitalize d-inline">{{$project->project_summary}}</p>
                                                 </td>
 
-                                                <td>{{$task->due_date}}</td>
+                                                <td>{{$project->deadline}}</td>
                                                 <td>
-                                                    @if($task->status == 1)
+                                                    @if($project->status == 1)
                                                     <label class="tag tag-yellow">Not Started</label>
-                                                    @elseif($task->status == 2)
+                                                    @elseif($project->status == 2)
                                                     <label class="tag tag-blue">In Progress</label>
-                                                    @elseif($task->status == 3)
+                                                    @elseif($project->status == 3)
                                                     <label class="tag tag-info">Hold On</label>
-                                                    @elseif($task->status == 4)
+                                                    @elseif($project->status == 4)
                                                     <label class="tag tag-green">Cancelled</label>
-                                                    @elseif($task->status == 5)
+                                                    @elseif($project->status == 5)
                                                     <label class="tag tag-red">Finished</label>
                                                     @endif
                                                 </td>
