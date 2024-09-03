@@ -238,8 +238,8 @@
                                                 <div class="form-group">
                                                     <label>Project Head</label>
                                                     <select class="form-control" name="head">
-                                                        @foreach($users as $user)
-                                                            <option value="{{$user->id}}">{{$user->name}}</option>
+                                                        @foreach($managers as $manager)
+                                                            <option value="{{$manager->id}}">{{$manager->name}}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>

@@ -26,6 +26,13 @@ class ProjectController extends Controller
         $users = User::where('user_type', $userType)
             ->where('role', 3)
             ->get();
+
+
+        $managers = User::where('user_type', $userType)
+            ->where('role', 2)
+            ->get();
+
+        
     
         // Count managers of the same user_type
         $managerscount = User::where('user_type', $userType)
@@ -40,7 +47,7 @@ class ProjectController extends Controller
             ->whereIn('create_project', $userIds)
             ->get();
     
-        return view('admin.viewprojects', compact('projects', 'users'));
+        return view('admin.viewprojects', compact('projects', 'users' , 'managers'));
     }
     
     public function AddProject(Request $req){
