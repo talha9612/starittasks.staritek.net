@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Spatie\Activitylog\Models\Activity;
+use App\Http\Controllers\CompanyController;
+
 use App\Http\Controllers\Admin\ProDepartmentController;
 // use App\Http\Controllers\Admin\AdminControler;
 
@@ -35,6 +37,9 @@ Route::get('/', function(){
         return view('auth.login');
     }
 });
+
+Route::post('/generateConfirmationCode', [CompanyController::class, 'generateConfirmationCode']);
+
 Route::get('/login', 'CompanyController@ForLogin');
 Route::get('/register-company', 'CompanyController@RegisterCompany');
 
