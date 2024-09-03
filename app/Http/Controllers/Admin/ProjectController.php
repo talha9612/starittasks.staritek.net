@@ -47,7 +47,8 @@ class ProjectController extends Controller
         $id = Auth::user()->id;
         $project = new Project();
         $project->project_name = $req->name;
-        $project->project_summary = $req->summary;
+        //$project->project_summary = $req->summary;
+        $project->project_summary = $req->input('summary');
         $project->project_head = $req->head;
         $project->start_date = $req->start_date;
         $project->deadline = $req->end_date;
