@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Image;
 use App\User;
 use App\Skill;
 use App\Designation;
@@ -10,6 +9,8 @@ use App\CompanySetting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Hash;
 class ProfileController extends Controller
 {
@@ -51,6 +52,18 @@ class ProfileController extends Controller
            }
         
         $user->save();
+        if ($request->hasFile('logo')) {
+            $company = CompanySetting::where('user_id', $request->id)->first();
+            if ($company && $company->logo) {
+                // Delete old logo
+                Storage::delete('/public/uploads/company_logos/' . $company->logo);
+            }
+            $logo = $request->file('logo');
+            $logoFilename = time() . '.' . $logo->getClientOriginalExtension();
+            Image::make($logo)->resize(300, 300)->save(public_path('/uploads/company_logos/' . $logoFilename));
+            $company->logo = $logoFilename;
+            $company->save();
+        }
         return redirect()->back();
     }
     public function CheckEamil(Request $req){

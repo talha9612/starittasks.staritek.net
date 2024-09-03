@@ -387,6 +387,10 @@
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <form id="target_category"><button type="submit" class="btn btn-primary" onclick="SaveSkill()">Add</button></form>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
         </div>
     </div>
 </div>
