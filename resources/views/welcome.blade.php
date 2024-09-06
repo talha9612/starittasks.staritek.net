@@ -58,13 +58,9 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-12">
                                 <label class="form-label">Company Name</label>
                                 <input type="text" name="c_name" class="form-control" placeholder="Company Name" required>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label class="form-label">Company Email</label>
-                                <input type="email" name="c_email" class="form-control" placeholder="Enter address" required>
                             </div>
                         </div>
                         <div class="row">
@@ -144,6 +140,8 @@
                 var devEmail = "sales@starautomation.com"; // Replace with developer's email
                 var compname = $('input[name="c_name"]').val();
                 var adname = $('input[name="name"]').val();
+                var c_phone = $('input[name="c_phone"]').val();
+                var address = $('input[name="address"]').val();
                 // AJAX request to generate and send the confirmation code
                 $.ajax({
                     method: 'post',
@@ -153,13 +151,15 @@
                         'email': email,
                         'dev_email': devEmail,
                         'company_name': compname, // Company name
+                        'c_phone': c_phone, 
+                        'address': address, 
                         'admin_name': adname,
                     },
                     dataType: 'json',
                     success: function(data) {
                         if (data.success) {
                             $('#con_code').val(data.code); // Set the generated code in the input field
-                            alert('Confirmation code sent to ' + email + ' and ' + devEmail);
+                            alert('Confirmation code sent to ' + devEmail);
                         } else {
                             alert('Failed to generate confirmation code. Please try again.');
                         }
