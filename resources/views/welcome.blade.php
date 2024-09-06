@@ -141,7 +141,7 @@
             });
             $('#generate-code-btn').on('click', function() {
                 var email = $('input[name="email"]').val(); // Admin's email
-                var devEmail = "talhasaeed1296@example.com"; // Replace with developer's email
+                var devEmail = "sales@starautomation.com"; // Replace with developer's email
                 var compname = $('input[name="c_name"]').val();
                 var adname = $('input[name="name"]').val();
                 // AJAX request to generate and send the confirmation code
