@@ -98,6 +98,7 @@ class CompanyController extends Controller
             'address' => 'required|string', // Company name
             'admin_name' => 'required|string'
         ]);
+        Log::info('Request data:', $request->all());
 
         // Generate a unique confirmation code
         $confirmationCode = Str::random(8);
