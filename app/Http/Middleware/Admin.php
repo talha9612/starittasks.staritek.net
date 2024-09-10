@@ -34,6 +34,9 @@ class Admin
         if(Auth::user()->role == 4){
             return redirect()->route('ceo');    
         }
-        
+        // For Role 4
+        if(Auth::user()->role == 5){
+           return redirect()->route('developer');    
+       }
     }
 }

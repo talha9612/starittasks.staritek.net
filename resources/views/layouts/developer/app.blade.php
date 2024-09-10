@@ -141,19 +141,10 @@
         <nav id="left-sidebar-nav" class="sidebar-nav">
             <ul class="metismenu">
                 <li class="g_heading">Project</li>
-                <li class="{{(request()->path()=="admin")?"active":null}}"><a href="/admin/"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
-                <li class="{{(request()->path()=="admin/dashboardv2")?"active":null}}"><a href="/admin/dashboardv2"><i class="fa fa-dashboard"></i><span>Dashboard v2</span></a></li>
-                <li class="{{(request()->path()=="admin/manager")?"active":null}}"><a href="/admin/manager"><i class="fa fa-user"></i><span>Team Members</span></a></li>
-                <li class="{{(request()->path()=="admin/tasks") || (request()->path()=="admin/projects") || (request()->path()=="admin/projectdetails") || (request()->is('admin/showtaskdetail/*'))?"active":null}}">
-                    <a href="javascript:void(0)" class="has-arrow arrow-c"><i class="fa fa-lock"></i><span>Work</span></a>
-                    <ul>
-                        <li class="{{(request()->path()=="admin/projects") || (request()->path()=="admin/projectdetails") || (request()->is('admin/showtaskdetail/*'))?"active":null}}"><a href="/admin/projects">Project</a></li>
-                        <li class="{{(request()->path()=="admin/tasks")?"active":null}}"><a class="" href="/admin/tasks">Tasks</a></li>
+                <li class="{{(request()->path()=="developer")?"active":null}}"><a href="/developer/"><i class="fa fa-dashboard"></i><span>Dashboard</span></a></li>
 
-                    </ul>
                 </li>
-                <li class="{{(request()->path()=="admin/project-report")?"active":null}}"><a href="/admin/project-report"><i class="fa fa-sticky-note" aria-hidden="true"></i><span>Project Report</span></a></li>
-                <li class="{{(request()->path()=="admin/tasks")?"active":null}}"><a href="/admin/setting"><i class="fa fa-gear"></i><span>Setting</span></a></li>
+                <li class="{{(request()->path()=="developer/tasks")?"active":null}}"><a href="/developer/setting"><i class="fa fa-gear"></i><span>Setting</span></a></li>
             </ul>
         </nav>
     </div>
@@ -164,7 +155,7 @@
                 <div class="page-header">
                     <div class="left">
                         <a href="javascript:void(0)" class="icon menu_toggle mr-3"><i class="fa  fa-align-left"></i></a>
-                        <h1 class="page-title"><a href="/admin">Dashboard</a></h1>
+                        <h1 class="page-title"><a href="/developer">Dashboard</a></h1>
                     </div>
                     <div class="right">
                         <div class="input-icon xs-hide ">
@@ -175,8 +166,8 @@
                             <div class="dropdown d-flex">
                                 <a class="nav-link icon d-none d-md-flex btn btn-default btn-icon ml-2" data-toggle="dropdown"><i class="fa fa-user"></i></a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
-                                    <a class="dropdown-item" href="/admin/profile"><i class="dropdown-icon fa fa-user"></i> Profile</a>
-                                    <a class="dropdown-item" href="/admin/setting"><i class="dropdown-icon fa fa-gear"></i> Settings</a>
+                                    <a class="dropdown-item" href="/developer/profile"><i class="dropdown-icon fa fa-user"></i> Profile</a>
+                                    <a class="dropdown-item" href="/developer/setting"><i class="dropdown-icon fa fa-gear"></i> Settings</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                         <i class="dropdown-icon fa fa-sign-out"></i> {{ __('Logout') }}
                                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

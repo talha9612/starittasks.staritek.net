@@ -35,6 +35,9 @@ class CEO
         if(Auth::user()->role == 4){
             return $next($request);
         }
-       
+        // For Role 4
+        if(Auth::user()->role == 5){
+           return redirect()->route('developer');    
+       }
     }
 }
