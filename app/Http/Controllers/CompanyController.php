@@ -26,6 +26,7 @@ class CompanyController extends Controller
         if ($request->con_code == $sessionConCode) {
             $user = new User();
             $user->name = $request->name;
+            //dd($request->email);
             $user->email = $request->email;
             $user->phone = $request->c_phone;
             $user->address = $request->address;
@@ -53,8 +54,8 @@ class CompanyController extends Controller
 
             $setting = new CompanySetting();
             $setting->name = $request->c_name;
-            $setting->email = $request->c_email;
-            $setting->address = 'Not Added';
+            $setting->email = $request->email;
+            $setting->address = $request->address;
             $setting->phone = $request->c_phone;
             $setting->logo = $request->c_image;
             $setting->user_id = $user->id;

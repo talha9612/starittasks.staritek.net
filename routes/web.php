@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Spatie\Activitylog\Models\Activity;
 use App\Http\Controllers\CompanyController;
-
+use App\Http\Controllers\register_new_company;
 use App\Http\Controllers\Admin\ProDepartmentController;
 // use App\Http\Controllers\Admin\AdminControler;
 
@@ -39,7 +39,7 @@ Route::get('/', function(){
 });
 
 Route::post('/generateConfirmationCode', [CompanyController::class, 'generateConfirmationCode']);
-
+Route::post('/register-new-company', [register_new_company::class, 'showRegisterNewCompanyForm'])->name('register_new_company');
 Route::get('/login', 'CompanyController@ForLogin');
 Route::get('/register-company', 'CompanyController@RegisterCompany');
 

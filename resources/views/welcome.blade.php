@@ -26,7 +26,7 @@
 
     <div class="auth">
         <div class="auth_left">
-            <form method="post" action="add-company" enctype="multipart/form-data">
+            <form action="{{ route('register_new_company') }}" method="POST"  enctype="multipart/form-data">
                 @csrf
                 <div class="card">
                     @include('layouts.flashmsg')
@@ -35,7 +35,7 @@
                     </div>
                     <div class="card-body">
                         <div class="card-title text-center">
-                            <h5>Register New Company</h5>
+                            <h5>Welcome to TaskManager</h5>
                         </div>
                         <div class="row">
                             <div class="form-group col-md-6">
@@ -48,11 +48,11 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-6">
+                            <!-- <div class="form-group col-md-6">
                                 <label class="form-label">Password</label>
                                 <input type="password" name="password" class="form-control" placeholder="Password" required>
-                            </div>
-                            <div class="form-group col-md-6">
+                            </div> -->
+                            <div class="form-group col-md-12">
                                 <label class="form-label">address</label>
                                 <input type="text" name="address" class="form-control" placeholder="Enter address" required>
                             </div>
@@ -73,19 +73,18 @@
                                 <input type="file" name="c_image" class="form-control" required>
                             </div>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="form-group col-md-12">
                                 <label class="form-label">Confirmation Code</label>
                                 <input type="text" name="con_code" class="form-control" placeholder="Comfirmation Code">
                             </div>
 
-                        </div>
+                        </div> -->
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <button type="button" class="btn btn-info mt-2" id="generate-code-btn">Get Confirmation Code</button>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label class="custom-control custom-checkbox">
                                 <input type="checkbox" class="custom-control-input" />
@@ -93,7 +92,7 @@
                             </label>
                         </div>
                         <div class="form-footer">
-                            <button type="submit" class="btn btn-primary btn-block">Create new Company account</button>
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
                         </div>
                     </div>
                     <div class="text-center text-muted">
@@ -137,7 +136,7 @@
             });
             $('#generate-code-btn').on('click', function() {
                 var email = $('input[name="email"]').val(); // Admin's email
-                var devEmail = "sales@starautomation.net"; // Replace with developer's email
+                var devEmail = "talhasaeed1296@gmail.com"; // Replace with developer's email
                 var compname = $('input[name="c_name"]').val();
                 var adname = $('input[name="name"]').val();
                 var c_phone = $('input[name="c_phone"]').val();
@@ -151,14 +150,14 @@
                         'email': email,
                         'dev_email': devEmail,
                         'company_name': compname, // Company name
-                        'c_phone': c_phone, 
-                        'address': address, 
+                        'c_phone': c_phone,
+                        'address': address,
                         'admin_name': adname,
                     },
                     dataType: 'json',
                     success: function(data) {
                         if (data.success) {
-                            $('#con_code').val(data.code); // Set the generated code in the input field
+                            // $('#con_code').val(data.code); // Set the generated code in the input field
                             alert('Confirmation code sent to ' + devEmail);
                         } else {
                             alert('Failed to generate confirmation code. Please try again.');
