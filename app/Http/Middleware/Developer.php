@@ -4,7 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
-class Manager
+
+class Developer
 {
     /**
      * Handle an incoming request.
@@ -24,7 +25,7 @@ class Manager
         }
         // For Role 2
         if(Auth::user()->role == 2){
-            return $next($request);
+            return redirect()->route('manager');    
         }
         // For Role 3
         if(Auth::user()->role == 3){
@@ -36,7 +37,7 @@ class Manager
         }
         // For Role 4
         if(Auth::user()->role == 5){
-           return redirect()->route('developer');    
+            return $next($request);
        }
     }
 }

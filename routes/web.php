@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Spatie\Activitylog\Models\Activity;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Developer\DeveloperController;
 
 use App\Http\Controllers\Admin\ProDepartmentController;
 // use App\Http\Controllers\Admin\AdminControler;
@@ -32,6 +33,8 @@ Route::get('/', function(){
             return redirect('user');
        }else if(Auth::user()->role == 4 && Auth::user()->status == 1 ){
         return redirect('ceo');
+       }else if(Auth::user()->role == 5 && Auth::user()->status == 1 ){
+        return redirect('developer');
         }
     }else{
         return view('auth.login');
@@ -46,6 +49,16 @@ Route::get('/register-company', 'CompanyController@RegisterCompany');
 Auth::routes();
 
 Route::post('/add-company','CompanyController@AddCompanyInfo');
+
+Route::group(['middleware' => ['developer']],function(){
+    // Developer
+    Route::get('/home', 'Developer\DeveloperController@index');
+    Route::get('/developer/', 'Developer\DeveloperController@index');
+    Route::get('/developer/setting/', 'Developer\SettingController@index');
+    Route::post('/developer/update-setting', 'Developer\SettingController@UpdateSetting');
+    Route::get('/developer/', 'Developer\DeveloperController@Team');
+});
+
 
 Route::group(['middleware' => ['CEO']],function(){
     Route::post('/ceo/single-task-model-complete/', 'CEO\TasksController@SingleTaskComplete');

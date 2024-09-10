@@ -53,8 +53,8 @@ class CompanyController extends Controller
 
             $setting = new CompanySetting();
             $setting->name = $request->c_name;
-            $setting->email = $request->c_email;
-            $setting->address = 'Not Added';
+            $setting->email = $request->email;
+            $setting->address = $request->address;
             $setting->phone = $request->c_phone;
             $setting->logo = $request->c_image;
             $setting->user_id = $user->id;
