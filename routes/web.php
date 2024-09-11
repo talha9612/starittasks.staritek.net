@@ -7,12 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Spatie\Activitylog\Models\Activity;
 use App\Http\Controllers\CompanyController;
-<<<<<<< HEAD
 use App\Http\Controllers\register_new_company;
-=======
-use App\Http\Controllers\Developer\DeveloperController;
-
->>>>>>> 3200a73a1821801563eb8f82ce497b1fea1cca67
 use App\Http\Controllers\Admin\ProDepartmentController;
 // use App\Http\Controllers\Admin\AdminControler;
 
