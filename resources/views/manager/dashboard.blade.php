@@ -1,11 +1,7 @@
 @extends('layouts.manager.app')
 @section('mytitle', 'Dashboard')
 @section('content')
-    <div class="section-body mt-3">
-        <div class="container-fluid">
-            <div class="row clearfix">
-                <div class="col-lg-12">
-                    <div class="mb-4">
+
                         <h4><i class="fa fa-address-book" aria-hidden="true"></i> Welcome {{ Auth::user()->name }}</h4>
                         <small>Measure How Fast You’re Growing Monthly Recurring Revenue. <a href="#">Learn
                                 More</a></small>

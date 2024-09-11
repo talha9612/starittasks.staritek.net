@@ -56,6 +56,8 @@ Route::group(['middleware' => ['developer']],function(){
     Route::get('/developer/setting/', 'Developer\SettingController@index');
     Route::post('/developer/update-setting', 'Developer\SettingController@UpdateSetting');
     Route::get('/developer/', 'Developer\DeveloperController@Team');
+    Route::post('/update-company-status', 'Developer\DeveloperController@updateStatus');
+
 });
 
 

@@ -34,7 +34,7 @@
                             <div class="d-md-flex justify-content-between mb-2">
                                 <ul class="nav nav-tabs b-none">
                                     <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#list"><i
-                                                class="fa fa-list-ul"></i>user List</a></li>
+                                                class="fa fa-list-ul"></i>Company List</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -73,12 +73,22 @@
                                                         <td>{{ $user->phone }}</td>
                                                         <td class="text-capitalize">{{ $user->address }}</td>
                                                         <td>
+                                                            @if($user->status == 1)
+        
                                                             <label class="custom-switch m-0">
-                                                                <input type="checkbox" value="1" class="custom-switch-input manager-change-status-user" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{ $user->status == 1 ? 'checked' : '' }}>
+                                                                <input type="checkbox" value="0" class="custom-switch-input developer-change-status-company" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{$user->status == 1? 'checked':''}}>
                                                                 <span class="custom-switch-indicator"></span>
                                                             </label>
+        
+                                                            @else
+                                                            <label class="custom-switch m-0">
+                                                                <input type="checkbox" value="0" class="custom-switch-input developer-change-status-company" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{$user->status == 1? 'checked':''}}>
+                                                                <span class="custom-switch-indicator"></span>
+                                                            </label>
+                                                            @endif
+        
+        
                                                         </td>
-
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -89,150 +99,47 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="addnew" role="tabpanel">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Add Staff</h3>
-
-                                </div>
-                                <form class="card-body" method="post" action="{{ url('/manager/add-user') }}"
-                                    enctype="multipart/form-data">
-                                    @csrf()
-                                    <div class="row clearfix">
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Name</label>
-                                                <input type="text" name="name" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Email</label>
-                                                <input type="text" name="email" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Password</label>
-                                                <div class="input-group mb-3">
-                                                    <input type="password" name="password" id="myInput"
-                                                        class="form-control" aria-label="Amount (to the nearest dollar)">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text" onclick="myFunction()"><i
-                                                                class="fa fa-eye-slash" aria-hidden="true"></i></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Date of Birth</label>
-                                                <input type="date" name="dob" value="2000-01-22"
-                                                    data-date-autoclose="true" class="form-control"
-                                                    placeholder="Date of Birth" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <label>Gender</label>
-                                            <select class="form-control show-tick" name="gender" required>
-                                                <option value="">-- Gender --</option>
-                                                <option value="1">Male</option>
-                                                <option value="2">Female</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Department <button type="button" class="btn btn-success btn-sm"
-                                                        onclick="GetDepartment()" data-toggle="modal"
-                                                        data-target="#addtask">Add Department</button></label>
-                                                <select class="form-control show_department" name="department">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Skills <button type="button" class="btn btn-success btn-sm"
-                                                        onclick="GetSkill()" data-toggle="modal"
-                                                        data-target="#addskill">Add
-                                                        Skill</button></label>
-                                                <select class="form-control show_skill" name="skill">
-
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Phone</label>
-                                                <input type="text" name="phone" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Address</label>
-                                                <input type="text" name="address" class="form-control" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4 col-sm-12">
-                                            <div class="form-group">
-                                                <label>Role</label>
-                                                <select class="form-control show-tick" name="role">
-                                                    <option value="3">My Team Member</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class=" col-md-4 col-sm-12">
-                                            <label>Select Image</label>
-                                            <div class="form-group mt-2 mb-3">
-                                                <input type="file" name="image" placeholder="check abid"
-                                                    class="dropify" required>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-12">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="submit" class="btn btn-outline-secondary">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-pane fade" id="otherteammembers" role="tabpanel">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">Add Team Member From Other Teams</h3>
-                                </div>
-                                <form class="card-body" method="post" action="{{ url('/manager/privous-add-user') }}"
-                                    enctype="multipart/form-data">
-                                    @csrf()
-                                    <div class="row clearfix">
-                                        <div class="col-md-4 col-sm-12">
-                                            <label>Other Team Member List</label>
-                                            <select class="form-control show-tick" name="member_id" required>
-                                                {{-- @foreach ($teams as $team)
-                                            @if ($team->team_member == Auth::user()->id)
-                                            @else
-                                            <option value="{{ $team->id }}">{{ $team->name }}</option>
-                                            @endif
-                                            @endforeach --}}
-
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-12 mt-3">
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                            <button type="submit" class="btn btn-outline-secondary">Cancel</button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('.developer-change-status-company').change(function() {
+                var checkbox = $(this);
+                var userId = checkbox.data('id'); // Get user ID from data attribute
+                var status = checkbox.is(':checked') ? 1 : 0; // Determine the new status
+    
+                $.ajax({
+                    url: '/update-company-status', // Ensure the URL matches your route
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Add CSRF token
+                    },
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        user_id: userId,
+                        status: status // Include status in the payload
+                    }),
+                    success: function(response) {
+                        if (response.success) {
+                            console.log('Company status updated successfully.');
+                            // Optionally, if you need to reload the entire page or part of it to reflect the changes
+                            // location.reload(); // Reload the page to reflect changes
+                            // or
+                            // Update the UI dynamically if you have other ways to do that
+                        } else {
+                            console.log('Failed to update Company status.');
+                            // Optionally reset checkbox state if update fails
+                            checkbox.prop('checked', !checkbox.is(':checked'));
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log('An error occurred: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+    
+    
 @endsection
