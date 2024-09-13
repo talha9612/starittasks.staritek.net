@@ -73,21 +73,24 @@
                                                         <td>{{ $user->phone }}</td>
                                                         <td class="text-capitalize">{{ $user->address }}</td>
                                                         <td>
-                                                            @if($user->status == 1)
-        
-                                                            <label class="custom-switch m-0">
-                                                                <input type="checkbox" value="0" class="custom-switch-input developer-change-status-company" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{$user->status == 1? 'checked':''}}>
-                                                                <span class="custom-switch-indicator"></span>
-                                                            </label>
-        
+                                                            @if ($user->status == 1)
+                                                                <label class="custom-switch m-0">
+                                                                    <input type="checkbox" value="0"
+                                                                        class="custom-switch-input developer-change-status-company"
+                                                                        data-id="{{ $user->id }}" data-toggle="toggle"
+                                                                        data-onstyle="outline-success" checked>
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
                                                             @else
-                                                            <label class="custom-switch m-0">
-                                                                <input type="checkbox" value="0" class="custom-switch-input developer-change-status-company" data-id="{{$user->id}}" data-toggle="toggle" data-onstyle="outline-success" {{$user->status == 1? 'checked':''}}>
-                                                                <span class="custom-switch-indicator"></span>
-                                                            </label>
+                                                                <label class="custom-switch m-0">
+                                                                    <input type="checkbox" value="0"
+                                                                        class="custom-switch-input developer-change-status-company"
+                                                                        data-id="{{ $user->id }}" data-toggle="toggle"
+                                                                        data-onstyle="outline-success">
+                                                                    <span class="custom-switch-indicator"></span>
+                                                                </label>
                                                             @endif
-        
-        
+
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -108,38 +111,36 @@
                 var checkbox = $(this);
                 var userId = checkbox.data('id'); // Get user ID from data attribute
                 var status = checkbox.is(':checked') ? 1 : 0; // Determine the new status
-    
+
+                console.log('User ID:', userId);
+                console.log('Status:', status);
+
                 $.ajax({
-                    url: '/update-company-status', // Ensure the URL matches your route
+                    url: '/update-company-status',
                     method: 'POST',
                     headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') // Add CSRF token
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    contentType: 'application/json',
-                    data: JSON.stringify({
+                    data: {
                         user_id: userId,
-                        status: status // Include status in the payload
-                    }),
+                        status: status
+                    },
                     success: function(response) {
+                        console.log('Response:', response);
                         if (response.success) {
-                            console.log('Company status updated successfully.');
-                            // Optionally, if you need to reload the entire page or part of it to reflect the changes
-                            // location.reload(); // Reload the page to reflect changes
-                            // or
-                            // Update the UI dynamically if you have other ways to do that
+                            console.log('Status updated successfully.');
                         } else {
-                            console.log('Failed to update Company status.');
-                            // Optionally reset checkbox state if update fails
+                            console.log('Failed to update status:', response.error);
                             checkbox.prop('checked', !checkbox.is(':checked'));
                         }
                     },
                     error: function(xhr) {
-                        console.log('An error occurred: ' + xhr.responseText);
+                        console.log('An error occurred:', xhr.statusText, xhr.responseText);
                     }
                 });
+
             });
         });
     </script>
-    
-    
+
 @endsection

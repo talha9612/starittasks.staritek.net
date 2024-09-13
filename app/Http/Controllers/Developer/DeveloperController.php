@@ -35,32 +35,36 @@ class DeveloperController extends Controller
         return view('developer.dashboard', compact('userDetails' , 'allcompanies'));
     }
     
-    public function updateStatus(Request $req)
-    {
-        if ($req->ajax()) {
-            // Validate request data
-            $req->validate([
-                'user_id' => 'required|integer',
-                'status' => 'required|integer',
-            ]);
-    
-            // Find the record in the company_setting table
-            $record = DB::table('company_setting')->where('user_id', $req->user_id)->first();
-            
-            if ($record) {
-                // Update the status
-                DB::table('company_setting')
-                    ->where('user_id', $req->user_id)
-                    ->update(['status' => $req->status]);
-    
+ public function updateStatus(Request $req)
+{
+    if ($req->ajax()) {
+        $req->validate([
+            'user_id' => 'required|integer',
+            'status' => 'required|integer',
+        ]);
+
+        $userId = $req->input('user_id');
+        $status = $req->input('status');
+
+        $record = DB::table('company_setting')->where('user_id', $userId)->first();
+
+        if ($record) {
+            $updated = DB::table('company_setting')
+                ->where('user_id', $userId)
+                ->update(['status' => $status]);
+
+            if ($updated) {
                 return response()->json(['success' => 'Status Changed Successfully!']);
             } else {
-                return response()->json(['error' => 'Record not found.'], 404);
+                return response()->json(['error' => 'Failed to update status.'], 500);
             }
+        } else {
+            return response()->json(['error' => 'Record not found.'], 404);
         }
-    
-        return response()->json(['error' => 'Invalid request.'], 400);
     }
+
+    return response()->json(['error' => 'Invalid request.'], 400);
+}
     
     
     
