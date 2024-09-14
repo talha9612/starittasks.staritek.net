@@ -73,24 +73,15 @@
                                                         <td>{{ $user->phone }}</td>
                                                         <td class="text-capitalize">{{ $user->address }}</td>
                                                         <td>
-                                                            @if ($user->status == 1)
-                                                                <label class="custom-switch m-0">
-                                                                    <input type="checkbox" value="0"
-                                                                        class="custom-switch-input developer-change-status-company"
-                                                                        data-id="{{ $user->id }}" data-toggle="toggle"
-                                                                        data-onstyle="outline-success" checked>
-                                                                    <span class="custom-switch-indicator"></span>
-                                                                </label>
-                                                            @else
-                                                                <label class="custom-switch m-0">
-                                                                    <input type="checkbox" value="0"
-                                                                        class="custom-switch-input developer-change-status-company"
-                                                                        data-id="{{ $user->id }}" data-toggle="toggle"
-                                                                        data-onstyle="outline-success">
-                                                                    <span class="custom-switch-indicator"></span>
-                                                                </label>
-                                                            @endif
-
+                                                            <select class="form-control change-status-company"
+                                                                data-id="{{ $user->user_id }}">
+                                                                <option value="1"
+                                                                    {{ $user->status == 1 ? 'selected' : '' }}>Active
+                                                                </option>
+                                                                <option value="0"
+                                                                    {{ $user->status == 0 ? 'selected' : '' }}>Inactive
+                                                                </option>
+                                                            </select>
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -107,16 +98,17 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('.developer-change-status-company').change(function() {
-                var checkbox = $(this);
-                var userId = checkbox.data('id'); // Get user ID from data attribute
-                var status = checkbox.is(':checked') ? 1 : 0; // Determine the new status
+            // Event listener for the dropdown change
+            $('.change-status-company').change(function() {
+                var dropdown = $(this);
+                var userId = dropdown.data('id'); // Get user ID from data attribute
+                var status = dropdown.val(); // Get the selected value (1 or 0)
 
                 console.log('User ID:', userId);
                 console.log('Status:', status);
 
                 $.ajax({
-                    url: '/update-company-status',
+                    url: '/status', // Ensure this matches the route if using API
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -127,20 +119,14 @@
                     },
                     success: function(response) {
                         console.log('Response:', response);
-                        if (response.success) {
-                            console.log('Status updated successfully.');
-                        } else {
-                            console.log('Failed to update status:', response.error);
-                            checkbox.prop('checked', !checkbox.is(':checked'));
-                        }
                     },
                     error: function(xhr) {
                         console.log('An error occurred:', xhr.statusText, xhr.responseText);
                     }
                 });
-
             });
         });
     </script>
+
 
 @endsection

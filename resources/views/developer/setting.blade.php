@@ -24,9 +24,9 @@
                                     <div class="card-header">
                                         <h3 class="card-title">Company Settings</h3>
                                         <div class="card-options">
-                                            {{-- <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
+                                            <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
                                             <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
-                                            <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a> --}}
+                                            <a href="#" class="card-options-remove" data-toggle="card-remove"><i class="fe fe-x"></i></a>
                                         </div>
                                     </div>
                                     <div class="card-body">
@@ -40,7 +40,7 @@
                                                         <input class="form-control" name="name" type="text" value="{{ $setting->name }}">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-4 col-sm-12">
+                                                {{-- <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label>Contact Person</label>
                                                         <select class="form-control" name="contact_person">
@@ -50,7 +50,7 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 <div class="col-md-4 col-sm-12">
                                                     <div class="form-group">
                                                         <label>Mobile Number <span class="text-danger">*</span></label>

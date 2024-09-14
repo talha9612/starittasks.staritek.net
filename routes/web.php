@@ -1,14 +1,16 @@
 <?php
 
-use App\Mail\SendTaskMail;
+use App\Http\Controllers\Admin\ProDepartmentController;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\Developer\DeveloperController;
+use App\Http\Controllers\register_new_company;
 use App\Mail\SendMarkDownMail;
+use App\Mail\SendTaskMail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Spatie\Activitylog\Models\Activity;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\register_new_company;
-use App\Http\Controllers\Admin\ProDepartmentController;
+
 // use App\Http\Controllers\Admin\AdminControler;
 
 /*
@@ -56,7 +58,7 @@ Route::group(['middleware' => ['developer']],function(){
     Route::get('/developer/setting/', 'Developer\SettingController@index');
     Route::post('/developer/update-setting', 'Developer\SettingController@UpdateSetting');
     Route::get('/developer/', 'Developer\DeveloperController@Team');
-    Route::post('/update-company-status', 'Developer\DeveloperController@updateStatus');
+    Route::post('/status', [DeveloperController::class, 'Status']);
 
 });
 
