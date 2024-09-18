@@ -10,9 +10,6 @@ class register_new_company extends Controller
 {
     public function showRegisterNewCompanyForm(Request $request)
     {
-       // dd($request->file('c_image'));
-        // Handle file upload
-       // dd($request->all());
         if ($request->hasFile('c_image')) {
             $avatar = $request->file('c_image');
             $filename = time() . '.' . $avatar->getClientOriginalExtension();

@@ -98,7 +98,7 @@ Route::group(['middleware' => ['CEO']],function(){
     Route::post('/ceo/update-profile', 'CEO\ProfileController@UpdateProfile');
     Route::get('/ceo/check-password', 'CEO\ProfileController@CheckPassword');
     Route::post('/ceo/update-password', 'CEO\ProfileController@UpdatePassword');
-    Route::get('/ceo/checkEmail', 'CEO\ProfileController@CheckEamil');
+    Route::get('/ceo/checkEmail', 'CEO\ProfileController@CheckEmail');
     // Admin Setting Update
     Route::get('/ceo/setting/', 'CEO\SettingController@index');
     Route::post('/ceo/update-setting', 'CEO\SettingController@UpdateSetting');
@@ -169,7 +169,7 @@ Route::group(['middleware' => ['admin']],function(){
     Route::post('/admin/update-setting', 'Admin\SettingController@UpdateSetting');
 
     // Admin Check Email
-    Route::get('/admin/checkEmail', 'Admin\ProfileController@CheckEamil');
+    Route::get('/admin/checkEmail', 'Admin\ProfileController@CheckEmail');
     Route::get('/admin/single-task-model/', 'Admin\TasksController@SingleTaskModel');
     Route::post('/admin/projectdetails/', 'Admin\ProjectDetailController@index');
     // Ajax Links
@@ -285,7 +285,7 @@ Route::group(['middleware' => ['user']],function(){
      Route::get('/user/user-change-sidebar-setting', 'User\ThemeSettingController@SideBar');
      Route::get('/user/user-change-boxshadow-setting', 'User\ThemeSettingController@BoxShadow');
 });
-Route::get('checkEmail','CompanyController@CheckEamil');
+Route::get('checkEmail','CompanyController@CheckEmail');
 Route::get('sendEmail',function(){
     $task = [];
     $user = [];

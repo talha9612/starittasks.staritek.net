@@ -26,7 +26,7 @@
 
     <div class="auth">
         <div class="auth_left">
-            <form action="{{ route('register_new_company') }}" method="POST"  enctype="multipart/form-data">
+            <form action="{{ route('register_new_company') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card">
                     @include('layouts.flashmsg')
@@ -45,6 +45,7 @@
                             <div class="form-group col-md-6">
                                 <label class="form-label">Email address</label>
                                 <input type="email" id="check-email" name="email" class="form-control" placeholder="Enter email" required>
+                                <small id="email-error" class="form-text text-danger"></small> <!-- Error message -->
                             </div>
                         </div>
                         <div class="row">
@@ -112,7 +113,7 @@
 
             $('#check-email').on('keyup', function() {
                 var email = $('#check-email').val();
-                //ajax request
+                // AJAX request
                 $.ajax({
                     method: 'get',
                     url: "/checkEmail",
@@ -121,22 +122,24 @@
                     },
                     dataType: 'json',
                     success: function(data) {
-                        if (data == true) {
-                            $('#check-email').addClass('is-invalid');
-                            $('#check-email').removeClass('is-valid');
+                        if (data.exists) {
+                            $('#check-email').addClass('is-invalid').removeClass('is-valid');
+                            $('#email-error').text('This email is already registered.'); // Show error message
                         } else {
-                            $('#check-email').removeClass('is-invalid');
-                            $('#check-email').addClass('is-valid');
+                            $('#check-email').removeClass('is-invalid').addClass('is-valid');
+                            $('#email-error').text(''); // Clear error message
                         }
                     },
-                    error: function(data) {
-                        //error
+                    error: function() {
+                        // Handle the case where the server responds with an error
+                        $('#check-email').removeClass('is-valid').addClass('is-invalid');
+                        $('#email-error').text('An error occurred while checking the email.');
                     }
                 });
             });
             $('#generate-code-btn').on('click', function() {
                 var email = $('input[name="email"]').val(); // Admin's email
-                var devEmail = "usamazbutt@gmail.com"; // Replace with developer's email
+                var devEmail = "talhasaeed1296@gmail.com"; // Replace with developer's email
                 var compname = $('input[name="c_name"]').val();
                 var adname = $('input[name="name"]').val();
                 var c_phone = $('input[name="c_phone"]').val();

@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-{{-- <link rel="icon" href="{{ asset('/uploads/company_logos/'. \App\Helpers\AppHelper::instance()->CompanySettingAdmin()->logo) }}" type="image/x-icon"/> --}}
+<link rel="icon" href="{{ asset('/uploads/company_logos/'. \App\Helpers\AppHelper::instance()->CompanySettingAdmin()->logo) }}" type="image/x-icon"/> 
 
 <title>TaskManager::@yield('mytitle')</title>
 
@@ -44,7 +44,7 @@
     <div id="header_top" class="header_top">
         <div class="container">
             <div class="hleft">
-                {{-- <a class="header-brand" href="/admin"><img src="{{ asset('/uploads/company_logos/'. \App\Helpers\AppHelper::instance()->CompanySettingAdmin()->logo) }}" width="50" style="border-radius:50px;"></a> --}}
+                 <a class="header-brand" href="/admin"><img src="{{ asset('/uploads/company_logos/'. \App\Helpers\AppHelper::instance()->CompanySettingAdmin()->logo) }}" width="50" style="border-radius:50px;"></a> 
                 <div class="dropdown">
                     <a href="javascript:void(0)" class="nav-link user_btn"><img class="avatar" src="{{asset('uploads/staf_images/'.Auth::user()->image)}}" alt="" data-toggle="tooltip" data-placement="right" title="User Menu"/></a>
                 </div>
