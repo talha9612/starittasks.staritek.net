@@ -30,7 +30,7 @@
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <form method="post" action="/admin/update-setting" enctype="multipart/form-data">
+                                        <form method="post" action="/developer/update-setting" enctype="multipart/form-data">
                                             @csrf
                                             <div class="row">
                                                 <div class="col-md-4 col-sm-12">
@@ -123,7 +123,7 @@
                                     <div class="card-header">
                                         <h3 class="card-title">Change Password</h3>
                                     </div>
-                                    <form method="post" action="/admin/update-password">
+                                    <form method="post" action="/developer/update-password">
                                         @csrf
                                         <div class="card-body">
                                             <div class="row clearfix">
@@ -184,7 +184,7 @@
                     //ajax request
                     $.ajax({
                         method:'get',
-                        url: "/admin/check-password",
+                        url: "/developer/check-password",
                         data: {
                             'password' : password,
                         },
