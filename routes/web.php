@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\ProDepartmentController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\Developer\DeveloperController;
 use App\Http\Controllers\register_new_company;
+use App\Http\Middleware\Developer;
 use App\Mail\SendMarkDownMail;
 use App\Mail\SendTaskMail;
 use Illuminate\Support\Facades\Auth;
@@ -59,6 +60,13 @@ Route::group(['middleware' => ['developer']],function(){
     Route::post('/developer/update-setting', 'Developer\SettingController@UpdateSetting');
     Route::get('/developer/', 'Developer\DeveloperController@Team');
     Route::post('/status', [DeveloperController::class, 'Status']);
+
+    // Developer Status
+    Route::get('/developer/profile/', 'Developer\ProfileController@index');
+    Route::post('/developer/update-profile', 'Developer\ProfileController@UpdateProfile');
+    Route::get('/developer/check-password', 'Developer\ProfileController@CheckPassword');
+    Route::post('/developer/update-password', 'Developer\ProfileController@UpdatePassword');
+    Route::get('/developer/checkEmail', 'Developer\ProfileController@CheckEmail');
 
 });
 
