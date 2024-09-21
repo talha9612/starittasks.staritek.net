@@ -1,66 +1,70 @@
 @extends('layouts.manager.app')
 @section('mytitle', 'Dashboard')
 @section('content')
-
-                        <h4><i class="fa fa-address-book" aria-hidden="true"></i> Welcome {{ Auth::user()->name }}</h4>
-                        <small>Measure How Fast You’re Growing Monthly Recurring Revenue. <a href="#">Learn
-                                More</a></small>
-                    </div>
+<div class="section-body mt-3">
+    <div class="container-fluid">
+        <div class="row clearfix">
+            <div class="col-lg-12">
+                <div class="mb-4">
+    <h4><i class="fa fa-address-book" aria-hidden="true"></i> Welcome {{ Auth::user()->name }}</h4>
+    <small>Measure How Fast You’re Growing Monthly Recurring Revenue. <a href="#">Learn
+            More</a></small>
+    </div>
+    </div>
+    </div>
+    <div class="row clearfix row-deck">
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Assign Projects</h3>
                 </div>
-            </div>
-            <div class="row clearfix row-deck">
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Assign Projects</h3>
-                        </div>
-                        <div class="card-body">
-                            <span class="float-left"><i class="fa fa-tasks " style="font-size: 40px;color:#EB6F62"
-                                    aria-hidden="true"></i></span>
-                            <h5 class="number mb-0 font-32 counter float-right">{{ $project }}</h5>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Team Mambers</h3>
-                        </div>
-                        <div class="card-body">
-                            <span class="float-left"><i class="fa fa-user" style="font-size: 40px;color:#00bcd4"
-                                    aria-hidden="true"></i></span>
-                            <h5 class="number mb-0 font-32 counter float-right">{{ $user }}</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Task Pandding</h3>
-                        </div>
-                        <div class="card-body">
-                            <span class="float-left"><i class="fa fa-file" style="font-size: 40px;color:#ff9800bf"
-                                    aria-hidden="true"></i></span>
-                            <h5 class="number mb-0 font-32 counter float-right">{{ $pandding_tasks }}</h5>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-4 col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Complete Task</h3>
-                        </div>
-                        <div class="card-body">
-                            <span class="float-left"><i class="fa fa-check-square" style="font-size: 40px;color:#4caf50"
-                                    aria-hidden="true"></i></span>
-                            <h5 class="number mb-0 font-32 counter float-right">{{ $pandding_tasks_complete }}</h5>
-                        </div>
-                    </div>
+                <div class="card-body">
+                    <span class="float-left"><i class="fa fa-tasks " style="font-size: 40px;color:#EB6F62"
+                            aria-hidden="true"></i></span>
+                    <h5 class="number mb-0 font-32 counter float-right">{{ $project }}</h5>
                 </div>
             </div>
         </div>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Team Mambers</h3>
+                </div>
+                <div class="card-body">
+                    <span class="float-left"><i class="fa fa-user" style="font-size: 40px;color:#00bcd4"
+                            aria-hidden="true"></i></span>
+                    <h5 class="number mb-0 font-32 counter float-right">{{ $user }}</h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Task Pandding</h3>
+                </div>
+                <div class="card-body">
+                    <span class="float-left"><i class="fa fa-file" style="font-size: 40px;color:#ff9800bf"
+                            aria-hidden="true"></i></span>
+                    <h5 class="number mb-0 font-32 counter float-right">{{ $pandding_tasks }}</h5>
+
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-4 col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Complete Task</h3>
+                </div>
+                <div class="card-body">
+                    <span class="float-left"><i class="fa fa-check-square" style="font-size: 40px;color:#4caf50"
+                            aria-hidden="true"></i></span>
+                    <h5 class="number mb-0 font-32 counter float-right">{{ $pandding_tasks_complete }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
     </div>
     <div class="section-body">
         <div class="container-fluid">
